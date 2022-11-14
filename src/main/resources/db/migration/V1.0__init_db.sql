@@ -1,6 +1,3 @@
-drop schema if exists shop cascade;
-create schema shop;
-
 create table shop.tcl_category
 (
     category_id serial,
