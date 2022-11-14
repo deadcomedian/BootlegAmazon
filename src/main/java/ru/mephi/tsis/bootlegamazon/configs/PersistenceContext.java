@@ -25,8 +25,8 @@ public class PersistenceContext {
     DataSource dataSource(Environment env) {
         HikariConfig dataSourceConfig = new HikariConfig();
         dataSourceConfig.setDriverClassName("org.postgresql.Driver");
-        dataSourceConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/postgres");
-        dataSourceConfig.setUsername("postgres");
+        dataSourceConfig.setJdbcUrl("jdbc:postgresql://localhost:5432/tsis");
+        dataSourceConfig.setUsername("tsis_user");
         dataSourceConfig.setPassword("password");
         return new HikariDataSource(dataSourceConfig);
     }
