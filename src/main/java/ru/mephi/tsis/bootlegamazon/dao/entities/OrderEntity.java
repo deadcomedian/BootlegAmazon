@@ -12,8 +12,8 @@ public class OrderEntity {
     @Column(name = "order_id")
     private Integer id;
 
-    @Column(name = "customer_id")
-    private Integer customerId;
+    @Column(name = "user_id")
+    private Integer userId;
 
     @Column(name = "status_id")
     private Integer statusId;
@@ -27,9 +27,9 @@ public class OrderEntity {
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer id, Integer customerId, Integer statusId, String address, Date date) {
+    public OrderEntity(Integer id, Integer userId, Integer statusId, String address, Date date) {
         this.id = id;
-        this.customerId = customerId;
+        this.userId = userId;
         this.statusId = statusId;
         this.address = address;
         this.date = date;
@@ -39,8 +39,8 @@ public class OrderEntity {
         return id;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Integer getUserId() {
+        return userId;
     }
 
     public Integer getStatusId() {

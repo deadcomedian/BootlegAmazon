@@ -10,22 +10,30 @@ public class CartEntity {
     @Column(name = "cart_id")
     private Integer id;
 
-    @Column(name = "customer_id")
-    private Integer customerId;
+    @Column(name = "user_id")
+    private Integer userId;
+
+    @Column(name = "cart_active")
+    private Boolean active;
 
     public CartEntity() {
     }
 
-    public CartEntity(Integer id, Integer customerId) {
+    public CartEntity(Integer id, Integer userId, Boolean active) {
         this.id = id;
-        this.customerId = customerId;
+        this.userId = userId;
+        this.active = active;
+    }
+
+    public Boolean getActive() {
+        return active;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Integer getUserId() {
+        return userId;
     }
 }
