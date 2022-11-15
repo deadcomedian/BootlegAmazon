@@ -1,7 +1,5 @@
 package ru.mephi.tsis.bootlegamazon.dao.entities;
 
-
-
 import javax.persistence.*;
 
 @Entity
