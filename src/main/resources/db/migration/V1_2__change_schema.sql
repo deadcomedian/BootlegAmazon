@@ -1,4 +1,4 @@
-drop schema if exists postgres.shop cascade;
+drop schema if exists shop cascade;
 
 create schema shop;
 
@@ -20,7 +20,8 @@ create table shop.tcl_status
 create table shop.tcl_role
 (
     role_id serial,
-    role_name character varying not null unique
+    role_name character varying not null unique,
+    primary key (role_id)
 );
 
 create table shop.t_user
@@ -39,10 +40,10 @@ create table shop.t_user
 create table shop.t_cart
 (
     cart_id serial,
-    customer_id int not null,
+    user_id int not null,
     cart_active boolean not null,
     primary key (cart_id),
-    foreign key (customer_id) references shop.t_customer (customer_id) on delete cascade
+    foreign key (user_id) references shop.t_user (user_id) on delete cascade
 );
 
 create table shop.t_order
