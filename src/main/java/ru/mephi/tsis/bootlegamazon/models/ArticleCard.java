@@ -1,6 +1,9 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
-public class ItemCard {
+public class ArticleCard {
+
+    private Integer id;
+
     private String itemName;
     private String authorName;
 
@@ -20,8 +23,17 @@ public class ItemCard {
         this.authorName = authorName;
     }
 
-    public ItemCard(String itemName, String authorName) {
+    public ArticleCard(Integer id, String itemName, String authorName) {
+        this.id = id;
         this.itemName = itemName;
         this.authorName = authorName;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }

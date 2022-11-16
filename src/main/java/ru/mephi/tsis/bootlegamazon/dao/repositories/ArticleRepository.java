@@ -12,8 +12,10 @@ import java.util.List;
 @Component
 public interface ArticleRepository extends CrudRepository<ArticleEntity, Integer> {
 
-    List<ArticleEntity> findByCategoryId(Integer categoryId);
-    List<ArticleEntity> findByName(String name);
-    List<ArticleEntity> findByAuthor(String author);
+    Iterable<ArticleEntity> findByCategoryId(Integer categoryId);
+    @Query("select a from ArticleEntity a where a.name = ?1")
+    Iterable<ArticleEntity> findByName(String name);
+    @Query("select a from ArticleEntity a where a.author = ?1")
+    Iterable<ArticleEntity> findByAuthor(String author);
 
 }

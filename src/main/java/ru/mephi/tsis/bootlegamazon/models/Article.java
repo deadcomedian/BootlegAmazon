@@ -1,6 +1,8 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
-public class Item {
+public class Article {
+
+    private Integer id;
     private String itemName;
     private String authorName;
     private String categoryName;
@@ -74,7 +76,16 @@ public class Item {
         this.itemActive = itemActive;
     }
 
-    public Item(String itemName, String authorName, String categoryName, String itemDescription, double itemPrice, double itemRating, String itemPhoto, boolean itemActive) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Article(Integer id, String itemName, String authorName, String categoryName, String itemDescription, double itemPrice, double itemRating, String itemPhoto, boolean itemActive) {
+        this.id = id;
         this.itemName = itemName;
         this.authorName = authorName;
         this.categoryName = categoryName;

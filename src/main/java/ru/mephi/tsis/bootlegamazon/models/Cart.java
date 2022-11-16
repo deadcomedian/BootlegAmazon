@@ -3,14 +3,19 @@ package ru.mephi.tsis.bootlegamazon.models;
 import java.util.ArrayList;
 
 public class Cart {
-    private ArrayList<Item> items;
-    private double price;
+    private ArrayList<ArticleCard> items;
+    private Double price;
 
-    public ArrayList<Item> getItems() {
+    public Cart(ArrayList<ArticleCard> items, Double price) {
+        this.items = items;
+        this.price = price;
+    }
+
+    public ArrayList<ArticleCard> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(ArrayList<ArticleCard> items) {
         this.items = items;
     }
 
@@ -18,12 +23,9 @@ public class Cart {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
-    public Cart(ArrayList<Item> items, double price) {
-        this.items = items;
-        this.price = price;
-    }
+
 }
