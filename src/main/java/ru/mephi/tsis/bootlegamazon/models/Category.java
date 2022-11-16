@@ -1,6 +1,8 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
 public class Category {
+
+    private Integer id;
     private String categoryName;
 
     public String getCategoryName() {
@@ -11,7 +13,16 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public Category(String categoryName) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Category(Integer id, String categoryName) {
+        this.id = id;
         this.categoryName = categoryName;
     }
 }

@@ -12,4 +12,6 @@ public interface CategoryRepository extends CrudRepository<CategoryEntity, Integ
 
     @Query("select c from CategoryEntity c where c.id = ?1 and c.active = true")
     Optional<CategoryEntity> findByCategoryId(Integer id);
+    @Query("select c from CategoryEntity c where c.name = ?1 and c.active = true")
+    Optional<CategoryEntity> findByName(String categoryName);
 }

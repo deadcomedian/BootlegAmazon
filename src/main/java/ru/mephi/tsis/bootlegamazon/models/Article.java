@@ -10,7 +10,16 @@ public class Article {
     private double itemPrice;
     private double itemRating;
     private String itemPhoto;
-    private boolean itemActive;
+
+    private Integer amount;
+
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
 
     public String getItemName() {
         return itemName;
@@ -68,14 +77,6 @@ public class Article {
         this.itemPhoto = itemPhoto;
     }
 
-    public boolean isItemActive() {
-        return itemActive;
-    }
-
-    public void setItemActive(boolean itemActive) {
-        this.itemActive = itemActive;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -84,7 +85,7 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Integer id, String itemName, String authorName, String categoryName, String itemDescription, double itemPrice, double itemRating, String itemPhoto, boolean itemActive) {
+    public Article(Integer id, String itemName, String authorName, String categoryName, String itemDescription, double itemPrice, double itemRating, String itemPhoto, Integer amount) {
         this.id = id;
         this.itemName = itemName;
         this.authorName = authorName;
@@ -93,6 +94,6 @@ public class Article {
         this.itemPrice = itemPrice;
         this.itemRating = itemRating;
         this.itemPhoto = itemPhoto;
-        this.itemActive = itemActive;
+        this.amount = amount;
     }
 }

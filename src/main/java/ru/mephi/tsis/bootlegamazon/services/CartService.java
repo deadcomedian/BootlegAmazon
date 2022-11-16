@@ -6,9 +6,6 @@ import ru.mephi.tsis.bootlegamazon.models.Cart;
 public interface CartService {
     void createCartForUser(Integer userId);
     Cart getCartByUserId(Integer userId) throws CartNotFoundException;
-    /*
-    можем ли мы менять количество товара в корзине или оно задаётся фиксированно при первоначальном добавлении?
-     */
     void addArticleToCart(Integer cartId, Integer articleId, Integer amount) throws CartNotFoundException;
     void removeOneArticleFromCart(Integer cartId, Integer articleId) throws CartNotFoundException;
     void deleteArticleFromCart(Integer cartId, Integer articleId) throws CartNotFoundException;
