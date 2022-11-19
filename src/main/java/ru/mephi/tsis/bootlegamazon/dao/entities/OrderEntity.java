@@ -1,7 +1,7 @@
 package ru.mephi.tsis.bootlegamazon.dao.entities;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "t_order")
@@ -22,12 +22,12 @@ public class OrderEntity {
     private String address;
 
     @Column(name = "order_date")
-    private Date date;
+    private LocalDate date;
 
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer id, Integer userId, Integer statusId, String address, Date date) {
+    public OrderEntity(Integer id, Integer userId, Integer statusId, String address, LocalDate date) {
         this.id = id;
         this.userId = userId;
         this.statusId = statusId;
@@ -51,7 +51,7 @@ public class OrderEntity {
         return address;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 }
