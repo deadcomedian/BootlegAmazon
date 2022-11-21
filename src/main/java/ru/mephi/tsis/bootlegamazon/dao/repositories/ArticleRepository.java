@@ -12,6 +12,7 @@ import java.util.List;
 @Component
 public interface ArticleRepository extends CrudRepository<ArticleEntity, Integer> {
 
+    @Query("select a from ArticleEntity a where a.categoryId = ?1")
     Iterable<ArticleEntity> findByCategoryId(Integer categoryId);
     @Query("select a from ArticleEntity a where a.name = ?1")
     Iterable<ArticleEntity> findByName(String name);

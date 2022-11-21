@@ -5,7 +5,7 @@ import javax.persistence.*;
 
 @Entity
 @IdClass(CartArticleId.class)
-@Table(name = "t_cart_article")
+@Table(name = "t_cart_article", schema = "shop")
 public class CartArticleEntity {
     @Id
     @Column(name = "cart_id")

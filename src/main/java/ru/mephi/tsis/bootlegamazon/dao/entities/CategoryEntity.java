@@ -3,7 +3,7 @@ package ru.mephi.tsis.bootlegamazon.dao.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "tcl_category")
+@Table(name = "tcl_category", schema = "shop")
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

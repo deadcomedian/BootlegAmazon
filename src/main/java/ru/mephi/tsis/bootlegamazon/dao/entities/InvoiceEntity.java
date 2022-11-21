@@ -3,7 +3,7 @@ package ru.mephi.tsis.bootlegamazon.dao.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "t_invoice")
+@Table(name = "t_invoice", schema = "shop")
 public class InvoiceEntity {
 
     @Id
