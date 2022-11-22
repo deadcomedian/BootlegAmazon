@@ -36,4 +36,12 @@ public class CategoryEntity {
     public Boolean getActive() {
         return active;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
