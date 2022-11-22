@@ -5,6 +5,7 @@ public class CustomerProfile {
     private String customerPhone;
     private String customerLogin;
     private String customerPassword;
+    private String customerRole;
 
     public String getCustomerName() {
         return customerName;
@@ -38,10 +39,19 @@ public class CustomerProfile {
         this.customerPassword = customerPassword;
     }
 
-    public CustomerProfile(String customerName, String customerPhone, String customerLogin, String customerPassword) {
+    public String getCustomerRole() {
+        return customerRole;
+    }
+
+    public void setCustomerRole(String customerRole) {
+        this.customerRole = customerRole;
+    }
+
+    public CustomerProfile(String customerName, String customerPhone, String customerLogin, String customerPassword, String customerRole) {
         this.customerName = customerName;
         this.customerPhone = customerPhone;
         this.customerLogin = customerLogin;
         this.customerPassword = customerPassword;
+        this.customerRole = customerRole;
     }
 }

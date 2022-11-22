@@ -24,7 +24,7 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role_id")
-    private String roleId;
+    private Integer roleId;
 
     @Column(name = "user_active")
     private Boolean active;
@@ -32,7 +32,7 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(Integer id, String name, String phone, String login, String password, String roleId, Boolean active) {
+    public UserEntity(Integer id, String name, String phone, String login, String password, Integer roleId, Boolean active) {
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -62,11 +62,27 @@ public class UserEntity {
         return password;
     }
 
-    public String getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
     public Boolean getActive() {
         return active;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
