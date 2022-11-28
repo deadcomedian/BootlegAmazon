@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @ComponentScan(basePackages = "ru.mephi.tsis.bootlegamazon")
 @EntityScan(basePackages="ru.mephi.tsis.bootlegamazon.dao.entities")
-@EnableWebMvc
+//@EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
 
