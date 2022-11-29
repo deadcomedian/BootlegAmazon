@@ -17,6 +17,7 @@
   text-decoration: none;
   background-color: var(--dl-color-primary-100);
 }
+
 @media(max-width: 1600px) {
   .button-sort-button {
     font-size: 20px;

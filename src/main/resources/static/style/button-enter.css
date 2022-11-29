@@ -20,15 +20,15 @@
 
 
 @media(max-width: 479px) {
+  .button-enter-root-class-name {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
   .button-enter-root-class-name1 {
     margin-top: 0rem;
     margin-bottom: 0rem;
   }
   .button-enter-root-class-name2 {
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-  }
-  .button-enter-root-class-name {
     margin-top: 0rem;
     margin-bottom: 0rem;
   }
