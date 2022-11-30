@@ -87,54 +87,28 @@
         <div class="categories-page-container1">
           <h1 class="categories-page-text">Категории</h1>
           <div class="button-add-container button-add-root-class-name">
-            <button type="button" class="button-add-button">
-              <span>
-                <span>Создать</span>
-                <br />
-              </span>
-            </button>
+            <a th:href="@{'/category/new'}">
+              <button type="button" class="button-add-button">
+                <span>
+                  <span>Создать</span>
+                  <br />
+                </span>
+              </button>
+            </a>
           </div>
         </div>
         <div class="categories-page-container2">
-          <div class="categories-page-container3">
-            <label class="categories-page-text1">Название категории</label>
-            <svg viewBox="0 0 1024 1024" class="categories-page-icon">
-              <path
-                d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
-              ></path>
-            </svg>
-          </div>
-          <div class="categories-page-container4">
-            <label class="categories-page-text2">Название категории</label>
-            <svg viewBox="0 0 1024 1024" class="categories-page-icon02">
-              <path
-                d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
-              ></path>
-            </svg>
-          </div>
-          <div class="categories-page-container5">
-            <label class="categories-page-text3">Название категории</label>
-            <svg viewBox="0 0 1024 1024" class="categories-page-icon04">
-              <path
-                d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
-              ></path>
-            </svg>
-          </div>
-          <div class="categories-page-container6">
-            <label class="categories-page-text4">Название категории</label>
-            <svg viewBox="0 0 1024 1024" class="categories-page-icon06">
-              <path
-                d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
-              ></path>
-            </svg>
-          </div>
-          <div class="categories-page-container7">
-            <label class="categories-page-text5">Название категории</label>
-            <svg viewBox="0 0 1024 1024" class="categories-page-icon08">
-              <path
-                d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
-              ></path>
-            </svg>
+          <div class="categories-page-container3" th:each="category : ${categories}" th:with="categoryId=${category.id}">
+            <label class="categories-page-text1" th:text="${category.categoryName}"></label>
+            <form th:method="POST" th:action="@{/category/{id}/delete(id=${categoryId})}">
+              <button type="submit">
+                <svg viewBox="0 0 1024 1024" class="categories-page-icon">
+                  <path
+                          d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
+                  ></path>
+                </svg>
+              </button>
+            </form>
           </div>
         </div>
         <div class="categories-page-container8">

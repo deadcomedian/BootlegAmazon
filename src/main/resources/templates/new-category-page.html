@@ -87,31 +87,36 @@
         <div class="new-category-page-container1">
           <h1 class="new-category-page-text">Новая категория</h1>
         </div>
-        <div class="new-category-page-container2">
-          <input
-            type="text"
-            placeholder="Название новой категории"
-            class="new-category-page-input input"
-          />
-        </div>
-        <div class="new-category-page-container3">
-          <div class="button-add-container button-add-root-class-name">
-            <button type="button" class="button-add-button">
-              <span>
-                <span>Создать</span>
-                <br />
-              </span>
-            </button>
+        <form th:method="POST" th:action="@{/category/add}" th:object="${category}">
+          <div class="new-category-page-container2" >
+              <input
+                      type="text"
+                      th:field="*{categoryName}"
+                      placeholder="Название новой категории"
+                      class="new-category-page-input input"
+              />
           </div>
-          <div class="button-cancel-container button-cancel-root-class-name">
-            <button type="button" class="button-cancel-button">
-              <span>
-                <span>Отменить</span>
-                <br />
-              </span>
-            </button>
+          <div class="new-category-page-container3">
+            <div class="button-add-container button-add-root-class-name">
+              <button type="submit" class="button-add-button">
+                <span>
+                  <span>Создать</span>
+                  <br />
+                </span>
+              </button>
+            </div>
+            <div class="button-cancel-container button-cancel-root-class-name">
+              <a th:href="@{'/category/all'}">
+                <button type="button" class="button-cancel-button">
+                  <span>
+                    <span>Отменить</span>
+                    <br />
+                  </span>
+                </button>
+              </a>
+            </div>
           </div>
-        </div>
+        </form>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>
