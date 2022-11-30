@@ -14,6 +14,7 @@ import ru.mephi.tsis.bootlegamazon.exceptions.StatusNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Order;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -41,13 +42,25 @@ public class OrderServiceImpl implements OrderService {
         return orderPrice;
     }
 
+    private String getOrderStatus (Integer id) throws StatusNotFoundException {
+        StatusEntity statusEntity = statusRepository.findById(id)
+                .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + id));
+        return statusEntity.getName();
+    }
+
     @Override
     public Order getById (Integer id) throws OrderNotFoundException, StatusNotFoundException {
         OrderEntity orderEntity = orderRepository.findById(id)
                 .orElseThrow(()->new OrderNotFoundException("Could not find Order with id:" + id));
         StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
                 .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
-        return new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(id));
+        return new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(id), orderEntity.getPaymentId());
+    }
+
+    @Override
+    public Order getByOrderPaymentId(String id) throws StatusNotFoundException {
+        OrderEntity orderEntity = orderRepository.findByOrderPaymentId(id);
+        return new Order(orderEntity.getId(), getOrderStatus(orderEntity.getStatusId()), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId());
     }
 
     @Override
@@ -95,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderEntity orderEntity : orderEntities) {
             StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
                     .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
-            orders.add(new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId())));
+            orders.add(new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId()));
         }
         return orders;
     }

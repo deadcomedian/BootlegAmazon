@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface OrderService {
     Order getById(Integer id) throws OrderNotFoundException, StatusNotFoundException;
+    Order getByOrderPaymentId(String id) throws StatusNotFoundException;
     List<Order> getAll(Comparator<OrderEntity> comparator) throws StatusNotFoundException;
     List<Order> getAllByStatus(String orderStatus, Comparator<OrderEntity> comparator) throws StatusNotFoundException;
     List<Order> getAllByDate(LocalDate orderDate, Comparator<OrderEntity> comparator) throws StatusNotFoundException;

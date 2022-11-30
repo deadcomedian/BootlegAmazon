@@ -1,0 +1,16 @@
+.payment-cancel-page-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.payment-cancel-page-text {
+  font-size: 48px;
+}
+.payment-cancel-page-image {
+  width: 652px;
+  height: 978px;
+  object-fit: cover;
+}

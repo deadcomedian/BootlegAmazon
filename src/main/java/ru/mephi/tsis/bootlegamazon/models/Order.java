@@ -8,6 +8,7 @@ public class Order {
     private String orderAddress;
     private LocalDate orderDate;
     private double orderPrice;
+    private String orderPaymentId;
 
     public int getOrderNumber() {
         return orderNumber;
@@ -49,11 +50,16 @@ public class Order {
         this.orderPrice = orderPrice;
     }
 
-    public Order(int orderNumber, String orderStatus, String orderAddress, LocalDate orderDate, double orderPrice) {
+    public String getOrderPaymentId() { return orderPaymentId; }
+
+    public void setOrderPaymentId(String orderPaymentId) { this.orderPaymentId = orderPaymentId; }
+
+    public Order(int orderNumber, String orderStatus, String orderAddress, LocalDate orderDate, double orderPrice, String orderPaymentId) {
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.orderAddress = orderAddress;
         this.orderDate = orderDate;
         this.orderPrice = orderPrice;
+        this.orderPaymentId = orderPaymentId;
     }
 }

@@ -13,5 +13,4 @@ public interface StatusRepository extends CrudRepository<StatusEntity, Integer> 
 
     @Query("select s from StatusEntity s where s.name = ?1")
     StatusEntity findByStatusName(String statusName);
-
 }

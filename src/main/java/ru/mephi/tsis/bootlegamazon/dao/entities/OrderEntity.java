@@ -24,15 +24,19 @@ public class OrderEntity {
     @Column(name = "order_date")
     private LocalDate date;
 
+    ////добавить !!!
+    private String paymentId; // Накатить 1.4 БД, добавить строку с payment_id в таблицу заказов
+
     public OrderEntity() {
     }
 
-    public OrderEntity(Integer id, Integer userId, Integer statusId, String address, LocalDate date) {
+    public OrderEntity(Integer id, Integer userId, Integer statusId, String address, LocalDate date, String paymentId) {
         this.id = id;
         this.userId = userId;
         this.statusId = statusId;
         this.address = address;
         this.date = date;
+        this.paymentId = paymentId;
     }
 
     public Integer getId() {
@@ -54,4 +58,6 @@ public class OrderEntity {
     public LocalDate getDate() {
         return date;
     }
+
+    public String getPaymentId() { return paymentId; }
 }
