@@ -201,8 +201,8 @@
   width: auto;
   height: 4rem;
   display: flex;
-  align-items: flex-start;
-  justify-content: undefined;
+  align-items: center;
+  justify-content: center;
 }
 .item-page-icon2 {
   fill: var(--dl-color-primary-100);
@@ -264,6 +264,14 @@
   }
   .item-page-text3 {
     text-transform: none;
+  }
+  .item-page-text4 {
+    font-style: normal;
+    font-weight: 700;
+  }
+  .item-page-text5 {
+    font-style: italic;
+    font-weight: 700;
   }
   .item-page-text6 {
     font-size: 1.5rem;
