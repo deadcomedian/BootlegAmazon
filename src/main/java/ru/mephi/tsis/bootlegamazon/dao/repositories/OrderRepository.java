@@ -29,7 +29,7 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
     // Либо менеджер фильтрует по пользователям и дате, либо пользователь фильтрует свои заказы по дате (тогда id - id этого пользователя)
     @Query("select o from OrderEntity o where o.userId = ?1 and o.date = ?2")
     Iterable<OrderEntity> findByUserIdAndDate(Integer userId, LocalDate date);
-    // Шизо-костыль, просто неправильно чтобы запустить
-    @Query("select o from OrderEntity o where o.userId = ?1")
+
+    @Query("select o from OrderEntity o where o.paymentId = ?1")
     OrderEntity findByOrderPaymentId(String paymentId);
 }

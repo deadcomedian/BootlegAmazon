@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
+import ru.mephi.tsis.bootlegamazon.models.Cart;
 import ru.mephi.tsis.bootlegamazon.models.Category;
+import ru.mephi.tsis.bootlegamazon.models.Order;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
 import java.util.Comparator;
@@ -39,6 +41,7 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String newCategory(Model model){
+
         model.addAttribute("category", new Category());
         return "new-category-page";
     }

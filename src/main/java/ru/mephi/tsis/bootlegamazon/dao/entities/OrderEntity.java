@@ -25,6 +25,7 @@ public class OrderEntity {
     private LocalDate date;
 
     ////добавить !!!
+    @Column(name = "payment_id")
     private String paymentId; // Накатить 1.4 БД, добавить строку с payment_id в таблицу заказов
 
     public OrderEntity() {
