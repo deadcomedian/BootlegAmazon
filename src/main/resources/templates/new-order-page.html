@@ -88,135 +88,80 @@
           <h1 class="new-order-page-text">Оформление заказа</h1>
         </div>
         <div class="new-order-page-container02">
-          <div class="new-order-page-container03">
+
+          <div class="new-order-page-container03" th:each="item : ${cart.items}" th:with="amount=${item.getAmount()},article=${item.getArticle()},name=${article.getItemName()},price=${article.getItemPrice()},photo=${article.getItemPhoto()}">
             <div class="new-order-page-container04">
               <img
                 alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                th:src="@{${photo}}"
                 class="new-order-page-image"
               />
-              <label class="new-order-page-text01">Название айтема</label>
+              <label class="new-order-page-text01" th:text="${name}"></label>
             </div>
+
             <div class="new-order-page-container05">
-              <label class="new-order-page-text02">15 шт</label>
-              <label class="new-order-page-text03">1000 ₽</label>
+              <label class="new-order-page-text02" th:text="${amount}"></label>
+              <label class="new-order-page-text03" th:text="${amount * price}"> ₽</label>
             </div>
-          </div>
-          <div class="new-order-page-container06">
-            <div class="new-order-page-container07">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="new-order-page-image1"
-              />
-              <label class="new-order-page-text04">Название айтема</label>
-            </div>
-            <div class="new-order-page-container08">
-              <label class="new-order-page-text05">15 шт</label>
-              <label class="new-order-page-text06">1000 ₽</label>
-            </div>
-          </div>
-          <div class="new-order-page-container09">
-            <div class="new-order-page-container10">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="new-order-page-image2"
-              />
-              <label class="new-order-page-text07">Название айтема</label>
-            </div>
-            <div class="new-order-page-container11">
-              <label class="new-order-page-text08">15 шт</label>
-              <label class="new-order-page-text09">1000 ₽</label>
-            </div>
-          </div>
-          <div class="new-order-page-container12">
-            <div class="new-order-page-container13">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="new-order-page-image3"
-              />
-              <label class="new-order-page-text10">Название айтема</label>
-            </div>
-            <div class="new-order-page-container14">
-              <label class="new-order-page-text11">15 шт</label>
-              <label class="new-order-page-text12">1000 ₽</label>
-            </div>
-          </div>
-          <div class="new-order-page-container15">
-            <div class="new-order-page-container16">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="new-order-page-image4"
-              />
-              <label class="new-order-page-text13">Название айтема</label>
-            </div>
-            <div class="new-order-page-container17">
-              <label class="new-order-page-text14">15 шт</label>
-              <label class="new-order-page-text15">1000 ₽</label>
-            </div>
+
           </div>
         </div>
         <div class="new-order-page-container18">
           <div class="new-order-page-container19">
             <span class="new-order-page-text16">Итого:</span>
-            <label class="new-order-page-text17">1000 ₽</label>
+            <label class="new-order-page-text17" th:text="${cart.price}"> ₽</label>
           </div>
-          <!--
-          Заглушка, нужен post запрос
-          -->
-          <a th:href="@{'/pay/1'}">
-          <div class="new-order-page-container20">
-            <div class="button-pay-container button-pay-root-class-name">
-              <button type="button" class="button-pay-button">
-                <span>
-                  <span>Оплатить</span>
-                  <br />
-                </span>
+        </div>
+        <!---->
+        <form th:method="POST" th:action="@{/pay}" th:object="${order}">
+
+          <div class="new-order-page-container21">
+            <label class="new-order-page-text18">
+              <span>Адрес доставки:</span>
+              <br />
+            </label>
+            <div class="new-order-page-container22">
+
+              <input
+                      type="text"
+                      th:field="*{orderAddress}"
+                      placeholder="Адрес доставки"
+                      class="new-order-page-input input"
+              />
+            </div>
+          </div>
+
+          <div class="new-order-page-container23">
+            <label class="new-order-page-text21">
+              Дата доставки:&nbsp;&nbsp;
+            </label>
+            <div class="new-order-page-container24">
+              <!--DATA CONSTRAINTS-->
+              <input
+                      type="date"
+                      th:field="*{orderDate}"
+                      placeholder="Дата доставки"
+                      class="new-order-page-input1 input"
+                      min="2022-01-01"
+                      max="2070-12-31"
+              />
+            </div>
+          </div>
+
+          <div class="new-order-page-container25">
+            <div class="button-save-container button-save-root-class-name">
+              <button type="submit" class="button-save-button">
+                    <span>
+                      <span>Перейти к оплате</span>
+                      <br />
+                    </span>
               </button>
             </div>
           </div>
-          </a>
-        </div>
+
+        </form>
         <!---->
-        <div class="new-order-page-container21">
-          <label class="new-order-page-text18">
-            <span>Адрес доставки:</span>
-            <br />
-          </label>
-          <div class="new-order-page-container22">
-            <input
-              type="text"
-              placeholder="Адрес доставки"
-              class="new-order-page-input input"
-            />
-          </div>
-        </div>
-        <div class="new-order-page-container23">
-          <label class="new-order-page-text21">
-            Дата доставки:&nbsp;&nbsp;
-          </label>
-          <div class="new-order-page-container24">
-            <input
-              type="text"
-              placeholder="Дата доставки"
-              class="new-order-page-input1 input"
-            />
-          </div>
-        </div>
-        <!---->
-        <div class="new-order-page-container25">
-          <div class="button-save-container button-save-root-class-name">
-            <button type="button" class="button-save-button">
-              <span>
-                <span>Сохранить</span>
-                <br />
-              </span>
-            </button>
-          </div>
-        </div>
+
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

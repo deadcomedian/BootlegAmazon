@@ -29,11 +29,11 @@ public class PaymentController {
         this.orderService = orderService;
     }
     //PostMapping - заглушка
-    @GetMapping("pay/1")
-    public String payment() {
+    @PostMapping("/pay")
+    public String payment(@ModelAttribute("order") Order order) {
 
         //заглушка
-        Order order = new Order(1, "Доставлен", "Тест", LocalDate.now(), 322.32, null);
+        //Order order = new Order(1, "Доставлен", "Тест", LocalDate.now(), 322.32, null);
 
         try {
             double total = order.getOrderPrice();

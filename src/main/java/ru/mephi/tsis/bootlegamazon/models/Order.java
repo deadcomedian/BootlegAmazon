@@ -3,18 +3,18 @@ package ru.mephi.tsis.bootlegamazon.models;
 import java.time.LocalDate;
 
 public class Order {
-    private int orderNumber;
+    private Integer orderNumber;
     private String orderStatus;
     private String orderAddress;
     private LocalDate orderDate;
     private double orderPrice;
     private String orderPaymentId;
 
-    public int getOrderNumber() {
+    public Integer getOrderNumber() {
         return orderNumber;
     }
 
-    public void setOrderNumber(int orderNumber) {
+    public void setOrderNumber(Integer orderNumber) {
         this.orderNumber = orderNumber;
     }
 
