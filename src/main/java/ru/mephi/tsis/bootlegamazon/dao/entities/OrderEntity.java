@@ -1,5 +1,7 @@
 package ru.mephi.tsis.bootlegamazon.dao.entities;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -21,6 +23,7 @@ public class OrderEntity {
     @Column(name = "order_address")
     private String address;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "order_date")
     private LocalDate date;
 

@@ -50,7 +50,7 @@ public class CategoryController {
     public String create(@ModelAttribute("category") Category category){
         if (category.getCategoryName().equals("")){
             //разобраться
-            throw new RuntimeException("EMPTY VALUE BLIN!!!");
+            throw new RuntimeException("EMPTY VALUE!!!");
         }
         categoryService.createCategory(category.getCategoryName());
         return "redirect:/category/all";

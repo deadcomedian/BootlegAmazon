@@ -60,7 +60,7 @@ public class OrderController {
         list.add(cartArticle);
         Cart cart1 = new Cart(list);
         model.addAttribute("cart", cart1);
-        Order order = new Order(6, "Инициализирован", null, LocalDate.now(), cart1.getPrice(), null);
+        Order order = new Order(6, "Инициализирован", null, null, cart1.getPrice(), null);
         model.addAttribute("order", order);
         return "new-order-page";
     }

@@ -121,7 +121,9 @@
               <br />
             </label>
             <div class="new-order-page-container22">
-
+              <input type="hidden" th:field="*{orderNumber}" />
+              <input type="hidden" th:field="*{orderStatus}" />
+              <input type="hidden" th:field="*{orderPrice}" />
               <input
                       type="text"
                       th:field="*{orderAddress}"

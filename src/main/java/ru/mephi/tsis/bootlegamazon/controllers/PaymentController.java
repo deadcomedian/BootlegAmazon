@@ -6,12 +6,15 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.mephi.tsis.bootlegamazon.models.Order;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
 import ru.mephi.tsis.bootlegamazon.services.PaymentService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -28,22 +31,15 @@ public class PaymentController {
         this.paymentService = paymentService;
         this.orderService = orderService;
     }
-    //PostMapping - заглушка
     @PostMapping("/pay")
-    public String payment(@ModelAttribute("order") Order order) {
-
-        //заглушка
-        //Order order = new Order(1, "Доставлен", "Тест", LocalDate.now(), 322.32, null);
+    public String payment(@ModelAttribute("order") @Valid Order order, BindingResult bindingResult, Model model) {
 
         try {
             double total = order.getOrderPrice();
             Payment payment = paymentService.createPayment(total, "http://localhost:8080/payment-success-page", "http://localhost:8080/pay/success");
 
-
-            //ВОТ ТУТА ЗАПИСЫВАЕМ В БД
             order.setOrderPaymentId(payment.getId());
 
-            //Чтобы было, из гайда
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
                     return "redirect:" + link.getHref();
