@@ -23,7 +23,6 @@ public class OrderEntity {
     @Column(name = "order_address")
     private String address;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "order_date")
     private LocalDate date;
 
@@ -41,6 +40,22 @@ public class OrderEntity {
         this.address = address;
         this.date = date;
         this.paymentId = paymentId;
+    }
+
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public Integer getId() {

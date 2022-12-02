@@ -1,11 +1,16 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDate;
 
 public class Order {
+
+    private Integer userId;
     private Integer orderNumber;
     private String orderStatus;
     private String orderAddress;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
     private double orderPrice;
     private String orderPaymentId;
@@ -54,12 +59,33 @@ public class Order {
 
     public void setOrderPaymentId(String orderPaymentId) { this.orderPaymentId = orderPaymentId; }
 
-    public Order(int orderNumber, String orderStatus, String orderAddress, LocalDate orderDate, double orderPrice, String orderPaymentId) {
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Order(Integer userId, Integer orderNumber, String orderStatus, String orderAddress, LocalDate orderDate, double orderPrice, String orderPaymentId) {
+        this.userId = userId;
         this.orderNumber = orderNumber;
         this.orderStatus = orderStatus;
         this.orderAddress = orderAddress;
         this.orderDate = orderDate;
         this.orderPrice = orderPrice;
         this.orderPaymentId = orderPaymentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderNumber=" + orderNumber +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", orderAddress='" + orderAddress + '\'' +
+                ", orderDate=" + orderDate +
+                ", orderPrice=" + orderPrice +
+                ", orderPaymentId='" + orderPaymentId + '\'' +
+                '}';
     }
 }

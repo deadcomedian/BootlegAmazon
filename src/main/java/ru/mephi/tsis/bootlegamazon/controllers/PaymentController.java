@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.mephi.tsis.bootlegamazon.exceptions.OrderNotFoundException;
+import ru.mephi.tsis.bootlegamazon.exceptions.StatusNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Order;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
@@ -36,9 +38,11 @@ public class PaymentController {
 
         try {
             double total = order.getOrderPrice();
-            Payment payment = paymentService.createPayment(total, "http://localhost:8080/payment-success-page", "http://localhost:8080/pay/success");
+            Payment payment = paymentService.createPayment(total, "http://localhost:8080/pay/cancel", "http://localhost:8080/pay/success");
 
-            order.setOrderPaymentId(payment.getId());
+            orderService.updatePaymentId(order.getOrderNumber(), payment.getId());
+            orderService.updateOrderAddress(order.getOrderNumber(), order.getOrderAddress());
+            orderService.updateOrderDate(order.getOrderNumber(), order.getOrderDate());
 
             for (Links link : payment.getLinks()) {
                 if (link.getRel().equalsIgnoreCase("approval_url")) {
@@ -46,10 +50,10 @@ public class PaymentController {
                 }
             }
 
-        } catch (PayPalRESTException e) {
+        } catch (OrderNotFoundException | PayPalRESTException e) {
             e.printStackTrace();
         }
-        return "redirect:/";
+        return null;
     }
 
     @GetMapping("pay/cancel")
@@ -62,10 +66,8 @@ public class PaymentController {
         try {
             Payment payment = paymentService.executePayment(paymentId, payerID);
             if (payment.getState().equals("approved")) {
-                // bad practice, поменять на запись по id
-                // ковырялся 100 лет чтобы прикрутить изменение статуса по оплате
-                // оказалось что не нужно..
-                //orderService.getByOrderPaymentId(paymentId).setOrderStatus("ИНИЦИАЛИЗИРОВАН");
+                Order order = orderService.getByOrderPaymentId(paymentId);
+                orderService.updateOrderStatus(order.getOrderNumber(),"Оплачен");
 
                 // РАЗОБРАТЬСЯ, А ЧТО ПРОИСХОДИТ ВООБЩЕ
 
@@ -73,7 +75,7 @@ public class PaymentController {
                 //УМЕНЬШАТЬ КОЛИЧЕСТВО - ПОСЛЕ ОПЛАТЫ\ОФОРМЛЕНИЯ?
                 return "payment-success-page";
             }
-        } catch (PayPalRESTException e) {
+        } catch (PayPalRESTException | StatusNotFoundException | OrderNotFoundException e) {
             e.printStackTrace();
         }
         return "redirect:/";

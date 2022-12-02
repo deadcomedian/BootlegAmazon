@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.mephi.tsis.bootlegamazon.dao.entities.ArticleEntity;
+import ru.mephi.tsis.bootlegamazon.exceptions.OrderNotFoundException;
+import ru.mephi.tsis.bootlegamazon.exceptions.StatusNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
 
@@ -22,6 +24,8 @@ public class OrderController {
     пейджинг
     валидация форм
     ограничения даты на фронте
+    получить заказ по user_id, где статус  - инициализирован
+    сделать страницы статусов оплаты
      */
     private final OrderService orderService;
 
@@ -47,7 +51,13 @@ public class OrderController {
         list.add(cartArticle1);
         Cart cart1 = new Cart(list);
         model.addAttribute("cart", cart1);
-        Order order = new Order(6, "Инициализирован", null, LocalDate.now(), cart1.getPrice(), null);
+        Order order;
+        try {
+            order = orderService.getById(9);
+        } catch (OrderNotFoundException | StatusNotFoundException e) {
+            order = new Order(1,9, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart1.getPrice(), "");
+            orderService.createOrder(order);
+        }
         model.addAttribute("order", order);
         return "new-order-page";
     }
@@ -60,7 +70,7 @@ public class OrderController {
         list.add(cartArticle);
         Cart cart1 = new Cart(list);
         model.addAttribute("cart", cart1);
-        Order order = new Order(6, "Инициализирован", null, null, cart1.getPrice(), null);
+        Order order = new Order(1,6, "Инициализирован", null, null, cart1.getPrice(), null);
         model.addAttribute("order", order);
         return "new-order-page";
     }

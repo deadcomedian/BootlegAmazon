@@ -18,4 +18,11 @@ public interface OrderService {
     List<Order> getAllByUserId(Integer userId, Comparator<OrderEntity> comparator) throws StatusNotFoundException;
     List<Order> getAllByUserIdAndStatus(Integer userId, String orderStatus, Comparator<OrderEntity> comparator) throws StatusNotFoundException;
     List<Order> findByUserIdAndDate(Integer userId, LocalDate orderDate, Comparator<OrderEntity> comparator) throws StatusNotFoundException;
+    void createOrder(Order order);
+    void updatePaymentId(Integer orderId, String paymentId) throws OrderNotFoundException;
+
+    void updateOrderStatus(Integer orderId, String orderStatus) throws OrderNotFoundException;
+
+    void updateOrderDate(Integer orderId, LocalDate date) throws OrderNotFoundException;
+    void updateOrderAddress(Integer orderId, String address) throws OrderNotFoundException;
 }

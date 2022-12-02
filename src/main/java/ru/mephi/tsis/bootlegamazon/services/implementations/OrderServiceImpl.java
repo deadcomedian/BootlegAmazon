@@ -54,13 +54,13 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(()->new OrderNotFoundException("Could not find Order with id:" + id));
         StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
                 .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
-        return new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(id), orderEntity.getPaymentId());
+        return new Order(orderEntity.getUserId(), orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(id), orderEntity.getPaymentId());
     }
 
     @Override
     public Order getByOrderPaymentId(String id) throws StatusNotFoundException {
         OrderEntity orderEntity = orderRepository.findByOrderPaymentId(id);
-        return new Order(orderEntity.getId(), getOrderStatus(orderEntity.getStatusId()), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId());
+        return new Order(orderEntity.getUserId(), orderEntity.getId(), getOrderStatus(orderEntity.getStatusId()), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId());
     }
 
     @Override
@@ -95,6 +95,47 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void createOrder(Order order) {
+        OrderEntity orderEntity = new OrderEntity(
+                null,
+                order.getUserId(),
+                statusRepository.findByStatusName(order.getOrderStatus()).getId(),
+                order.getOrderAddress(),
+                order.getOrderDate(),
+                order.getOrderPaymentId()
+        );
+        orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public void updatePaymentId(Integer orderId, String paymentId) throws OrderNotFoundException {
+        OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Founf, id: " + orderId));
+        orderEntity.setPaymentId(paymentId);
+        orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public void updateOrderStatus(Integer orderId, String orderStatus) throws OrderNotFoundException {
+        OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Founf, id: " + orderId));
+        orderEntity.setStatusId(statusRepository.findByStatusName(orderStatus).getId());
+        orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public void updateOrderDate(Integer orderId, LocalDate date) throws OrderNotFoundException {
+        OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Founf, id: " + orderId));
+        orderEntity.setDate(date);
+        orderRepository.save(orderEntity);
+    }
+
+    @Override
+    public void updateOrderAddress(Integer orderId, String address) throws OrderNotFoundException {
+        OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(()->new OrderNotFoundException("Order Not Founf, id: " + orderId));
+        orderEntity.setAddress(address);
+        orderRepository.save(orderEntity);
+    }
+
+    @Override
     public List<Order> getAllByUserId(Integer userId, Comparator<OrderEntity> comparator) throws StatusNotFoundException {
         List<OrderEntity> orderEntities = Lists.newArrayList(orderRepository.findAllByUserId(userId));
         return processOrders(orderEntities, comparator);
@@ -108,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
         for (OrderEntity orderEntity : orderEntities) {
             StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
                     .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
-            orders.add(new Order(orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId()));
+            orders.add(new Order(orderEntity.getUserId(), orderEntity.getId(), statusEntity.getName(), orderEntity.getAddress(), orderEntity.getDate(), getOrderPrice(orderEntity.getId()), orderEntity.getPaymentId()));
         }
         return orders;
     }
