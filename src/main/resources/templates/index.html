@@ -35,11 +35,6 @@
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
-      data-tag="font"
-    />
-    <link
-      rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&amp;display=swap"
       data-tag="font"
     />
@@ -47,203 +42,214 @@
   </head>
   <body>
     <div>
-      <link href="/style/catalog-test-page.css" rel="stylesheet" />
+      <link href="/style/catalog-page.css" rel="stylesheet" />
 
-      <div class="catalog-test-page-container">
-        <div class="catalog-test-page-container1">
-          <div class="catalog-test-page-container2">
-            <header data-role="Header" class="catalog-test-page-header">
-              <img
-                alt="logo"
-                src="https://i.imgur.com/vizTO84.png"
-                class="catalog-test-page-image"
-              />
-              <div class="catalog-test-page-container3">
+      <div class="catalog-page-container">
+        <header data-role="Header" class="header-header">
+          <img
+            alt="logo"
+            src="https://i.imgur.com/vizTO84.png"
+            class="header-image"
+          />
+          <div class="header-container">
+            <div class="tool-box-container tool-box-root-class-name">
+              <div class="tool-box-container1">
+                <input
+                  type="text"
+                  placeholder="Поиск товара"
+                  class="tool-box-input input"
+                />
                 <svg
                   viewBox="0 0 950.8571428571428 1024"
-                  class="catalog-test-page-icon"
+                  class="tool-box-search"
                 >
                   <path
                     d="M658.286 475.429c0-141.143-114.857-256-256-256s-256 114.857-256 256 114.857 256 256 256 256-114.857 256-256zM950.857 950.857c0 40-33.143 73.143-73.143 73.143-19.429 0-38.286-8-51.429-21.714l-196-195.429c-66.857 46.286-146.857 70.857-228 70.857-222.286 0-402.286-180-402.286-402.286s180-402.286 402.286-402.286 402.286 180 402.286 402.286c0 81.143-24.571 161.143-70.857 228l196 196c13.143 13.143 21.143 32 21.143 51.429z"
                   ></path></svg
-                ><svg viewBox="0 0 1024 1024" class="catalog-test-page-icon02">
+                ><svg viewBox="0 0 1024 1024" class="tool-box-cart">
+                  <path
+                    d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
+                  ></path></svg
+                ><svg viewBox="0 0 1024 1024" class="tool-box-profile">
                   <path
                     d="M576 706.612v-52.78c70.498-39.728 128-138.772 128-237.832 0-159.058 0-288-192-288s-192 128.942-192 288c0 99.060 57.502 198.104 128 237.832v52.78c-217.102 17.748-384 124.42-384 253.388h896c0-128.968-166.898-235.64-384-253.388z"
                   ></path>
                 </svg>
               </div>
-              <div data-role="MobileMenu" class="catalog-test-page-mobile-menu">
-                <nav class="catalog-test-page-nav">
-                  <div class="catalog-test-page-container4">
-                    <img
-                      alt="image"
-                      src="https://presentation-website-assets.teleporthq.io/logos/logo.png"
-                      class="catalog-test-page-image1"
-                    />
-                    <div
-                      data-role="CloseMobileMenu"
-                      class="catalog-test-page-close-mobile-menu"
-                    >
-                      <svg
-                        viewBox="0 0 1024 1024"
-                        class="catalog-test-page-icon04"
-                      >
-                        <path
-                          d="M810 274l-238 238 238 238-60 60-238-238-238 238-60-60 238-238-238-238 60-60 238 238 238-238z"
-                        ></path>
-                      </svg>
-                    </div>
-                  </div>
-                </nav>
-                <div>
-                  <svg
-                    viewBox="0 0 950.8571428571428 1024"
-                    class="catalog-test-page-icon06"
-                  >
-                    <path
-                      d="M925.714 233.143c-25.143 36.571-56.571 69.143-92.571 95.429 0.571 8 0.571 16 0.571 24 0 244-185.714 525.143-525.143 525.143-104.571 0-201.714-30.286-283.429-82.857 14.857 1.714 29.143 2.286 44.571 2.286 86.286 0 165.714-29.143 229.143-78.857-81.143-1.714-149.143-54.857-172.571-128 11.429 1.714 22.857 2.857 34.857 2.857 16.571 0 33.143-2.286 48.571-6.286-84.571-17.143-148-91.429-148-181.143v-2.286c24.571 13.714 53.143 22.286 83.429 23.429-49.714-33.143-82.286-89.714-82.286-153.714 0-34.286 9.143-65.714 25.143-93.143 90.857 112 227.429 185.143 380.571 193.143-2.857-13.714-4.571-28-4.571-42.286 0-101.714 82.286-184.571 184.571-184.571 53.143 0 101.143 22.286 134.857 58.286 41.714-8 81.714-23.429 117.143-44.571-13.714 42.857-42.857 78.857-81.143 101.714 37.143-4 73.143-14.286 106.286-28.571z"
-                    ></path></svg
-                  ><svg
-                    viewBox="0 0 877.7142857142857 1024"
-                    class="catalog-test-page-icon08"
-                  >
-                    <path
-                      d="M585.143 512c0-80.571-65.714-146.286-146.286-146.286s-146.286 65.714-146.286 146.286 65.714 146.286 146.286 146.286 146.286-65.714 146.286-146.286zM664 512c0 124.571-100.571 225.143-225.143 225.143s-225.143-100.571-225.143-225.143 100.571-225.143 225.143-225.143 225.143 100.571 225.143 225.143zM725.714 277.714c0 29.143-23.429 52.571-52.571 52.571s-52.571-23.429-52.571-52.571 23.429-52.571 52.571-52.571 52.571 23.429 52.571 52.571zM438.857 152c-64 0-201.143-5.143-258.857 17.714-20 8-34.857 17.714-50.286 33.143s-25.143 30.286-33.143 50.286c-22.857 57.714-17.714 194.857-17.714 258.857s-5.143 201.143 17.714 258.857c8 20 17.714 34.857 33.143 50.286s30.286 25.143 50.286 33.143c57.714 22.857 194.857 17.714 258.857 17.714s201.143 5.143 258.857-17.714c20-8 34.857-17.714 50.286-33.143s25.143-30.286 33.143-50.286c22.857-57.714 17.714-194.857 17.714-258.857s5.143-201.143-17.714-258.857c-8-20-17.714-34.857-33.143-50.286s-30.286-25.143-50.286-33.143c-57.714-22.857-194.857-17.714-258.857-17.714zM877.714 512c0 60.571 0.571 120.571-2.857 181.143-3.429 70.286-19.429 132.571-70.857 184s-113.714 67.429-184 70.857c-60.571 3.429-120.571 2.857-181.143 2.857s-120.571 0.571-181.143-2.857c-70.286-3.429-132.571-19.429-184-70.857s-67.429-113.714-70.857-184c-3.429-60.571-2.857-120.571-2.857-181.143s-0.571-120.571 2.857-181.143c3.429-70.286 19.429-132.571 70.857-184s113.714-67.429 184-70.857c60.571-3.429 120.571-2.857 181.143-2.857s120.571-0.571 181.143 2.857c70.286 3.429 132.571 19.429 184 70.857s67.429 113.714 70.857 184c3.429 60.571 2.857 120.571 2.857 181.143z"
-                    ></path></svg
-                  ><svg
-                    viewBox="0 0 602.2582857142856 1024"
-                    class="catalog-test-page-icon10"
-                  >
-                    <path
-                      d="M548 6.857v150.857h-89.714c-70.286 0-83.429 33.714-83.429 82.286v108h167.429l-22.286 169.143h-145.143v433.714h-174.857v-433.714h-145.714v-169.143h145.714v-124.571c0-144.571 88.571-223.429 217.714-223.429 61.714 0 114.857 4.571 130.286 6.857z"
-                    ></path>
-                  </svg>
-                </div>
-              </div>
-            </header>
-            <div class="catalog-test-page-banner">
-              <img
-                alt="image"
-                src="https://ndc.book24.ru/resize/1100x320/iblock/9a0/9a0e81e2a20bb7ec2eba83268eac49ce/d4cba9396e671dcf315ca3771105b38c.jpg"
-                class="catalog-test-page-image2"
-              />
             </div>
           </div>
-          <div class="catalog-test-page-gallery">
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1418065460487-3e41a6c84dc5?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDEyfHxmb3Jlc3R8ZW58MHx8fHwxNjI2MjUxMjg4&amp;ixlib=rb-1.2.1&amp;h=1200"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
+        </header>
+        <div class="catalog-page-container1">
+          <h1 class="catalog-page-text">Каталог</h1>
+          <div class="catalog-page-container2">
+            <div class="button-sort-container button-sort-root-class-name">
+              <button type="button" class="button-sort-button">
+                <span>
+                  <span>Сортировка</span>
+                  <br />
+                </span>
+              </button>
             </div>
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name1"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1579551053957-ee77f9b970c7?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDQ2fHx3b29kc3xlbnwwfHx8fDE2MjY0NDc1ODg&amp;ixlib=rb-1.2.1&amp;w=1000"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
-            </div>
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name2"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDN8fHdvb2RzfGVufDB8fHx8MTYyNjQ0NzU3Mw&amp;ixlib=rb-1.2.1&amp;w=1000"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
-            </div>
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name3"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1439853949127-fa647821eba0?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDE4fHxuYXR1cmV8ZW58MHx8fHwxNjI2NDQ3ODAw&amp;ixlib=rb-1.2.1&amp;w=1000"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
-            </div>
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name4"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1529948723647-8b7bd77b441c?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDExfHxjbGlmZnxlbnwwfHx8fDE2MjY0NDc4MjQ&amp;ixlib=rb-1.2.1&amp;w=1000"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
-            </div>
-            <div
-              class="gallery-card11-gallery-card gallery-card11-root-class-name5"
-            >
-              <img
-                alt="image"
-                src="https://images.unsplash.com/photo-1553570739-330b8db8a925?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDI0fHxvY2VhbnxlbnwwfHx8fDE2MjY0NDc4ODQ&amp;ixlib=rb-1.2.1&amp;w=1000"
-                class="gallery-card11-image"
-              />
-              <h2 class="gallery-card11-text"><span>Project Title</span></h2>
-              <span class="gallery-card11-text1">
-                <span>Lorem ipsum dolor sit amet</span>
-              </span>
+            <div class="button-filter-container button-filter-root-class-name">
+              <button type="button" class="button-filter-button">
+                <span>
+                  <span>Фильтр</span>
+                  <br />
+                </span>
+              </button>
             </div>
           </div>
-          <footer class="catalog-test-page-footer">
-            <img
-              alt="logo"
-              src="https://i.imgur.com/vizTO84.png"
-              class="catalog-test-page-image3"
-            />
-            <span class="catalog-test-page-text">
-              © 2022 С18-501, все права зарегистрированы.
-            </span>
-            <div class="catalog-test-page-icon-group1">
-              <svg
-                viewBox="0 0 950.8571428571428 1024"
-                class="catalog-test-page-icon12"
-              >
-                <path
-                  d="M925.714 233.143c-25.143 36.571-56.571 69.143-92.571 95.429 0.571 8 0.571 16 0.571 24 0 244-185.714 525.143-525.143 525.143-104.571 0-201.714-30.286-283.429-82.857 14.857 1.714 29.143 2.286 44.571 2.286 86.286 0 165.714-29.143 229.143-78.857-81.143-1.714-149.143-54.857-172.571-128 11.429 1.714 22.857 2.857 34.857 2.857 16.571 0 33.143-2.286 48.571-6.286-84.571-17.143-148-91.429-148-181.143v-2.286c24.571 13.714 53.143 22.286 83.429 23.429-49.714-33.143-82.286-89.714-82.286-153.714 0-34.286 9.143-65.714 25.143-93.143 90.857 112 227.429 185.143 380.571 193.143-2.857-13.714-4.571-28-4.571-42.286 0-101.714 82.286-184.571 184.571-184.571 53.143 0 101.143 22.286 134.857 58.286 41.714-8 81.714-23.429 117.143-44.571-13.714 42.857-42.857 78.857-81.143 101.714 37.143-4 73.143-14.286 106.286-28.571z"
-                ></path></svg
-              ><svg
-                viewBox="0 0 877.7142857142857 1024"
-                class="catalog-test-page-icon14"
-              >
-                <path
-                  d="M585.143 512c0-80.571-65.714-146.286-146.286-146.286s-146.286 65.714-146.286 146.286 65.714 146.286 146.286 146.286 146.286-65.714 146.286-146.286zM664 512c0 124.571-100.571 225.143-225.143 225.143s-225.143-100.571-225.143-225.143 100.571-225.143 225.143-225.143 225.143 100.571 225.143 225.143zM725.714 277.714c0 29.143-23.429 52.571-52.571 52.571s-52.571-23.429-52.571-52.571 23.429-52.571 52.571-52.571 52.571 23.429 52.571 52.571zM438.857 152c-64 0-201.143-5.143-258.857 17.714-20 8-34.857 17.714-50.286 33.143s-25.143 30.286-33.143 50.286c-22.857 57.714-17.714 194.857-17.714 258.857s-5.143 201.143 17.714 258.857c8 20 17.714 34.857 33.143 50.286s30.286 25.143 50.286 33.143c57.714 22.857 194.857 17.714 258.857 17.714s201.143 5.143 258.857-17.714c20-8 34.857-17.714 50.286-33.143s25.143-30.286 33.143-50.286c22.857-57.714 17.714-194.857 17.714-258.857s5.143-201.143-17.714-258.857c-8-20-17.714-34.857-33.143-50.286s-30.286-25.143-50.286-33.143c-57.714-22.857-194.857-17.714-258.857-17.714zM877.714 512c0 60.571 0.571 120.571-2.857 181.143-3.429 70.286-19.429 132.571-70.857 184s-113.714 67.429-184 70.857c-60.571 3.429-120.571 2.857-181.143 2.857s-120.571 0.571-181.143-2.857c-70.286-3.429-132.571-19.429-184-70.857s-67.429-113.714-70.857-184c-3.429-60.571-2.857-120.571-2.857-181.143s-0.571-120.571 2.857-181.143c3.429-70.286 19.429-132.571 70.857-184s113.714-67.429 184-70.857c60.571-3.429 120.571-2.857 181.143-2.857s120.571-0.571 181.143 2.857c70.286 3.429 132.571 19.429 184 70.857s67.429 113.714 70.857 184c3.429 60.571 2.857 120.571 2.857 181.143z"
-                ></path></svg
-              ><svg
-                viewBox="0 0 602.2582857142856 1024"
-                class="catalog-test-page-icon16"
-              >
-                <path
-                  d="M548 6.857v150.857h-89.714c-70.286 0-83.429 33.714-83.429 82.286v108h167.429l-22.286 169.143h-145.143v433.714h-174.857v-433.714h-145.714v-169.143h145.714v-124.571c0-144.571 88.571-223.429 217.714-223.429 61.714 0 114.857 4.571 130.286 6.857z"
-                ></path>
-              </svg>
-            </div>
-          </footer>
         </div>
+        <div class="catalog-page-gallery">
+          <div class="catalog-card-gallery-card catalog-card-root-class-name">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-card-gallery-card catalog-card-root-class-name1">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-card-gallery-card catalog-card-root-class-name2">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-card-gallery-card catalog-card-root-class-name3">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-card-gallery-card catalog-card-root-class-name4">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="catalog-card-gallery-card catalog-card-root-class-name5">
+            <div class="catalog-card-container">
+              <img
+                alt="image"
+                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                class="catalog-card-image"
+              />
+              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <div class="catalog-card-container1">
+                <label class="catalog-card-text1"><span>Автор</span></label>
+              </div>
+              <div class="catalog-card-container2">
+                <label class="catalog-card-text2"><span>Цена</span></label>
+                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
+                  <path
+                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="categories-page-container8">
+          <a href="/category/all/0">
+            <button type="button">
+              <svg viewBox="0 0 1024 1024" class="categories-page-icon10">
+                <path d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"></path>
+              </svg>
+            </button>
+          </a>
+          <label class="categories-page-text6">1</label>
+          <a href="/category/all/0">
+            <button type="button">
+              <svg viewBox="0 0 1024 1024" class="categories-page-icon12">
+                <path d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
+              </svg>
+            </button>
+          </a>
+        </div>
+        <footer class="footer-footer">
+          <span class="footer-text">
+            <span>© 2022 С18-501, все права зарегистрированы.</span>
+          </span>
+        </footer>
       </div>
     </div>
     <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
