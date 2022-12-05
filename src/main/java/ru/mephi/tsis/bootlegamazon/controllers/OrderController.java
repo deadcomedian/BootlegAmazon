@@ -13,19 +13,20 @@ import ru.mephi.tsis.bootlegamazon.services.OrderService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
 public class OrderController {
     /*
     TO DO
-    получать номер заказа из репозитория бд
-    разобраться с подтягиванием цены в корзину
     пейджинг
     валидация форм
     ограничения даты на фронте
-    получить заказ по user_id, где статус  - инициализирован
     сделать страницы статусов оплаты
+    что делать если мы удалили кеатегорию: а книги с ней остались?
+    доделать страницу каталога и товара
      */
     private final OrderService orderService;
 
@@ -61,29 +62,22 @@ public class OrderController {
         model.addAttribute("order", order);
         return "new-order-page";
     }
-    @PostMapping("/fromcart")
+    @PostMapping("/new")
     public String newOrderFromCart(@ModelAttribute("cart") Cart cart, Model model){
-        //Костыль
-        Article article = new Article(1,"20000 liye pod vodoy", "Jules Verne", "Приключения", "", 500.0, 5.0, "https://i.imgur.com/ZAbq3yF.jpeg", 1);
-        ArrayList<CartArticle> list = new ArrayList<>();
-        CartArticle cartArticle = new CartArticle(article, 1);
-        list.add(cartArticle);
-        Cart cart1 = new Cart(list);
-        model.addAttribute("cart", cart1);
-        Order order = new Order(1,6, "Инициализирован", null, null, cart1.getPrice(), null);
+        //заглушка
+        Integer userId = 1;
+        model.addAttribute("cart", cart);
+        Order order;
+        try {
+            List<Order> orders = orderService.getAllByUserIdAndStatus(userId, "Инициализирован", (a1, a2) -> 0);
+            order = orders.get(0);
+        } catch (StatusNotFoundException e) {
+            int orderNumber = orderService.getOrdersCount() +1;
+            order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
+            orderService.createOrder(order);
+        }
         model.addAttribute("order", order);
         return "new-order-page";
-    }
-
-    @PostMapping("/new")
-    public String newOrder(@ModelAttribute("order") Order order){
-        /*
-        получаем сумму из корзины
-        проводим оплату
-        если успешно - прописали в бд и седлали редирект на личный кабинет: где отображаются заказы
-        если не успешно - на страницу с оформлением заказа
-         */
-        return null;
     }
 
 }

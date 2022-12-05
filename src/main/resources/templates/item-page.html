@@ -85,7 +85,7 @@
           </div>
         </header>
         <div class="item-page-container1">
-          <h1 class="item-page-text">Название Книги</h1>
+          <h1 class="item-page-text" th:text="${article.itemName}"></h1>
           <svg viewBox="0 0 1024 1024" class="item-page-icon">
             <path
               d="M884 300l-78 78-160-160 78-78q12-12 30-12t30 12l100 100q12 12 12 30t-12 30zM128 736l472-472 160 160-472 472h-160v-160z"
@@ -96,14 +96,14 @@
           <div class="item-page-container3">
             <img
               alt="image"
-              src="https://play.teleporthq.io/static/svg/default-img.svg"
+              th:src="@{${article.itemPhoto}}"
               class="item-page-image"
             />
           </div>
           <div class="item-page-container4">
-            <label class="item-page-text1">1000 ₽</label>
-            <label class="item-page-text2">в наличии</label>
-            <label class="item-page-text3">15 штук</label>
+            <label class="item-page-text1" th:text="${article.itemPrice} + ' ₽'"></label>
+            <label class="item-page-text2">В наличии</label>
+            <label class="item-page-text3" th:text="${article.amount} + ' шт.'"></label>
             <div class="item-page-container5">
               <svg viewBox="0 0 1024 1024" class="item-page-icon2">
                 <path
@@ -114,13 +114,9 @@
           </div>
         </div>
         <div class="item-page-container6">
-          <label class="item-page-text4">Категория</label>
-          <label class="item-page-text5">Автор</label>
-          <span class="item-page-text6">
-            Описание книги - это как хорошее произведение искуcства. Если
-            написать сочно, то любой книгу каждый же купит. А вот описывая
-            только скучные факты ничего хорошего не добьёшься.
-          </span>
+          <label class="item-page-text4" th:text="'Категория: ' + ${article.categoryName}"></label>
+          <label class="item-page-text5" th:text="'Автор: ' + ${article.authorName}"></label>
+          <span class="item-page-text6" th:text="${article.itemDescription}"></span>
         </div>
         <footer class="footer-footer">
           <span class="footer-text">

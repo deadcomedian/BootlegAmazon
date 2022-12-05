@@ -100,125 +100,24 @@
             </div>
           </div>
         </div>
-        <div class="catalog-page-gallery">
+        <div class="catalog-page-gallery" th:each="articleCard : ${articleCards}">
           <div class="catalog-card-gallery-card catalog-card-root-class-name">
             <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
+              <a th:href="@{'/items/' + ${articleCard.id}}">
+                <img
+                        alt="image"
+                        th:src="@{${articleCard.photo}}"
+                        class="catalog-card-image"
+                />
+                <h1 class="catalog-card-text">
+                  <span th:text="${articleCard.itemName}"></span>
+                </h1>
+              </a>
               <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
+                <label class="catalog-card-text1"><span th:text="${articleCard.authorName}"></span></label>
               </div>
               <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
-                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
-                  <path
-                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="catalog-card-gallery-card catalog-card-root-class-name1">
-            <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
-              <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
-              </div>
-              <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
-                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
-                  <path
-                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="catalog-card-gallery-card catalog-card-root-class-name2">
-            <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
-              <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
-              </div>
-              <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
-                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
-                  <path
-                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="catalog-card-gallery-card catalog-card-root-class-name3">
-            <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
-              <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
-              </div>
-              <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
-                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
-                  <path
-                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="catalog-card-gallery-card catalog-card-root-class-name4">
-            <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
-              <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
-              </div>
-              <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
-                <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
-                  <path
-                    d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
-                  ></path>
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div class="catalog-card-gallery-card catalog-card-root-class-name5">
-            <div class="catalog-card-container">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="catalog-card-image"
-              />
-              <h1 class="catalog-card-text"><span>Название Книги</span></h1>
-              <div class="catalog-card-container1">
-                <label class="catalog-card-text1"><span>Автор</span></label>
-              </div>
-              <div class="catalog-card-container2">
-                <label class="catalog-card-text2"><span>Цена</span></label>
+                <label class="catalog-card-text2" ><span th:text="${articleCard.price} + ' ₽'"></span></label>
                 <svg viewBox="0 0 1024 1024" class="catalog-card-icon">
                   <path
                     d="M306 630q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84h140q40 84 80 170 10 18 46 95t56 119h300q150-272 164-300l74 42-164 298q-24 44-74 44h-318l-38 70zM726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26zM470 384v-128h-128v-86h128v-128h84v128h128v86h-128v128h-84z"
@@ -229,18 +128,22 @@
           </div>
         </div>
         <div class="categories-page-container8">
-          <a href="/category/all/0">
+          <a th:href="@{/items/all/{previousPageNumber}(previousPageNumber=${previousPage})}" >
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon10">
-                <path d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"></path>
+                <path
+                        d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
+                ></path>
               </svg>
             </button>
           </a>
-          <label class="categories-page-text6">1</label>
-          <a href="/category/all/0">
+          <label class="categories-page-text6" th:text="${currentPage + 1}"></label>
+          <a th:href="@{/items/all/{nextPageNumber}(nextPageNumber=${nextPage})}" >
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon12">
-                <path d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"></path>
+                <path
+                        d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
+                ></path>
               </svg>
             </button>
           </a>

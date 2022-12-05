@@ -6,6 +6,7 @@ import ru.mephi.tsis.bootlegamazon.dao.entities.OrderEntity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
     /*
@@ -17,6 +18,7 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
     // Менеджер фильтрует по пользователям
     @Query("select o from OrderEntity o where o.userId = ?1")
     Iterable<OrderEntity> findAllByUserId(Integer userId);
+
     // Менеджер фильтрует по статусам
     @Query("select o from OrderEntity o where o.statusId = ?1")
     Iterable<OrderEntity> findByStatusId(Integer statusId);
@@ -32,4 +34,7 @@ public interface OrderRepository extends CrudRepository<OrderEntity, Integer> {
 
     @Query("select o from OrderEntity o where o.paymentId = ?1")
     OrderEntity findByOrderPaymentId(String paymentId);
+
+    @Query("select count(o.id) as exact_count from OrderEntity o")
+    int getOrderCount();
 }

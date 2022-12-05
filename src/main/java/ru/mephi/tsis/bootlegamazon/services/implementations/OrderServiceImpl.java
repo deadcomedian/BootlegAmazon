@@ -136,6 +136,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public int getOrdersCount() {
+        return orderRepository.getOrderCount();
+    }
+
+    @Override
     public List<Order> getAllByUserId(Integer userId, Comparator<OrderEntity> comparator) throws StatusNotFoundException {
         List<OrderEntity> orderEntities = Lists.newArrayList(orderRepository.findAllByUserId(userId));
         return processOrders(orderEntities, comparator);

@@ -24,12 +24,10 @@ import java.util.Date;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final ArticleService articleService;
     private final OrderService orderService;
 
     @Autowired
-    public PaymentController(PaymentService paymentService, ArticleService articleService, OrderService orderService) {
-        this.articleService = articleService;
+    public PaymentController(PaymentService paymentService, OrderService orderService) {
         this.paymentService = paymentService;
         this.orderService = orderService;
     }

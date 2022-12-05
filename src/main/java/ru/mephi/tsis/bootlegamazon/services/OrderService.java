@@ -25,4 +25,6 @@ public interface OrderService {
 
     void updateOrderDate(Integer orderId, LocalDate date) throws OrderNotFoundException;
     void updateOrderAddress(Integer orderId, String address) throws OrderNotFoundException;
+
+    int getOrdersCount();
 }

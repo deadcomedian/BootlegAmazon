@@ -7,6 +7,26 @@ public class ArticleCard {
     private String itemName;
     private String authorName;
 
+    private String photo;
+
+    private Double price;
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
     public String getItemName() {
         return itemName;
     }
@@ -23,10 +43,12 @@ public class ArticleCard {
         this.authorName = authorName;
     }
 
-    public ArticleCard(Integer id, String itemName, String authorName) {
+    public ArticleCard(Integer id, String itemName, String authorName, String photo, Double price) {
         this.id = id;
         this.itemName = itemName;
         this.authorName = authorName;
+        this.photo = photo;
+        this.price = price;
     }
 
     public Integer getId() {
