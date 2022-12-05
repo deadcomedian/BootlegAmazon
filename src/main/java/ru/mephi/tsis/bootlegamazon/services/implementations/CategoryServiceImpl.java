@@ -2,6 +2,10 @@ package ru.mephi.tsis.bootlegamazon.services.implementations;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.CategoryRepository;
@@ -63,6 +67,21 @@ public class CategoryServiceImpl implements CategoryService {
         List<CategoryEntity> categoryEntities = Lists.newArrayList(categoryRepository.findByName(categoryName)
                 .orElseThrow(()-> new CategoryNotFoundException("Category not found with name: " + categoryName)));
         return processCategory(categoryEntities, comparator);
+    }
+
+    @Override
+    public List<Category> getAllByPages(Pageable pageable) {
+        Page<CategoryEntity> categoryEntities = categoryRepository.findAll(pageable);
+        ArrayList<Category> categories = new ArrayList<>();
+        for (CategoryEntity categoryEntity : categoryEntities){
+            categories.add(new Category(categoryEntity.getId(), categoryEntity.getName()));
+        }
+        return categories;
+    }
+
+    @Override
+    public int getTotalPages(Pageable pageable) {
+        return categoryRepository.findAll(pageable).getTotalPages();
     }
 
     private List<Category> processCategory(List<CategoryEntity> categoryEntities, Comparator<CategoryEntity> comparator){

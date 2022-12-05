@@ -1,47 +1,70 @@
 package ru.mephi.tsis.bootlegamazon.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
-import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
-import ru.mephi.tsis.bootlegamazon.models.Cart;
+
 import ru.mephi.tsis.bootlegamazon.models.Category;
-import ru.mephi.tsis.bootlegamazon.models.Order;
+
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
 
-    private final CategoryService categoryService;
+    private int currentPage;
 
-    private final Comparator<CategoryEntity> comp = new Comparator<CategoryEntity>() {
-        @Override
-        public int compare(CategoryEntity o1, CategoryEntity o2) {
-            return o1.getName().compareTo(o2.getName());
-        }
-    };
+    private final CategoryService categoryService;
 
     @Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/all")
-    public String showAll(Model model){
-        List<Category> categories = categoryService.getAll(comp);
+    @GetMapping("/all/{pageNumber}")
+    public String showAll(Model model, @PathVariable Integer pageNumber){
+        Sort sort = Sort.by(Sort.Direction.ASC,"name");
+        Pageable pageable = PageRequest.of(pageNumber,10, sort);
+        int totalPages = categoryService.getTotalPages(pageable);
+        int previousPage = 0;
+        int nextPage = 0;
+        int currentPage = pageNumber;
+        this.currentPage = currentPage;
+        if ((pageNumber > totalPages) || (pageNumber < 0)){
+            return "redirect:/category/all/1";
+        }
+
+        if (pageNumber == 0){
+            previousPage = 0;
+            if (totalPages == 1){
+                nextPage = 0;
+            } else {
+                nextPage = currentPage + 1;
+            }
+        } else if (pageNumber == totalPages-1){
+            nextPage = totalPages-1;
+            previousPage = currentPage - 1;
+        } else {
+            nextPage = currentPage + 1;
+            previousPage = currentPage - 1;
+        }
+
+        List<Category> categories = categoryService.getAllByPages(pageable);
         model.addAttribute("categories", categories);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("nextPage", nextPage);
+        model.addAttribute("previousPage", previousPage);
         return "categories-page";
     }
 
     @GetMapping("/new")
     public String newCategory(Model model){
-
         model.addAttribute("category", new Category());
         return "new-category-page";
     }
@@ -53,7 +76,7 @@ public class CategoryController {
             throw new RuntimeException("EMPTY VALUE!!!");
         }
         categoryService.createCategory(category.getCategoryName());
-        return "redirect:/category/all";
+        return "redirect:/category/all/" + currentPage;
     }
 
     @PostMapping("/{id}/delete")
@@ -65,6 +88,6 @@ public class CategoryController {
         } catch (Exception e) {
             throw new RuntimeException(id,e);
         }
-        return "redirect:/category/all";
+        return "redirect:/category/all/"+currentPage;
     }
 }

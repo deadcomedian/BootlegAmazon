@@ -1,5 +1,7 @@
 package ru.mephi.tsis.bootlegamazon.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Category;
@@ -14,4 +16,8 @@ public interface CategoryService {
     Category getById(Integer id) throws CategoryNotFoundException;
     List<Category> getAll(Comparator<CategoryEntity> comparator);
     List<Category> getAllByCategoryName(String categoryName, Comparator<CategoryEntity> comparator) throws CategoryNotFoundException;
+
+    List<Category> getAllByPages(Pageable pageable);
+
+    int getTotalPages(Pageable pageable);
 }
