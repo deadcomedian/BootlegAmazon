@@ -17,4 +17,5 @@ public interface UserRepository extends CrudRepository<UserEntity, Integer> {
 
     @Query("select u from UserEntity u where u.login = ?1")
     Optional<UserEntity> findByLogin(String userLogin);
+
 }

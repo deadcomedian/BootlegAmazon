@@ -1,10 +1,12 @@
 package ru.mephi.tsis.bootlegamazon.dao.entities;
 
+import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "tcl_role", schema = "shop")
-public class RoleEntity {
+public class RoleEntity implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +15,9 @@ public class RoleEntity {
 
     @Column(name = "role_name")
     private String name;
+
+    @OneToMany (mappedBy = "role", fetch=FetchType.EAGER)
+    private Collection<UserAuth> users;
 
     public RoleEntity() {
     }
@@ -26,7 +31,30 @@ public class RoleEntity {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public Collection<UserAuth> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<UserAuth> users) {
+        this.users = users;
+    }
+
+    @Override
+    public String getAuthority() {
+        return getName();
+    }
+
 }
