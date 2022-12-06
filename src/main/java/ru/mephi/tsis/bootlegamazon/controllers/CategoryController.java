@@ -27,8 +27,8 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/all/{pageNumber}")
-    public String showAll(Model model, @PathVariable Integer pageNumber){
+    @GetMapping("/all")
+    public String showAll(Model model, @RequestParam Integer pageNumber){
         Sort sort = Sort.by(Sort.Direction.ASC,"name");
         Pageable pageable = PageRequest.of(pageNumber,10, sort);
         int totalPages = categoryService.getTotalPages(pageable);
@@ -36,8 +36,8 @@ public class CategoryController {
         int nextPage = 0;
         int currentPage = pageNumber;
         this.currentPage = currentPage;
-        if ((pageNumber > totalPages) || (pageNumber < 0)){
-            return "redirect:/category/all/1";
+        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+            return "redirect:/category/all?pageNumber=0";
         }
 
         if (pageNumber == 0){
@@ -76,7 +76,7 @@ public class CategoryController {
             throw new RuntimeException("EMPTY VALUE!!!");
         }
         categoryService.createCategory(category.getCategoryName());
-        return "redirect:/category/all/" + currentPage;
+        return "redirect:/category/all?pageNumber=" + currentPage;
     }
 
     @PostMapping("/{id}/delete")
@@ -88,6 +88,6 @@ public class CategoryController {
         } catch (Exception e) {
             throw new RuntimeException(id,e);
         }
-        return "redirect:/category/all/"+currentPage;
+        return "redirect:/category/all?pageNumber="+currentPage;
     }
 }

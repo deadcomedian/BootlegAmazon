@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Article;
@@ -32,8 +33,8 @@ public class ItemsController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/all/{pageNumber}")
-    public String all(Model model, @PathVariable Integer pageNumber){
+    @GetMapping("/all")
+    public String all(Model model, @RequestParam Integer pageNumber){
         Sort sort = Sort.by(Sort.Direction.ASC,"id");
         Pageable pageable = PageRequest.of(pageNumber,6, sort);
         int totalPages = articleCardService.getTotalPages(pageable);
@@ -41,8 +42,8 @@ public class ItemsController {
         int nextPage = 0;
         int currentPage = pageNumber;
         this.currentPage = currentPage;
-        if ((pageNumber > totalPages) || (pageNumber < 0)){
-            return "redirect:/items/all/1";
+        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+            return "redirect:/items/all?pageNumber=0";
         }
 
         if (pageNumber == 0){

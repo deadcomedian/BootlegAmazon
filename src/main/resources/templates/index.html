@@ -128,7 +128,7 @@
           </div>
         </div>
         <div class="categories-page-container8">
-          <a th:href="@{/items/all/{previousPageNumber}(previousPageNumber=${previousPage})}" >
+          <a th:href="@{/items/all(pageNumber=${previousPage})}" >
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon10">
                 <path
@@ -138,7 +138,7 @@
             </button>
           </a>
           <label class="categories-page-text6" th:text="${currentPage + 1}"></label>
-          <a th:href="@{/items/all/{nextPageNumber}(nextPageNumber=${nextPage})}" >
+          <a th:href="@{/items/all(pageNumber=${nextPage})}" >
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon12">
                 <path
