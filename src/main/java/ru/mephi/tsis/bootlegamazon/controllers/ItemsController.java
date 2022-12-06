@@ -17,7 +17,8 @@ import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 @Controller
 @RequestMapping("/items")
@@ -27,6 +28,8 @@ public class ItemsController {
     private ArticleCardService articleCardService;
     private ArticleService articleService;
 
+
+
     @Autowired
     public ItemsController(ArticleCardService articleCardService, ArticleService articleService) {
         this.articleCardService = articleCardService;
@@ -34,9 +37,20 @@ public class ItemsController {
     }
 
     @GetMapping("/all")
-    public String all(Model model, @RequestParam Integer pageNumber){
-        Sort sort = Sort.by(Sort.Direction.ASC,"id");
-        Pageable pageable = PageRequest.of(pageNumber,6, sort);
+    public String all(
+            Model model,
+            @RequestParam Integer pageNumber,
+            @RequestParam("sort") Optional<String> sortMethod
+    ){
+        //Я девопс, пишу как умею
+        HashMap<String,Sort> sortMethodMap = new HashMap<>();
+        sortMethodMap.put("Убрать сортировку", Sort.by(Sort.Direction.ASC, "id"));
+        sortMethodMap.put("Сначала дешевле", Sort.by(Sort.Direction.ASC, "price"));
+        sortMethodMap.put("Сначала дороже", Sort.by(Sort.Direction.DESC, "price"));
+        sortMethodMap.put("Ниже рейтинг", Sort.by(Sort.Direction.ASC, "rating"));
+        sortMethodMap.put("Выше рейтинг", Sort.by(Sort.Direction.DESC, "rating"));
+
+        Pageable pageable = sortMethod.map(s -> PageRequest.of(pageNumber, 6, sortMethodMap.get(s))).orElseGet(() -> PageRequest.of(pageNumber, 6, Sort.by("id")));
         int totalPages = articleCardService.getTotalPages(pageable);
         int previousPage = 0;
         int nextPage = 0;
@@ -66,6 +80,7 @@ public class ItemsController {
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("nextPage", nextPage);
         model.addAttribute("previousPage", previousPage);
+        model.addAttribute("sortMethods", Arrays.stream(sortMethodMap.keySet().toArray()).sorted().toArray());
         return "index";
     }
 
@@ -79,4 +94,5 @@ public class ItemsController {
         }
         return "item-page";
     }
+
 }

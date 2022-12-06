@@ -83,20 +83,20 @@
           <h1 class="catalog-page-text">Каталог</h1>
           <div class="catalog-page-container2">
             <div class="button-sort-container button-sort-root-class-name">
-              <button type="button" class="button-sort-button">
-                <span>
+              <div class="button-sort-button">
                   <span>Сортировка</span>
-                  <br />
-                </span>
-              </button>
+                    <div class="list" th:each="sortMethod : ${sortMethods}">
+                      <a th:text="${sortMethod}" th:href="@{/items/all(pageNumber=${currentPage}, sort=${sortMethod} )}"></a>
+                    </div>
+              </div>
             </div>
             <div class="button-filter-container button-filter-root-class-name">
-              <button type="button" class="button-filter-button">
-                <span>
+              <div class="button-filter-button">
                   <span>Фильтр</span>
-                  <br />
-                </span>
-              </button>
+                  <div class="list" >
+                    tut filtr
+                  </div>
+              </div>
             </div>
           </div>
         </div>
