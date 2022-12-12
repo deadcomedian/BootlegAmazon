@@ -96,4 +96,22 @@ public class Article {
         this.itemPhoto = itemPhoto;
         this.amount = amount;
     }
+
+    public Article() {
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", itemPrice=" + itemPrice +
+                ", itemRating=" + itemRating +
+                ", itemPhoto='" + itemPhoto + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
 }

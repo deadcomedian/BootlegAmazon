@@ -15,7 +15,7 @@ public interface CategoryService {
     void updateName(Integer id, String name) throws CategoryNotFoundException;
     Category getById(Integer id) throws CategoryNotFoundException;
     List<Category> getAll(Comparator<CategoryEntity> comparator);
-    List<Category> getAllByCategoryName(String categoryName, Comparator<CategoryEntity> comparator) throws CategoryNotFoundException;
+    Category getByCategoryName(String categoryName) throws CategoryNotFoundException;
 
     List<Category> getAllByPages(Pageable pageable);
 

@@ -63,10 +63,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> getAllByCategoryName(String categoryName, Comparator<CategoryEntity> comparator) throws CategoryNotFoundException {
-        List<CategoryEntity> categoryEntities = Lists.newArrayList(categoryRepository.findByName(categoryName)
-                .orElseThrow(()-> new CategoryNotFoundException("Category not found with name: " + categoryName)));
-        return processCategory(categoryEntities, comparator);
+    public Category getByCategoryName(String categoryName) throws CategoryNotFoundException {
+        CategoryEntity categoryEntity = categoryRepository.findByName(categoryName).orElseThrow(()-> new CategoryNotFoundException("Category not found with name: " + categoryName));
+        return new Category(categoryEntity.getId(), categoryEntity.getName());
     }
 
     @Override

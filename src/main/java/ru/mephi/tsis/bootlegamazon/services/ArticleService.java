@@ -1,10 +1,13 @@
 package ru.mephi.tsis.bootlegamazon.services;
 
+import org.springframework.data.domain.Pageable;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.BadValueException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.Category;
+
+import java.util.List;
 
 public interface ArticleService {
     void createArticle(Category category, String name, String author, String description, String photo, Double price, Double rating);

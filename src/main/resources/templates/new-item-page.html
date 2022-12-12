@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>New-item-page - Travel Agency</title>
+    <title>Bootleg Amazon</title>
     <meta property="og:title" content="New-item-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
@@ -82,18 +82,22 @@
         <form
           enctype="application/x-www-form-urlencoded"
           class="new-item-page-form"
+          th:method="POST"
+          th:action="@{/items/add}"
+          th:object="${item}"
         >
           <div class="new-item-page-container1">
             <div class="new-item-page-container2">
               <input
                 type="text"
+                th:field="*{itemName}"
                 placeholder="Название книги"
                 required=""
                 class="new-item-page-input input"
               />
             </div>
             <div class="new-item-page-container3">
-              <button type="button" class="new-item-page-button">
+              <button type="submit" class="new-item-page-button">
                 <span>
                   <span>Сохранить</span>
                   <br />
@@ -110,6 +114,7 @@
               <div class="new-item-page-container7">
                 <input
                   type="text"
+                  th:field="*{itemPrice}"
                   placeholder="Цена"
                   required=""
                   class="new-item-page-input1 input"
@@ -123,18 +128,20 @@
           <div class="new-item-page-container8">
             <input
               type="text"
+              th:field="*{authorName}"
               placeholder="Автор"
               required=""
               class="new-item-page-input2 input"
             />
-            <select required="" class="new-item-page-select input">
-              <option value="Null" selected="">Категория</option>
-              <option value="11">111</option>
-              <option value="22">222</option>
-              <option value="33">333</option>
+            <label for="categories">Категория</label>
+            <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
+              <div th:each="category : ${categories}">
+                  <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+              </div>
             </select>
             <textarea
               placeholder="Описание"
+              th:field="*{itemDescription}"
               required="true"
               class="new-item-page-textarea input"
             ></textarea>

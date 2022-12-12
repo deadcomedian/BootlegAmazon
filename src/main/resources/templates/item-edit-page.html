@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Bootleg Amazon</title>
-    <meta property="og:title" content="Error-page - Travel Agency" />
+    <meta property="og:title" content="New-item-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -38,13 +38,13 @@
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&amp;display=swap"
       data-tag="font"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="/style/style.css" />
   </head>
   <body>
     <div>
-      <link href="./error-page.css" rel="stylesheet" />
+      <link href="/style/new-item-page.css" rel="stylesheet" />
 
-      <div class="error-page-container">
+      <div class="new-item-page-container">
         <header data-role="Header" class="header-header">
           <img
             alt="logo"
@@ -79,9 +79,78 @@
             </div>
           </div>
         </header>
-        <div class="error-page-container1">
-          <h1 class="error-page-text">ВСЁ ПОШЛО ПО ... 404 :)</h1>
-        </div>
+        <form
+          enctype="application/x-www-form-urlencoded"
+          class="new-item-page-form"
+          th:method="POST"
+          th:action="@{/items/saveedited}"
+          th:object="${item}"
+        >
+          <div class="new-item-page-container1">
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{itemRating}" />
+            <input type="hidden" th:field="*{itemPhoto}" />
+            <input type="hidden" th:field="*{amount}" />
+            <div class="new-item-page-container2">
+              <input
+                type="text"
+                th:field="*{itemName}"
+                placeholder="Название книги"
+                required=""
+                class="new-item-page-input input"
+              />
+            </div>
+            <div class="new-item-page-container3">
+              <button type="submit" class="new-item-page-button">
+                <span>
+                  <span>Сохранить</span>
+                  <br />
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="new-item-page-container4">
+            <div class="new-item-page-container5">
+              <span class="new-item-page-text3">Загрузите фото товара</span>
+              <input type="file" placeholder="placeholder" class="input" />
+            </div>
+            <div class="new-item-page-container6">
+              <div class="new-item-page-container7">
+                <input
+                  type="text"
+                  th:field="*{itemPrice}"
+                  placeholder="Цена"
+                  required=""
+                  class="new-item-page-input1 input"
+                />
+                <label class="new-item-page-text4">&nbsp; ₽</label>
+              </div>
+              <label class="new-item-page-text5">&nbsp; &nbsp;</label>
+              <label class="new-item-page-text6">&nbsp; &nbsp;</label>
+            </div>
+          </div>
+          <div class="new-item-page-container8">
+            <input
+              type="text"
+              th:field="*{authorName}"
+              placeholder="Автор"
+              required=""
+              class="new-item-page-input2 input"
+            />
+            <label for="categories">Категория</label>
+            <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
+              <div th:each="category : ${categories}">
+                  <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+              </div>
+            </select>
+            <textarea
+              placeholder="Описание"
+              th:field="*{itemDescription}"
+              required="true"
+              class="new-item-page-textarea input"
+            ></textarea>
+          </div>
+        </form>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

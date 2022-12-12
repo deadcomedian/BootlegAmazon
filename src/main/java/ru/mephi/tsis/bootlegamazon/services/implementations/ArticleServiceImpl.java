@@ -1,6 +1,9 @@
 package ru.mephi.tsis.bootlegamazon.services.implementations;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.mephi.tsis.bootlegamazon.dao.entities.ArticleEntity;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
@@ -14,6 +17,9 @@ import ru.mephi.tsis.bootlegamazon.models.Category;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {

@@ -8,9 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Category;
 
+import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
+import ru.mephi.tsis.bootlegamazon.services.implementations.ArticleCardServiceImpl;
 
 import java.util.List;
 
@@ -21,10 +24,12 @@ public class CategoryController {
     private int currentPage;
 
     private final CategoryService categoryService;
+    private final ArticleCardService articleCardService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService) {
+    public CategoryController(CategoryService categoryService, ArticleCardService articleCardService) {
         this.categoryService = categoryService;
+        this.articleCardService = articleCardService;
     }
 
     @GetMapping("/all")
@@ -80,13 +85,19 @@ public class CategoryController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") String id){
-        System.out.println("ID: " + id);
+    public String delete(@PathVariable("id") Integer id, Model model){
+        Pageable pageable = PageRequest.of(0,10);
         try {
-            int categoryId = Integer.parseInt(id);
-            categoryService.deleteCategory(categoryId);
+            List<ArticleCard> articleCards = articleCardService.getAllByCategoryName(pageable, categoryService.getById(id).getCategoryName());
+            if(articleCards.size() == 0){
+                categoryService.deleteCategory(id);
+            } else {
+                model.addAttribute("errorMessage", "Нельзя удалить категорию, так как есть товары, которые от неё зависят");
+                return "error-page";
+            }
+
         } catch (Exception e) {
-            throw new RuntimeException(id,e);
+            throw new RuntimeException(id.toString(),e);
         }
         return "redirect:/category/all?pageNumber="+currentPage;
     }
