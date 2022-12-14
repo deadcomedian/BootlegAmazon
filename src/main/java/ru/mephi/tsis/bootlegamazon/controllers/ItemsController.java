@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
@@ -21,17 +22,21 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
 @RequestMapping("/items")
 public class ItemsController {
 
-    private String currentSearch;
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/images";
 
     private Integer currentPage;
     private ArticleCardService articleCardService;
@@ -180,20 +185,24 @@ public class ItemsController {
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("item") Article item){
+    public String create(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
         System.out.println(item.toString());
         try {
+            String filename = file.getOriginalFilename();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
+            Files.write(fileNameAndPath, file.getBytes());
             articleService.createArticle
                     (
                             categoryService.getByCategoryName(item.getCategoryName()),
                             item.getItemName(),
                             item.getAuthorName(),
                             item.getItemDescription(),
-                            item.getItemPhoto(),
+                            "../images/" + filename,
                             item.getItemPrice(),
                             5.0
                     );
-        } catch (CategoryNotFoundException e) {
+
+        } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
         return "redirect:/items/all?page=0";

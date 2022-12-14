@@ -79,12 +79,14 @@
             </div>
           </div>
         </header>
+        <!--          enctype="application/x-www-form-urlencoded"-->
         <form
-          enctype="application/x-www-form-urlencoded"
+
           class="new-item-page-form"
           th:method="POST"
           th:action="@{/items/add}"
           th:object="${item}"
+          enctype="multipart/form-data"
         >
           <div class="new-item-page-container1">
             <div class="new-item-page-container2">
@@ -108,7 +110,7 @@
           <div class="new-item-page-container4">
             <div class="new-item-page-container5">
               <span class="new-item-page-text3">Загрузите фото товара</span>
-              <input type="file" placeholder="placeholder" class="input" />
+              <input type="file" placeholder="placeholder" name="image" class="input" accept="image/*"/>
             </div>
             <div class="new-item-page-container6">
               <div class="new-item-page-container7">

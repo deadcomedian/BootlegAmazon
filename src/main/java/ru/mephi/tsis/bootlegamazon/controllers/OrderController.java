@@ -21,7 +21,6 @@ import java.util.List;
 public class OrderController {
     /*
     TO DO
-    пейджинг
     валидация форм
     ограничения даты на фронте
     сделать страницы статусов оплаты
@@ -62,7 +61,7 @@ public class OrderController {
         model.addAttribute("order", order);
         return "new-order-page";
     }
-    @PostMapping("/new")
+    @GetMapping("/new")
     public String newOrderFromCart(@ModelAttribute("cart") Cart cart, Model model){
         //заглушка
         Integer userId = 1;

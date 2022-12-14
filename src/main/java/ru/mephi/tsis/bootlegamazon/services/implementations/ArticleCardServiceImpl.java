@@ -76,6 +76,7 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         return articleCards;
     }
 
+    //получать counts
     @Override
     public int getTotalPages(Pageable pageable) {
         return articleRepository.findAll(pageable).getTotalPages();
