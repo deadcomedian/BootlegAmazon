@@ -222,11 +222,15 @@ public class ItemsController {
     }
 
     @PostMapping("/saveedited")
-    public String saveEdited(@ModelAttribute("item") Article item){
+    public String saveEdited(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
         int id = item.getId();
         try {
+            String filename = file.getOriginalFilename();
+            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
+            Files.write(fileNameAndPath, file.getBytes());
+            item.setItemPhoto("../images/" + filename);
             articleService.update(item);
-        } catch (ArticleNotFoundException | CategoryNotFoundException e) {
+        } catch (ArticleNotFoundException | CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
         return "redirect:/items/"+id;

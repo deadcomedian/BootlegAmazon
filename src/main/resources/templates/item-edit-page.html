@@ -80,16 +80,15 @@
           </div>
         </header>
         <form
-          enctype="application/x-www-form-urlencoded"
           class="new-item-page-form"
           th:method="POST"
           th:action="@{/items/saveedited}"
           th:object="${item}"
+          enctype="multipart/form-data"
         >
           <div class="new-item-page-container1">
             <input type="hidden" th:field="*{id}" />
             <input type="hidden" th:field="*{itemRating}" />
-            <input type="hidden" th:field="*{itemPhoto}" />
             <input type="hidden" th:field="*{amount}" />
             <div class="new-item-page-container2">
               <input
@@ -112,7 +111,7 @@
           <div class="new-item-page-container4">
             <div class="new-item-page-container5">
               <span class="new-item-page-text3">Загрузите фото товара</span>
-              <input type="file" placeholder="placeholder" class="input" />
+              <input type="file" placeholder="placeholder" name="image" class="input" />
             </div>
             <div class="new-item-page-container6">
               <div class="new-item-page-container7">
