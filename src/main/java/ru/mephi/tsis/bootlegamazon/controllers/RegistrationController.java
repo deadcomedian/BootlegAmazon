@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserEntity;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
@@ -26,16 +27,21 @@ public class RegistrationController {
     @PostMapping("/registration/create")
     public String addUser(@ModelAttribute("userForm") @Valid UserEntity userForm, BindingResult bindingResult, Model model) {
 
+        if (userForm.getName().equals("") || userForm.getPhone().equals("") || userForm.getLogin().equals("") || userForm.getPassword().equals("") || userForm.getPasswordConfirm().equals("")) {
+            model.addAttribute("fieldError", "Все поля должны быть заполнены!");
+            return "redirect:/registration/";
+        }
+
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "redirect:/registration/";
         }
         if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
             model.addAttribute("passwordError", "Пароли не совпадают");
-            return "registration";
+            return "redirect:/registration/";
         }
         if (!userService.createUser(userForm.getName(), userForm.getPhone(), userForm.getLogin(), userForm.getPassword())){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
-            return "registration";
+            return "redirect:/registration/";
         }
         return "redirect:/items/all?page=0";
     }

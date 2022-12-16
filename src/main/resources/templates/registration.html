@@ -6,7 +6,7 @@
 </head>
 <body>
 <div>
-    <form th:method="POST" th:action="@{registration/create}" th:object="${userForm}">
+    <form th:method="POST" th:action="@{/registration/create}" th:object="${userForm}">
         <h2>Регистрация</h2>
         <div>
             <label>
@@ -34,6 +34,9 @@
                 <input type="password" th:field="*{passwordConfirm}" placeholder="Повторите пароль">
                 <errors th:if="${passwordError}"> Пароли не совпадают </errors>
             </label>
+        </div>
+        <div>
+        <errors th:if="${fieldError}"> Все поля должны быть заполнены! </errors>
         </div>
         <button type="submit">Зарегистрироваться</button>
     </form>
