@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:form="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<div>
+    <form method="POST" modelAttribute="userForm">
+        <h2>Регистрация</h2>
+        <div>
+            <label>
+                <input type="text" path="username" placeholder="Username" autofocus="true">
+            </label>
+            <errors path="username"></errors>
+        </div>
+        <div>
+            <label>
+                <input type="password" path="password" placeholder="Password">
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="password" path="passwordConfirm" placeholder="Повторите пароль">
+            </label>
+            <errors path="password"></errors>
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <a th:href="@{'/items/all?page=0'}">Отменить</a>
+</div>
+</body>
+</html>

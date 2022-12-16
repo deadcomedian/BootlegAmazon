@@ -44,12 +44,12 @@ public class UserService implements UserDetailsService {
         return userAuthRepository.findAll();
     }
 
-    public boolean createUser(String name, String phone, String login, String password) {
-        if (userRepository.findByLogin(login).isPresent()) {
+    public boolean createUser(UserEntity userEntity) {
+        if (userRepository.findByLogin(userEntity.getLogin()).isPresent()) {
             return false;
         }
         int roleId = roleRepository.findByName("Покупатель").get().getId();
-        UserEntity userEntity = new UserEntity(null, name, phone, login, password, roleId, true);
+        //UserEntity userEntity = new UserEntity(null, name, phone, login, password, roleId, true);
         userRepository.save(userEntity);
         return true;
     }

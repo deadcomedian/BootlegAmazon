@@ -29,6 +29,9 @@ public class UserEntity {
     @Column(name = "user_active")
     private Boolean active;
 
+    @Transient
+    private String passwordConfirm;
+
     public UserEntity() {
     }
 
@@ -86,4 +89,7 @@ public class UserEntity {
         this.active = active;
     }
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
 }
