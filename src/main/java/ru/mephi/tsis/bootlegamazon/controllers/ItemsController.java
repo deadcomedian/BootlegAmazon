@@ -188,20 +188,33 @@ public class ItemsController {
     public String create(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
         System.out.println(item.toString());
         try {
-            String filename = file.getOriginalFilename();
-            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
-            Files.write(fileNameAndPath, file.getBytes());
-            articleService.createArticle
-                    (
-                            categoryService.getByCategoryName(item.getCategoryName()),
-                            item.getItemName(),
-                            item.getAuthorName(),
-                            item.getItemDescription(),
-                            "../images/" + filename,
-                            item.getItemPrice(),
-                            5.0
-                    );
+            if (!file.isEmpty()){
+                String filename = file.getOriginalFilename();
+                Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
+                Files.write(fileNameAndPath, file.getBytes());
+                articleService.createArticle
+                        (
+                                categoryService.getByCategoryName(item.getCategoryName()),
+                                item.getItemName(),
+                                item.getAuthorName(),
+                                item.getItemDescription(),
+                                "../images/" + filename,
+                                item.getItemPrice(),
+                                5.0
+                        );
 
+            } else {
+                articleService.createArticle
+                        (
+                                categoryService.getByCategoryName(item.getCategoryName()),
+                                item.getItemName(),
+                                item.getAuthorName(),
+                                item.getItemDescription(),
+                                "",
+                                item.getItemPrice(),
+                                5.0
+                        );
+            }
         } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -225,10 +238,12 @@ public class ItemsController {
     public String saveEdited(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
         int id = item.getId();
         try {
-            String filename = file.getOriginalFilename();
-            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
-            Files.write(fileNameAndPath, file.getBytes());
-            item.setItemPhoto("../images/" + filename);
+            if (!file.isEmpty()){
+                String filename = file.getOriginalFilename();
+                Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
+                Files.write(fileNameAndPath, file.getBytes());
+                item.setItemPhoto("../images/" + filename);
+            }
             articleService.update(item);
         } catch (ArticleNotFoundException | CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);

@@ -68,7 +68,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
 
     @Override
     public List<ArticleCard> getAllByAuthorOrName(Pageable pageable, String str) {
-        Page<ArticleEntity> articleEntities = articleRepository.findByNameOrAuthor(pageable, str);
+        Page<ArticleEntity> articleEntities = articleRepository.findByNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, str);
+        //Page<ArticleEntity> articleEntities = articleRepository.findByNameOrAuthor(pageable, str);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
             articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));

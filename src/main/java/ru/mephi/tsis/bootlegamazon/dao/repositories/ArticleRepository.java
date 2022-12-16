@@ -22,8 +22,9 @@ public interface ArticleRepository extends PagingAndSortingRepository<ArticleEnt
     @Query("select a from ArticleEntity a where a.author = ?1 and a.active = true")
     Page<ArticleEntity> findByAuthor(Pageable pageable, String author);
 
-    @Query("select a from ArticleEntity a where (a.name = ?1 or a.author = ?1) and a.active = true ")
-    Page<ArticleEntity> findByNameOrAuthor(Pageable pageable, String str);
+    @Query("select a from ArticleEntity a " +
+            "where upper(a.name) like upper(concat('%', ?1, '%')) or upper(a.author) like upper(concat('%', ?1, '%'))")
+    Page<ArticleEntity> findByNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(Pageable pageable, String str);
 
     @Override
     @Query("select a from ArticleEntity a where a.active = true")
