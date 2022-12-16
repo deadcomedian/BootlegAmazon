@@ -6,28 +6,38 @@
 </head>
 <body>
 <div>
-    <form method="POST" modelAttribute="userForm">
+    <form th:method="POST" th:action="@{registration/create}" th:object="${userForm}">
         <h2>Регистрация</h2>
         <div>
             <label>
-                <input type="text" path="username" placeholder="Username" autofocus="true">
-            </label>
-            <errors path="username"></errors>
-        </div>
-        <div>
-            <label>
-                <input type="password" path="password" placeholder="Password">
+                <input type="text" th:field="*{name}" placeholder="ФИО">
             </label>
         </div>
         <div>
             <label>
-                <input type="password" path="passwordConfirm" placeholder="Повторите пароль">
+                <input type="text" th:field="*{phone}" placeholder="Телефон">
+                </label>
+        </div>
+        <div>
+            <label>
+                <input type="text" th:field="*{login}" placeholder="Логин">
+                <errors th:if="${usernameError}"> Пользователь с таким именем или телефоном уже существует </errors>
             </label>
-            <errors path="password"></errors>
+        </div>
+        <div>
+            <label>
+                <input type="password" th:field="*{password}" placeholder="Пароль">
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="password" th:field="*{passwordConfirm}" placeholder="Повторите пароль">
+                <errors th:if="${passwordError}"> Пароли не совпадают </errors>
+            </label>
         </div>
         <button type="submit">Зарегистрироваться</button>
     </form>
-    <a th:href="@{'/items/all?page=0'}">Отменить</a>
+    <a th:href="@{'/items/all?page=0'}">Вернуться</a>
 </div>
 </body>
 </html>

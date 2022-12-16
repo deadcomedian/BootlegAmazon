@@ -92,4 +92,16 @@ public class UserEntity {
     public String getPasswordConfirm() {
         return passwordConfirm;
     }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
 }

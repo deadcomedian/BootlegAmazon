@@ -20,11 +20,10 @@ public class RegistrationController {
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("userForm", new UserEntity());
-
         return "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/registration/create")
     public String addUser(@ModelAttribute("userForm") @Valid UserEntity userForm, BindingResult bindingResult, Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -34,12 +33,11 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Пароли не совпадают");
             return "registration";
         }
-        if (!userService.createUser(userForm)){
+        if (!userService.createUser(userForm.getName(), userForm.getPhone(), userForm.getLogin(), userForm.getPassword())){
             model.addAttribute("usernameError", "Пользователь с таким именем уже существует");
             return "registration";
         }
-
-        return "redirect:/registration";
+        return "redirect:/items/all?page=0";
     }
 
 }
