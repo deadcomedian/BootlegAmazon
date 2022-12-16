@@ -11,12 +11,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity security) throws Exception
     {
         security.httpBasic().disable();
     }
-}
+
+
 /*
     @Bean
     public PasswordEncoder encoder() {
@@ -29,10 +31,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity.authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/items/**").not().fullyAuthenticated()
+                .antMatchers("/items/**").permitAll()
+                //.antMatchers("/items/**").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор и Менеджер
-                .antMatchers("/category/**").hasAuthority("Администратор")
-                .antMatchers("/category/**").hasAuthority("Менеджер")
+                //.antMatchers("/category/**").hasAuthority("Администратор")
+                //.antMatchers("/category/**").hasAuthority("Менеджер")
                 //Доступ разрешен всем пользователей
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
@@ -48,7 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+ */
+
 }
 
 
- */

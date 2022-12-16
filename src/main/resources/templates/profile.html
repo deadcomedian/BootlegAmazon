@@ -6,6 +6,18 @@
 </head>
 <body>
 <div>
+    <div>
+        <label th:text="'ФИО: ' + ${currentUser.name}"></label>
+    </div>
+    <div>
+        <label th:text="'Номер телефона: ' + ${currentUser.phone}"></label>
+    </div>
+    <div>
+        <label th:text="'Логин: ' + ${currentUser.login}"></label>
+    </div>
+    <div>
+        <label th:text="'Пароль: ' + ${currentUser.password}"></label>
+    </div>
 
 </div>
 </body>

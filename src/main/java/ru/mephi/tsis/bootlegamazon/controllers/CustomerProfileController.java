@@ -17,18 +17,18 @@ public class CustomerProfileController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("current")
+    @GetMapping("")
     public String customerProfile(Model model, @AuthenticationPrincipal UserEntity user) {
-        model.addAttribute("currentCustomer", user);
+        model.addAttribute("currentUser", user);
         return "profile";
     }
 
     @GetMapping("{id}")
     public String anyProfile (@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserEntity currentUser) {
         UserEntity user = userRepository.findById(id).get();
-        if (!currentUser.getId().equals(user.getId())) {
-            return "error/error";
-        }
+      //  if (!currentUser.getId().equals(user.getId())) {
+       //     return "error/error";
+      //  }
         model.addAttribute("currentUser", user);
         return "profile";
     }
