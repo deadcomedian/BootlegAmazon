@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/")
 public class HomeController {
-    @GetMapping("/authorize")
+    @GetMapping("/login")
     public String authorize(){
-        return "authorization-page";
+        return "login";
     }
 }
