@@ -18,6 +18,9 @@ public class CartArticleEntity {
     @Column(name = "article_amount")
     private Integer articleAmount;
 
+    @Column(name = "active")
+    private Boolean active;
+
     public CartArticleEntity() {
     }
 
@@ -35,5 +38,16 @@ public class CartArticleEntity {
         return articleAmount;
     }
 
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setArticleAmount(Integer articleAmount) {
+        this.articleAmount = articleAmount;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
 

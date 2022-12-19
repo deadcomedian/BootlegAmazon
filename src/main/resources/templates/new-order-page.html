@@ -89,7 +89,7 @@
         </div>
         <div class="new-order-page-container02">
 
-          <div class="new-order-page-container03" th:each="item : ${cart.items}" th:with="amount=${item.getAmount()},article=${item.getArticle()},name=${article.getItemName()},price=${article.getItemPrice()},photo=${article.getItemPhoto()}">
+          <div class="new-order-page-container03" th:each="item : ${cart.items}" th:with="amount=${item.getAmount()},article=${item.getArticle()},name=${article.getItemName()},price=${article.getPrice()},photo=${article.getPhoto()}">
             <div class="new-order-page-container04">
               <img
                 alt="image"
@@ -114,7 +114,6 @@
         </div>
         <!---->
         <form th:method="POST" th:action="@{/pay}" th:object="${order}">
-
           <div class="new-order-page-container21">
             <label class="new-order-page-text18">
               <span>Адрес доставки:</span>

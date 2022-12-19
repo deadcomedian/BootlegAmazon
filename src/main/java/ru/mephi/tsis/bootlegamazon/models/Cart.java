@@ -1,16 +1,21 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cart {
+
+    private Integer id;
     private ArrayList<CartArticle> items;
     private Double price;
 
-    public Cart(ArrayList<CartArticle> items) {
-        this.items = items;
+    public Cart(Integer id, List<CartArticle> items) {
+        this.id = id;
+        this.items = new ArrayList<>();
+        this.items.addAll(items);
         double price = 0.0;
         for (CartArticle item : items){
-            price += item.getArticle().getItemPrice()*item.getAmount();
+            price += item.getArticle().getPrice()*item.getAmount();
         }
         this.price = price;
     }
@@ -31,5 +36,7 @@ public class Cart {
         this.price = price;
     }
 
-
+    public Integer getId() {
+        return id;
+    }
 }

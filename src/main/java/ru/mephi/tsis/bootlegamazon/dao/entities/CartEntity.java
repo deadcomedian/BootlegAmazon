@@ -36,4 +36,8 @@ public class CartEntity {
     public Integer getUserId() {
         return userId;
     }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

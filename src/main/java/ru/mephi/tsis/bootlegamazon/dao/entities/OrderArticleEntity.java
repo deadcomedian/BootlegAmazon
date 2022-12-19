@@ -20,14 +20,13 @@ public class OrderArticleEntity {
     @Column(name = "article_amount")
     private Integer articleAmount;
 
-    //????????
     @Column(name = "article_order_price")
-    private Integer articleOrderPrice;
+    private Double articleOrderPrice;
 
     public OrderArticleEntity() {
     }
 
-    public OrderArticleEntity(Integer orderId, Integer articleId, Integer articleAmount, Integer articleOrderPrice) {
+    public OrderArticleEntity(Integer orderId, Integer articleId, Integer articleAmount, Double articleOrderPrice) {
         this.orderId = orderId;
         this.articleId = articleId;
         this.articleAmount = articleAmount;
@@ -46,8 +45,9 @@ public class OrderArticleEntity {
         return articleAmount;
     }
 
-    public Integer getArticleOrderPrice() {
+    public Double getArticleOrderPrice() {
         return articleOrderPrice;
     }
+
 }
 

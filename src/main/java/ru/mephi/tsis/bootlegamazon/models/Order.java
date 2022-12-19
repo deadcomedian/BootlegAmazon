@@ -77,6 +77,9 @@ public class Order {
         this.orderPaymentId = orderPaymentId;
     }
 
+    public Order() {
+    }
+
     @Override
     public String toString() {
         return "Order{" +

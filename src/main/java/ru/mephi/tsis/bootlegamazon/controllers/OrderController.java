@@ -18,13 +18,9 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/orders")
+@SessionAttributes("order")
 public class OrderController {
-    /*
-    TO DO
-    валидация форм
-    ограничения даты на фронте
-    сделать страницы статусов оплаты
-     */
+
     private final OrderService orderService;
 
     @Autowired
@@ -35,39 +31,26 @@ public class OrderController {
     @GetMapping("/fromcarttest")
     public String newOrderFromCart(Model model){
         //Костыль
-        Article article = new Article(1,"20000 liye pod vodoy", "Jules Verne", "Приключения", "", 500.0, 5.0, "https://i.imgur.com/ZAbq3yF.jpeg", 1);
-        Article article1 = new Article(2,"2 Kapitana", "Veneamin Kaverin", "Приключения", "", 600.0, 5.0, "http://ftp.libs.spb.ru/covers/images/cover_19817029-ks_2021-10-05_12-29-34.jpg", 2);
+        ArticleCard article = new ArticleCard(1,"20000 liye pod vodoy", "Jules Verne", "https://i.imgur.com/ZAbq3yF.jpeg", 500.0);
+        ArticleCard article1 = new ArticleCard(2,"2 Kapitana", "Veneamin Kaverin","http://ftp.libs.spb.ru/covers/images/cover_19817029-ks_2021-10-05_12-29-34.jpg", 600.0);
         ArrayList<CartArticle> list = new ArrayList<>();
         CartArticle cartArticle = new CartArticle(article, 1);
         CartArticle cartArticle1 = new CartArticle(article1, 2);
         list.add(cartArticle);
         list.add(cartArticle1);
-        Cart cart1 = new Cart(list);
-        model.addAttribute("cart", cart1);
-        Order order;
-        try {
-            order = orderService.getById(9);
-        } catch (OrderNotFoundException | StatusNotFoundException e) {
-            order = new Order(1,9, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart1.getPrice(), "");
-            orderService.createOrder(order);
-        }
+        Cart cart = new Cart(6, list);
+        model.addAttribute("cart", cart);
+        int orderNumber = orderService.getOrdersCount() + 1;
+        Order order = new Order(2,orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
         model.addAttribute("order", order);
         return "new-order-page";
     }
     @GetMapping("/new")
     public String newOrderFromCart(@ModelAttribute("cart") Cart cart, Model model){
-        //заглушка
-        Integer userId = 1;
+        Integer userId = 1; //заглушка
         model.addAttribute("cart", cart);
-        Order order;
-        try {
-            List<Order> orders = orderService.getAllByUserIdAndStatus(userId, "Инициализирован", (a1, a2) -> 0);
-            order = orders.get(0);
-        } catch (StatusNotFoundException e) {
-            int orderNumber = orderService.getOrdersCount() +1;
-            order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
-            orderService.createOrder(order);
-        }
+        int orderNumber = orderService.getOrdersCount() + 1;
+        Order order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
         model.addAttribute("order", order);
         return "new-order-page";
     }

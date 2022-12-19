@@ -1,19 +1,20 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
 public class CartArticle {
-    private Article article;
+    private ArticleCard article;
     private Integer amount;
 
-    public CartArticle(Article article, Integer amount) {
+    public CartArticle(ArticleCard article, Integer amount) {
         this.article = article;
         this.amount = amount;
     }
 
-    public Article getArticle() {
+
+    public ArticleCard getArticle() {
         return article;
     }
 
-    public void setArticle(Article article) {
+    public void setArticle(ArticleCard article) {
         this.article = article;
     }
 
