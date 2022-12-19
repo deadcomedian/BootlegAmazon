@@ -12,8 +12,8 @@ public interface InvoiceService {
     void updateArticleId(Integer id, Integer articleId) throws InvoiceNotFoundException;
     void updateArticleCount(Integer id, Integer articleCount) throws InvoiceNotFoundException;
     void updateInvoice(Integer id, Integer articleId, Integer articleCount) throws InvoiceNotFoundException;
-    Invoice getById(Integer id) throws InvoiceNotFoundException;
-    List<Invoice> getAll(Pageable pageable);
+    Invoice getById(Integer id) throws InvoiceNotFoundException, ArticleNotFoundException;
+    List<Invoice> getAll(Pageable pageable) throws ArticleNotFoundException;
     List<Invoice> getByArticleId(Pageable pageable, Integer articleId) throws ArticleNotFoundException;
     int getTotalPages(Pageable pageable);
 }

@@ -1,13 +1,14 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
 public class Invoice {
-    Integer id;
-    Integer articleId;
-    Integer articleCount;
+    private Integer id;
+    private ArticleCard articleCard;
+    private Integer articleCount;
 
-    public Invoice(Integer id, Integer articleId, Integer articleCount) {
+
+    public Invoice(Integer id, ArticleCard articleCard, Integer articleCount) {
         this.id = id;
-        this.articleId = articleId;
+        this.articleCard = articleCard;
         this.articleCount = articleCount;
     }
 
@@ -19,12 +20,12 @@ public class Invoice {
         this.id = id;
     }
 
-    public Integer getArticleId() {
-        return articleId;
+    public ArticleCard getArticleCard() {
+        return articleCard;
     }
 
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
+    public void setArticleCard(ArticleCard articleCard) {
+        this.articleCard = articleCard;
     }
 
     public Integer getArticleCount() {
