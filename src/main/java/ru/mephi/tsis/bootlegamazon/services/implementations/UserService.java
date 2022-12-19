@@ -5,30 +5,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserEntity;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.RoleRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
-import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
-import ru.mephi.tsis.bootlegamazon.models.User;
 import ru.mephi.tsis.bootlegamazon.services.MyUserPrincipal;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
+
     UserAuthRepository userAuthRepository;
 
-    @Autowired
     UserRepository userRepository;
 
-    @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    public UserService(UserAuthRepository userAuthRepository, UserRepository userRepository, RoleRepository roleRepository) {
+        this.userAuthRepository = userAuthRepository;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -39,6 +41,12 @@ public class UserService implements UserDetailsService {
         }
         return new  MyUserPrincipal(user);
     }
+
+    public UserDetails loadById(Integer id){
+        UserAuth user = userAuthRepository.findById(id).orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        return new MyUserPrincipal(user);
+    }
+
 
     public List<UserAuth> allUsers() {
         return userAuthRepository.findAll();

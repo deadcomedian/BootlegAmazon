@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.Date;
 
 @Controller
+@RequestMapping("/pay")
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -31,7 +32,7 @@ public class PaymentController {
         this.paymentService = paymentService;
         this.orderService = orderService;
     }
-    @PostMapping("/pay")
+    @PostMapping("")
     public String payment(@ModelAttribute("order") @Valid Order order, BindingResult bindingResult, Model model) {
 
         try {
@@ -54,12 +55,12 @@ public class PaymentController {
         return null;
     }
 
-    @GetMapping("pay/cancel")
+    @GetMapping("/cancel")
     public String paymentCancel() {
         return "payment-cancel-page";
     }
 
-    @GetMapping("pay/success")
+    @GetMapping("/success")
     public String paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerID) {
         try {
             Payment payment = paymentService.executePayment(paymentId, payerID);

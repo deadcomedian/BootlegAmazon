@@ -24,19 +24,12 @@ public class OrderController {
     валидация форм
     ограничения даты на фронте
     сделать страницы статусов оплаты
-    что делать если мы удалили кеатегорию: а книги с ней остались?
-    доделать страницу каталога и товара
      */
     private final OrderService orderService;
 
     @Autowired
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
-    }
-
-    @GetMapping("/1")
-    public String order(){
-        return "new-order-page";
     }
 
     @GetMapping("/fromcarttest")
@@ -79,4 +72,13 @@ public class OrderController {
         return "new-order-page";
     }
 
+    @GetMapping("/all")
+    public String all(){
+        return "";
+    }
+
+    @GetMapping("/{id}")
+    public String byId(@PathVariable Integer id){
+        return "";
+    }
 }
