@@ -34,7 +34,8 @@ public class CustomerProfileController {
     }
 
     @GetMapping("")
-    public String customerProfile(Model model, @AuthenticationPrincipal UserEntity user) {
+    public String customerProfile(Model model, @AuthenticationPrincipal UserDetails user) {
+
         model.addAttribute("currentUser", user);
         return "profile";
     }

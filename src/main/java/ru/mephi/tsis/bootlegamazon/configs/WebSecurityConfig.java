@@ -20,35 +20,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-    @Bean
-    public PasswordEncoder encoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().antMatchers("/style/**").permitAll();
-
-        httpSecurity.authorizeRequests()
-                //Доступ только для не зарегистрированных пользователей
-                .antMatchers("/items/**").permitAll()
-                //.antMatchers("/items/**").not().fullyAuthenticated()
-                //Доступ только для пользователей с ролью Администратор и Менеджер
-                //.antMatchers("/category/**").hasAuthority("Администратор")
-                //.antMatchers("/category/**").hasAuthority("Менеджер")
-                //Доступ разрешен всем пользователей
-                //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
-                .and()
-                //Настройка для входа в систему
-                .formLogin()
-                .loginPage("/login")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll();
-
-    }
+//    @Bean
+//    public PasswordEncoder encoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
+//
+//    @Override
+//    protected void configure(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity.authorizeRequests().antMatchers("/style/**").permitAll();
+//
+//        httpSecurity.authorizeRequests()
+//                //Доступ только для не зарегистрированных пользователей
+//                .antMatchers("/items/**").permitAll()
+//                //.antMatchers("/items/**").not().fullyAuthenticated()
+//                //Доступ только для пользователей с ролью Администратор и Менеджер
+//                //.antMatchers("/category/**").hasAuthority("Администратор")
+//                //.antMatchers("/category/**").hasAuthority("Менеджер")
+//                //Доступ разрешен всем пользователей
+//                //Все остальные страницы требуют аутентификации
+//                .anyRequest().authenticated()
+//                .and()
+//                //Настройка для входа в систему
+//                .formLogin()
+//                .loginPage("/login")
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .permitAll();
+//
+//    }
 
 
 
