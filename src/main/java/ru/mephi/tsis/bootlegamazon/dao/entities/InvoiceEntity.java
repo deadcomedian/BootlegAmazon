@@ -37,4 +37,16 @@ public class InvoiceEntity {
     public Integer getCount() {
         return count;
     }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 }
