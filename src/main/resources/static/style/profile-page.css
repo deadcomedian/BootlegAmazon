@@ -1,0 +1,225 @@
+.tool-box-container {
+  display: flex;
+  position: relative;
+}
+.tool-box-container1 {
+  display: flex;
+  position: relative;
+  padding-top: 2.5rem;
+  padding-bottom: 0.5rem;
+}
+.tool-box-input {
+  width: 20rem;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  font-family: Open Sans;
+  border-radius: 1rem;
+}
+.tool-box-search {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-cart {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-profile {
+  width: 5rem;
+  height: 3rem;
+}
+
+@media(max-width: 991px) {
+  .tool-box-input {
+    width: 15rem;
+  }
+  .tool-box-search {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-cart {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-profile {
+    width: 4rem;
+    height: 2.5rem;
+  }
+}
+@media(max-width: 767px) {
+  .tool-box-input {
+    width: 10rem;
+  }
+  .tool-box-search {
+    width: 3rem;
+    height: 2rem;
+  }
+  .tool-box-cart {
+    width: 2rem;
+    height: 2rem;
+  }
+  .tool-box-profile {
+    width: 3rem;
+    height: 2rem;
+  }
+}
+@media(max-width: 479px) {
+  .tool-box-input {
+    width: 5rem;
+  }
+}
+
+.header-header {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  justify-content: space-between;
+}
+.header-image {
+  width: auto;
+  height: 6rem;
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media(max-width: 479px) {
+  .header-image {
+    height: 4rem;
+  }
+}
+
+.footer-footer {
+  width: 100%;
+  display: flex;
+  position: relative;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  justify-content: center;
+}
+.footer-text {
+  text-align: center;
+  font-family: Open Sans;
+}
+
+.profile-page-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.profile-page-container1 {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  margin-top: 2rem;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+  padding-right: 2rem;
+  justify-content: center;
+}
+.profile-page-text {
+  font-size: 4em;
+  font-family: Rubik Dirt;
+  line-height: 1em;
+}
+.profile-page-text03 {
+  color: var(--dl-color-gray-500);
+  text-align: center;
+  font-family: Open Sans;
+  margin-bottom: 1rem;
+}
+.profile-page-container2 {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-direction: column;
+}
+.profile-page-text06 {
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.profile-page-text07 {
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.profile-page-text08 {
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.profile-page-text09 {
+  color: var(--dl-color-primary-admin);
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  text-transform: none;
+  text-decoration: none;
+}
+.profile-page-button {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 2rem;
+  font-family: Open Sans;
+  font-weight: 600;
+  padding-top: 0.5rem;
+  padding-left: 3rem;
+  border-radius: 3rem;
+  margin-bottom: 2rem;
+  padding-right: 3rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--dl-color-primary-100);
+}
+.profile-page-button1 {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 2rem;
+  font-family: Open Sans;
+  font-weight: 600;
+  padding-top: 0.5rem;
+  padding-left: 3rem;
+  border-radius: 3rem;
+  margin-bottom: 2rem;
+  padding-right: 3rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--dl-color-primary-100);
+}
+.profile-page-button2 {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 2rem;
+  font-family: Open Sans;
+  font-weight: 600;
+  padding-top: 0.5rem;
+  padding-left: 3rem;
+  border-radius: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--dl-color-primary-admin);
+}
