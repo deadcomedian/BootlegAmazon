@@ -45,7 +45,6 @@ public class PaymentController {
     @PostMapping("")
     public String payment(
             @ModelAttribute("order") @Valid Order order,
-            RedirectAttributes redirectAttributes,
             Model model) {
 
         try {
@@ -76,8 +75,7 @@ public class PaymentController {
     public String paymentSuccess(
             @RequestParam("paymentId") String paymentId,
             @RequestParam("PayerID") String payerID,
-            @ModelAttribute("order") Order order,
-            BindingResult errors
+            @ModelAttribute("order") Order order
     ) {
         System.out.println(order);
         try {
@@ -86,7 +84,6 @@ public class PaymentController {
                 Cart cart = cartService.getCartByUserId(order.getUserId());
                 List<CartArticle> cartArticles = cart.getItems();
 
-                //order.setOrderStatus("Оплачен");
                 order.setOrderPaymentId(paymentId);
                 orderService.createOrder(order);
                 orderArticleService.addArticlesFromCartToOrder(order.getOrderNumber(), cartArticles);
@@ -110,6 +107,6 @@ public class PaymentController {
                  BadValueException e) {
             e.printStackTrace();
         }
-        return "redirect:/";
+        return "redirect:/items/all?page=0";
     }
 }

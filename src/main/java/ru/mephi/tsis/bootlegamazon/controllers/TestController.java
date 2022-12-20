@@ -36,4 +36,34 @@ public class TestController {
         model.addAttribute("errorMessage", "ERROR");
         return "error-page";
     }
+
+    @GetMapping("/profiles")
+    public String profiles(){
+        return "profiles-page";
+    }
+
+    @GetMapping("/cart")
+    public String cart(){
+        return "cart-page";
+    }
+
+    @GetMapping("/orders")
+    public String orders(){
+        return "orders-page";
+    }
+
+    @GetMapping("/payment-success")
+    public String paymentSuccess(){
+        return "payment-success-page";
+    }
+
+    @GetMapping("/payment-cancel")
+    public String paymentCancel(){
+        return "payment-cancel-page";
+    }
+
+    @GetMapping("/admin-panel")
+    public String adminPanel(){
+        return "admin-panel-page";
+    }
 }

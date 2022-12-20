@@ -18,7 +18,7 @@ import ru.mephi.tsis.bootlegamazon.services.implementations.ArticleCardServiceIm
 import java.util.List;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/categories")
 public class CategoryController {
 
     private int currentPage;
@@ -33,7 +33,7 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
-    public String showAll(Model model, @RequestParam Integer pageNumber){
+    public String showAll(Model model, @RequestParam ("page") Integer pageNumber){
         Sort sort = Sort.by(Sort.Direction.ASC,"name");
         Pageable pageable = PageRequest.of(pageNumber,10, sort);
         int totalPages = categoryService.getTotalPages(pageable);
@@ -42,7 +42,7 @@ public class CategoryController {
         int currentPage = pageNumber;
         this.currentPage = currentPage;
         if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/category/all?pageNumber=0";
+            return "redirect:/category/all?page=0";
         }
 
         if (pageNumber == 0){
@@ -81,7 +81,7 @@ public class CategoryController {
             throw new RuntimeException("EMPTY VALUE!!!");
         }
         categoryService.createCategory(category.getCategoryName());
-        return "redirect:/category/all?pageNumber=" + currentPage;
+        return "redirect:/category/all?page=" + currentPage;
     }
 
     @PostMapping("/{id}/delete")
@@ -99,6 +99,6 @@ public class CategoryController {
         } catch (Exception e) {
             throw new RuntimeException(id.toString(),e);
         }
-        return "redirect:/category/all?pageNumber="+currentPage;
+        return "redirect:/category/all?page="+currentPage;
     }
 }

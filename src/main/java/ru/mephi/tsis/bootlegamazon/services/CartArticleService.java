@@ -16,4 +16,6 @@ public interface CartArticleService {
     void removeArticleFromCart(Integer articleId, Integer cartId) throws CartArticleNotFoundException;
 
     void deleteAllArticlesFromCart(Integer cartId);
+
+    void deleteArticleFromCartCompletely(Integer articleId, Integer cartId) throws CartArticleNotFoundException;
 }

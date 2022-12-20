@@ -84,7 +84,6 @@
         </div>
         <div class="orders-page-container4">
           <label class="orders-page-text1">№ Заказа</label>
-          <label class="orders-page-text1">Пользователь</label>
           <label class="orders-page-text1">Статус</label>
           <label class="orders-page-text1">Сумма</label>
           <label class="orders-page-text1"></label>>
@@ -92,7 +91,6 @@
         <div class="orders-page-container3" th:each="order : ${orders}">
           <div class="orders-page-container4">
             <label class="orders-page-text1" th:text="${order.getNumber()}"></label>
-            <label class="orders-page-text2" th:text="${order.getUsername()}"></label>
             <label class="orders-page-text3" th:text="${order.getStatus()}"></label>
             <label class="orders-page-text4" th:text="${order.getPrice()}"></label>
             <a>
