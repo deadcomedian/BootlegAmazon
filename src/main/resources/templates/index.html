@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <title>Bootleg Amazon</title>
     <meta property="og:title" content="Travel Agency" />
@@ -134,7 +134,7 @@
                     </svg>
                   </button>
                 </a>
-                <a th:href="@{/profile}">
+                <!--- <a th:href="@{/profile/{id}(id=${currentUser.id})}"> -->
                   <button>
                     <svg viewBox="0 0 1024 1024" class="tool-box-profile">
                       <path

@@ -51,11 +51,23 @@
 
       <div class="authorization-page-container">
         <header data-role="Header" class="header-header">
-          <img
+
+          <button type="button" class="profile-page-button1">
+          <span>
+            <a th:href="@{'/items/all?page=0'}">
+              <img
+                    alt="logo"
+                    src="https://i.imgur.com/vizTO84.png"
+                    class="header-image"
+            /></a>
+          </span>
+          </button>
+
+        <!---  <img
             alt="logo"
             src="https://i.imgur.com/vizTO84.png"
             class="header-image"
-          />
+          /> -->
           <div class="header-container">
             <div class="tool-box-container tool-box-root-class-name">
               <div class="tool-box-container1">
@@ -119,22 +131,20 @@
             />
           </div>
           <div class="button-enter-container button-enter-root-class-name">
-            <!--  <button type="submit" class="button-enter-button">
-               <span>
-                 <span>Войти</span>
-                 <br />
-               </span>
-             </button> -->
             <input type="submit" value="Войти" class="button-enter-button"/>
            </div>
+
            </form>
-           <div
-             class="button-register-container button-register-root-class-name"
-           >
-             <button type="button" class="button-register-button">
-               Войти
-             </button>
-           </div>
+
+          <div class="button-register-container button-register-root-class-name">
+            <button type="button" class="button-register-button">
+                <span>
+               <a th:href="@{/registration}">
+                 <span>Зарегистрироваться</span></a>
+                </span>
+            </button>
+          </div>
+
          </div>
          <footer class="footer-footer">
            <span class="footer-text">

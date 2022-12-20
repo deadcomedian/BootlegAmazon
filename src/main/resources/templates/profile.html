@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Profile-page - Travel Agency</title>
+    <title>Профиль</title>
     <meta property="og:title" content="Profile-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
@@ -97,12 +97,20 @@
         </div>
         <button type="button" class="profile-page-button">
           <span>
+            <a th:href="@{/profile/{id}/edit(id=${currentUser.id})}">
+              <span>Редактировать</span></a>
+            <br />
+          </span>
+        </button>
+        <button type="button" class="profile-page-button">
+          <span>
             <span>Посмотреть все свои заказы</span>
             <br />
           </span>
         </button>
         <button type="button" class="profile-page-button1">
           <span>
+            <a th:href="@{'/items/all?page=0'}">
             <span>Перейти в каталог</span>
             <br />
           </span>
@@ -113,6 +121,9 @@
             <br />
           </span>
         </button>
+
+        <a th:href="@{/logout}">Выйти</a>
+
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>
