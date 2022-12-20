@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Bootleg Amazon</title>
-    <meta property="og:title" content="Error-page - Travel Agency" />
+    <title>Orders-page - Travel Agency</title>
+    <meta property="og:title" content="Orders-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -38,13 +38,13 @@
       href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&amp;display=swap"
       data-tag="font"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="/style/style.css" />
   </head>
   <body>
     <div>
-      <link href="/style/error-page.css" rel="stylesheet" />
+      <link href="/style/orders-page.css" rel="stylesheet" />
 
-      <div class="error-page-container">
+      <div class="orders-page-container">
         <header data-role="Header" class="header-header">
           <img
             alt="logo"
@@ -79,8 +79,45 @@
             </div>
           </div>
         </header>
-        <div class="error-page-container1">
-          <h1 class="error-page-text">ВСЁ ПОШЛО ПО ... 404 :)</h1>
+        <div class="orders-page-container1">
+          <h1 class="orders-page-text">Все заказы</h1>
+          <div class="orders-page-container2">
+            <div class="button-filter-container button-filter-root-class-name2">
+              <button type="button" class="button-filter-button">
+                <span>
+                  <span>Фильтр</span>
+                  <br />
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="orders-page-container3">
+          <div class="orders-page-container4">
+            <label class="orders-page-text1">№ заказа</label>
+            <label class="orders-page-text2">ник пользователя</label>
+            <label class="orders-page-text3">статус</label>
+            <label class="orders-page-text4">1000 ₽</label>
+            <svg viewBox="0 0 1024 1024" class="orders-page-icon">
+              <path
+                d="M512 384q52 0 90 38t38 90-38 90-90 38-90-38-38-90 38-90 90-38zM512 726q88 0 151-63t63-151-63-151-151-63-151 63-63 151 63 151 151 63zM512 192q158 0 286 88t184 232q-56 144-184 232t-286 88-286-88-184-232q56-144 184-232t286-88z"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <div class="orders-page-container5"></div>
+        <div class="orders-page-container6">
+          <svg viewBox="0 0 1024 1024" class="orders-page-icon2">
+            <path
+              d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
+            ></path>
+          </svg>
+          <label class="orders-page-text5">1</label>
+          <svg viewBox="0 0 1024 1024" class="orders-page-icon4">
+            <path
+              d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
+            ></path>
+          </svg>
         </div>
         <footer class="footer-footer">
           <span class="footer-text">
@@ -94,5 +131,6 @@
       data-section-id="header"
       src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
     ></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
   </body>
 </html>
