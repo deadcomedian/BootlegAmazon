@@ -86,7 +86,7 @@ public class PaymentController {
                 Cart cart = cartService.getCartByUserId(order.getUserId());
                 List<CartArticle> cartArticles = cart.getItems();
 
-                order.setOrderStatus("Оплачен");
+                //order.setOrderStatus("Оплачен");
                 order.setOrderPaymentId(paymentId);
                 orderService.createOrder(order);
                 orderArticleService.addArticlesFromCartToOrder(order.getOrderNumber(), cartArticles);

@@ -1,1 +1,0 @@
-alter table shop.t_order_article drop column active;
