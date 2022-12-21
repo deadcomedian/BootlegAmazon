@@ -14,6 +14,8 @@ import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
 import ru.mephi.tsis.bootlegamazon.models.CustomerProfile;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
+import javax.validation.Valid;
+
 
 @Controller
 @RequestMapping("/profile")
@@ -62,14 +64,21 @@ public class CustomerProfileController {
     }
 
     @PostMapping("/saveedit")
-    public String saveEdit(@ModelAttribute("user") UserEntity user, Model model, @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirectAttributes) {
+    public String saveEdit(@ModelAttribute("user") @Valid UserEntity user, Model model, @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirectAttributes) {
         UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
+        int id = loggedUser.getId();
+
+        if (user.getName().equals("") || user.getPassword().equals("") || user.getPasswordConfirm().equals("")) {
+            redirectAttributes.addFlashAttribute("fieldError", "Все поля должны быть заполнены!");
+            return "redirect:/profile/" + id + "/edit";
+        }
+
         if (!user.getPassword().equals(user.getPasswordConfirm())){
             redirectAttributes.addFlashAttribute("passwordError", "Пароли не совпадают");
-            return "redirect:/registration";
+            return "redirect:/profile/" + id + "/edit";
         }
-        userService.update(loggedUser.getId(), user.getName(), user.getPassword());
-        return "redirect:/profile/"+user.getId();
+        userService.update(id, user.getName(), user.getPassword());
+        return "redirect:/profile/"+ id;
     }
 
 }

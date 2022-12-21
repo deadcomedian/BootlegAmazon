@@ -1,6 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="" xmlns:th="http://www.w3.org/1999/xhtml">
-  <head>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="http://www.springframework.org/security/tags">
+
+<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+  <property name="templateResolver" ref="templateResolver"></property>
+  <property name="additionalDialects">
+    <set>
+      <bean class="org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect"></bean>
+    </set>
+  </property>
+</bean>
+
+<head>
     <title>Профиль</title>
     <meta property="og:title" content="Profile-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -115,13 +127,14 @@
             <br />
           </span>
         </button>
+        <sec:authorize access="hasRole('Администратор')">
         <button type="button" class="profile-page-button2">
           <span>
             <span>Перейти в Админ-панель</span>
             <br />
           </span>
         </button>
-
+        </sec:authorize>
         <a th:href="@{/logout}">Выйти</a>
 
         <footer class="footer-footer">
