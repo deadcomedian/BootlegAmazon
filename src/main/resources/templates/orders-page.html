@@ -149,8 +149,12 @@
 
             <label class="orders-page-text1" th:text="${order.getNumber()}"></label>
             <label class="orders-page-text2" th:text="${order.getUsername()}"></label>
-            <a class="orders-page-text3" th:text="${order.getStatus()}" th:href="@{/orders/choosenewstatus(orderid=${order.getNumber()})}"></a>
-<!--            <label ></label>-->
+            <div th:if="${order.getStatus() == 'Отменён'} or ${order.getStatus()== 'Доставлен'}">
+              <label class="orders-page-text3" th:text="${order.getStatus()}"></label>
+            </div>
+            <div th:if="${order.getStatus() != 'Отменён'} and ${order.getStatus() != 'Доставлен'}">
+              <a class="orders-page-text3" th:text="${order.getStatus()}" th:href="@{/orders/choosenewstatus(orderid=${order.getNumber()})}"></a>
+            </div>
             <label class="orders-page-text4" th:text="${order.getPrice()}"></label>
 
           </div>
