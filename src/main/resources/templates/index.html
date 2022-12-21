@@ -1,16 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="http://www.springframework.org/security/tags">
-
-<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
-  <property name="templateResolver" ref="templateResolver"></property>
-  <property name="additionalDialects">
-    <set>
-      <bean class="org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect"></bean>
-    </set>
-  </property>
-</bean>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <head>
   <title>Bootleg Amazon</title>
@@ -219,7 +208,18 @@
               </button>
             </a>
 
-            <sec:authorize access="!isAuthenticated()">
+            <div th:if="${user != null}">
+              <a th:href="@{/profile/{id}(id=${user.getUser().getId()})}">
+                <button>
+                  <svg viewBox="0 0 1024 1024" class="tool-box-profile">
+                    <path
+                            d="M576 706.612v-52.78c70.498-39.728 128-138.772 128-237.832 0-159.058 0-288-192-288s-192 128.942-192 288c0 99.060 57.502 198.104 128 237.832v52.78c-217.102 17.748-384 124.42-384 253.388h896c0-128.968-166.898-235.64-384-253.388z"
+                    ></path>
+                  </svg>
+                </button> </a>
+            </div>
+
+            <div th:if="${user == null}">
               <a th:href="@{/login}">
                 <button>
                   <svg viewBox="0 0 1024 1024" class="tool-box-profile">
@@ -229,19 +229,9 @@
                   </svg>
                 </button>
               </a>
-            </sec:authorize>
+            </div>
 
-       <!--       <sec:authorize access="isAuthenticated()">
-                  <a th:href="@{/profile/{id}(id=${currentUser.id})}">
-                    <button>
-                      <svg viewBox="0 0 1024 1024" class="tool-box-profile">
-                        <path
-                                d="M576 706.612v-52.78c70.498-39.728 128-138.772 128-237.832 0-159.058 0-288-192-288s-192 128.942-192 288c0 99.060 57.502 198.104 128 237.832v52.78c-217.102 17.748-384 124.42-384 253.388h896c0-128.968-166.898-235.64-384-253.388z"
-                        ></path>
-                      </svg>
-                    </button> </a>
-                </sec:authorize>
--->
+
             </a>
           </div>
         </div>

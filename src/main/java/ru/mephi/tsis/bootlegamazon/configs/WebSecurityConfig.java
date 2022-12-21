@@ -32,16 +32,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         httpSecurity.authorizeRequests()
                 //Доступ только для не зарегистрированных пользователей
-                //.antMatchers("/registration").not().fullyAuthenticated()
                 .antMatchers("/registration").not().fullyAuthenticated()
                 .antMatchers("/login").not().fullyAuthenticated()
-                .antMatchers("/items/**").permitAll()
-                //.antMatchers("/registration").permitAll()
-                //.antMatchers("/items/**").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор и Менеджер
-               //.antMatchers("/category/**").hasAuthority("Администратор")
-                //.antMatchers("/category/**").hasAuthority("Менеджер")
+               .antMatchers("/categories/all",
+                       "/categories/new",
+                       "/categories/add",
+                       "/categories/{id}/delete",
+                       "/items/new",
+                       "/items/add",
+                       "/items/{id}/edit",
+                       "/items/saveedited",
+                       "/items/{id}/delete").hasAuthority("Администратор")
+                .antMatchers("/categories/**").hasAuthority("Менеджер")
                 //Доступ разрешен всем пользователей
+                .antMatchers("/items/all", "/items/{id}", "/items/search").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()

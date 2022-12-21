@@ -48,7 +48,7 @@ public class CategoryController {
         int currentPage = pageNumber;
         this.currentPage = currentPage;
         if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/category/all?page=0";
+            return "redirect:/categories/all?page=0";
         }
 
         if (pageNumber == 0){

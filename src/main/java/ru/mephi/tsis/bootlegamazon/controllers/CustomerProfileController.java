@@ -54,6 +54,7 @@ public class CustomerProfileController {
         }
         model.addAttribute("currentUser", user);
         model.addAttribute("role", role);
+        model.addAttribute("user", currentUser);
         return "profile";
     }
 

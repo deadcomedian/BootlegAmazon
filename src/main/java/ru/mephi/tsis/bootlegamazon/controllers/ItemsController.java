@@ -5,6 +5,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -78,8 +80,10 @@ public class ItemsController {
             @RequestParam("stock") Optional<Boolean> inStock, //фильтрация по наличию
             @RequestParam("pricefrom") Optional<Double> priceFrom, //фильтрация по цене - от
             @RequestParam("priceto") Optional<Double> priceTo, //фильтрация по цене - до
-            @RequestParam("search") Optional<String> searchField // поиск
+            @RequestParam("search") Optional<String> searchField, // поиск
+            @AuthenticationPrincipal UserDetails user
     ) {
+        model.addAttribute("user", user);
         HrefArgs hrefArgs = new HrefArgs();
         //Я девопс, пишу как умею
         HashMap<String,Sort> sortMethodMap = new HashMap<>();
@@ -177,7 +181,8 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}")
-    public String byId(@PathVariable Integer id, Model model){
+    public String byId(@PathVariable Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             Article article = articleService.getById(id);
             model.addAttribute("article",article);
