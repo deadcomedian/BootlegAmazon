@@ -255,11 +255,11 @@
         <div class="button-sort-container button-sort-root-class-name">
           <div class="popup button-sort-button" onclick="sortPopupFunction()">Сортировка
             <span class="popuptext" id="sortPopup">
-                    <div class="list" th:each="sortMethod : ${sortMethods}">
-                      <a th:text="${sortMethod}"
-                         th:href="@{'/items/all?page=0&sort=' + ${sortMethod} + ${hrefArgs.getHrefArgsExcept('sort')}}"></a>
-                    </div>
-                  </span>
+              <div class="list" th:each="sortMethod : ${sortMethods}">
+                <a th:text="${sortMethod}"
+                   th:href="@{'/items/all?page=0&sort=' + ${sortMethod} + ${hrefArgs.getHrefArgsExcept('sort')}}"></a>
+              </div>
+            </span>
           </div>
           <script>
             // When the user clicks on div, open the popup

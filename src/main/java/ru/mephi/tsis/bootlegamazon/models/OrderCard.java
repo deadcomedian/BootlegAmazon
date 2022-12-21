@@ -32,4 +32,14 @@ public class OrderCard {
     public Double getPrice() {
         return price;
     }
+
+    @Override
+    public String toString() {
+        return "OrderCard{" +
+                "number=" + number +
+                ", username='" + username + '\'' +
+                ", status='" + status + '\'' +
+                ", price=" + price +
+                '}';
+    }
 }

@@ -7,13 +7,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
-import ru.mephi.tsis.bootlegamazon.exceptions.CartNotFoundException;
-import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
-import ru.mephi.tsis.bootlegamazon.exceptions.StatusNotFoundException;
+import ru.mephi.tsis.bootlegamazon.exceptions.*;
 import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
+import ru.mephi.tsis.bootlegamazon.services.StatusService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,10 +27,13 @@ public class OrderController {
 
     private final CartService cartService;
 
+    private final StatusService statusService;
+
     @Autowired
-    public OrderController(OrderService orderService, CartService cartService) {
+    public OrderController(OrderService orderService, CartService cartService, StatusService statusService) {
         this.orderService = orderService;
         this.cartService = cartService;
+        this.statusService = statusService;
     }
 
     @GetMapping("/fromcarttest")
@@ -150,10 +151,29 @@ public class OrderController {
         return "orders-page-user";
     }
 
-    @GetMapping("/{id}")
-    public String byId(@PathVariable Integer id){
-        return "";
+    @GetMapping("/choosenewstatus")
+    public String showAvailableStatuses(@RequestParam("orderid") Integer orderId ,Model model){
+        List<Status> statuses = statusService.getAll();
+        model.addAttribute("statuses", statuses);
+        model.addAttribute("orderNumber", orderId);
+        return "change-order-status-page";
     }
+
+    @GetMapping("/changestatus")
+    public String changeOrderStatus(@RequestParam("orderid") Integer orderId, @RequestParam("statusid") Integer statusId){
+        try {
+            Order order = orderService.getById(orderId);
+            if (!order.getOrderStatus().equals("Отменён")){
+                orderService.updateOrderStatus(orderId, statusService.getById(statusId).getName());
+            }
+        } catch (OrderNotFoundException | StatusNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return "redirect:/orders/all?page=" + currentPage;
+    }
+
+
+    
 }
 // Основное
 //Неавторизованный пользователь
