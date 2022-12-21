@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserEntity;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.RoleRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
 import ru.mephi.tsis.bootlegamazon.models.CustomerProfile;
@@ -27,16 +28,18 @@ public class CustomerProfileController {
 
     private UserAuthRepository userAuthRepository;
 
+    private RoleRepository roleRepository;
+
     @Autowired
-    public CustomerProfileController(UserRepository userRepository, UserService userService, UserAuthRepository userAuthRepository) {
+    public CustomerProfileController(UserRepository userRepository, UserService userService, UserAuthRepository userAuthRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userAuthRepository = userAuthRepository;
+        this.roleRepository = roleRepository;
     }
 
     @GetMapping("")
     public String customerProfile(Model model, @AuthenticationPrincipal UserDetails user) {
-
         model.addAttribute("currentUser", user);
         return "profile";
     }
@@ -45,10 +48,12 @@ public class CustomerProfileController {
     public String anyProfile (@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
         UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
         UserEntity user = userRepository.findById(id).get();
+        String role = roleRepository.findById(user.getRoleId()).get().getName();
         if (!loggedUser.getId().equals(user.getId())) {
             return "error-page";
         }
         model.addAttribute("currentUser", user);
+        model.addAttribute("role", role);
         return "profile";
     }
 

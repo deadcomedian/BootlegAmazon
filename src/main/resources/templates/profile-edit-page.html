@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Редактирование профиля</title>
     <meta property="og:title" content="NewEdit-Profile-page - Travel Agency" />
@@ -136,13 +136,14 @@
             <div>
                 <errors th:if="${fieldError}"> Все поля должны быть заполнены! </errors>
             </div>
-            <div>
+            <div sec:authorize="hasAuthority('Администратор')">
             <select class="new-edit-profile-page-select input">
                 <option value="Null">Роль</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
+                <option value="Option 2">Администратор</option>
+                <option value="Option 3">Менеджер</option>
+                <option value="Option 4">Покупатель</option>
             </select>
-            </div>
+                </sec:authorize> </div>
           <button type="submit" class="new-edit-profile-page-button">
             <span>
               <span>Сохранить</span>
@@ -157,12 +158,14 @@
             <br />
           </span>
         </button>
+    <div sec:authorize="hasAuthority('Администратор')">
         <button type="button" class="new-edit-profile-page-button2">
           <span>
             <span>Дезактивировать</span>
             <br />
           </span>
         </button>
+        </sec:authorize> </div>
           <footer class="footer-footer">
             <span class="footer-text">
               <span>© 2022 С18-501, все права зарегистрированы.</span>

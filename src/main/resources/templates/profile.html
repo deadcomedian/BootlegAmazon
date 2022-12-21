@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="http://www.springframework.org/security/tags">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
   <property name="templateResolver" ref="templateResolver"></property>
@@ -105,7 +103,9 @@ xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="htt
           <label class="profile-page-text06" th:text="'Логин: ' + ${currentUser.login}"></label>
           <label class="profile-page-text07" th:text="'ФИО: ' + ${currentUser.name}"></label>
           <label class="profile-page-text08" th:text="'Номер телефона: ' + ${currentUser.phone}"></label>
-          <label class="profile-page-text09">Роль</label>
+          <div sec:authorize="hasAuthority('Администратор')">
+          <label class="profile-page-text09"  th:text=" ${role}"></label>
+            </sec:authorize> </div>
         </div>
         <button type="button" class="profile-page-button">
           <span>
@@ -125,16 +125,17 @@ xsi:schemaLocation="http://www.springframework.org/security/tags" xmlns:sec="htt
             <a th:href="@{'/items/all?page=0'}">
             <span>Перейти в каталог</span>
             <br />
-          </span>
+            </a> </span>
         </button>
-        <sec:authorize access="hasRole('Администратор')">
+        <div sec:authorize="hasAuthority('Администратор')">
         <button type="button" class="profile-page-button2">
           <span>
+            <a th:href="@{'/admin/panel'}">
             <span>Перейти в Админ-панель</span>
             <br />
           </span>
         </button>
-        </sec:authorize>
+          </sec:authorize> </div>
         <a th:href="@{/logout}">Выйти</a>
 
         <footer class="footer-footer">
