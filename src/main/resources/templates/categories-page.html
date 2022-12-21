@@ -87,7 +87,7 @@
         <div class="categories-page-container1">
           <h1 class="categories-page-text">Категории</h1>
           <div class="button-add-container button-add-root-class-name">
-            <a th:href="@{'/category/new'}">
+            <a th:href="@{'/categories/new'}">
               <button type="button" class="button-add-button">
                 <span>
                   <span>Создать</span>
@@ -100,7 +100,7 @@
         <div class="categories-page-container2">
           <div class="categories-page-container3" th:each="category : ${categories}" th:with="categoryId=${category.id}">
             <label class="categories-page-text1" th:text="${category.categoryName}"></label>
-            <form th:method="POST" th:action="@{/category/{id}/delete(id=${categoryId})}">
+            <form th:method="POST" th:action="@{/categories/{id}/delete(id=${categoryId})}">
               <button type="submit">
                 <svg viewBox="0 0 1024 1024" class="categories-page-icon">
                   <path
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="categories-page-container8">
-          <a th:href="@{/category/all(pageNumber=${previousPage})}">
+          <a th:href="@{/categories/all(page=${previousPage})}">
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon10">
                 <path
@@ -122,7 +122,7 @@
             </button>
           </a>
           <label class="categories-page-text6" th:text="${currentPage + 1}"></label>
-          <a th:href="@{/category/all(pageNumber=${nextPage})}">
+          <a th:href="@{/categories/all(page=${nextPage})}">
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="categories-page-icon12">
                 <path

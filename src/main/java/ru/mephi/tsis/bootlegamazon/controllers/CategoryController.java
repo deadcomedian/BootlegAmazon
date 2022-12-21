@@ -6,8 +6,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Category;
 
@@ -15,6 +20,7 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 import ru.mephi.tsis.bootlegamazon.services.implementations.ArticleCardServiceImpl;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -75,13 +81,21 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("category") Category category){
-        if (category.getCategoryName().equals("")){
-            //разобраться
-            throw new RuntimeException("EMPTY VALUE!!!");
+    public String create(@ModelAttribute("category") @Validated Category category, BindingResult result, RedirectAttributes attributes){
+
+        if(result.hasErrors()){
+            attributes.addFlashAttribute("error", "Заполните название категории (от 2 до 20 символов)");
+            return "redirect:/categories/new";
+        } else {
+            try {
+                Category check = categoryService.getByCategoryName(category.getCategoryName());
+                attributes.addFlashAttribute("error", "Категория с таким названием уже существует");
+                return "redirect:/categories/new";
+            } catch (CategoryNotFoundException e) {
+                categoryService.createCategory(category.getCategoryName());
+                return "redirect:/categories/all?page=" + currentPage;
+            }
         }
-        categoryService.createCategory(category.getCategoryName());
-        return "redirect:/category/all?page=" + currentPage;
     }
 
     @PostMapping("/{id}/delete")
@@ -99,6 +113,6 @@ public class CategoryController {
         } catch (Exception e) {
             throw new RuntimeException(id.toString(),e);
         }
-        return "redirect:/category/all?page="+currentPage;
+        return "redirect:/categories/all?page="+currentPage;
     }
 }

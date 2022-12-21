@@ -2,6 +2,7 @@ package ru.mephi.tsis.bootlegamazon.models;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class Order {
@@ -9,9 +10,15 @@ public class Order {
     private Integer userId;
     private Integer orderNumber;
     private String orderStatus;
+
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Size(min=2, max=50)
     private String orderAddress;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
+
     private double orderPrice;
     private String orderPaymentId;
 

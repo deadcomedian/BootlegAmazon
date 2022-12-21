@@ -79,7 +79,7 @@
             </div>
           </div>
         </header>
-        <!--          enctype="application/x-www-form-urlencoded"-->
+        <h2 th:if="${error} != null" th:text="${error}"></h2>
         <form
           class="new-item-page-form"
           th:method="POST"

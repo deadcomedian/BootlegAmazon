@@ -1,0 +1,1 @@
+alter table shop.tcl_category drop constraint tcl_category_category_name_key;
