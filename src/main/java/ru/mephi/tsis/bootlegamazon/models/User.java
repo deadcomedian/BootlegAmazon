@@ -2,8 +2,15 @@ package ru.mephi.tsis.bootlegamazon.models;
 
 public class User {
     private String login;
-    private String password;
-    private Integer roleId;
+
+    private String name;
+    private String role;
+
+    public User(String login, String name, String role) {
+        this.login = login;
+        this.name = name;
+        this.role = role;
+    }
 
     public String getLogin() {
         return login;
@@ -13,25 +20,19 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public User(String login, String password, Integer roleId) {
-        this.login = login;
-        this.password = password;
-        this.roleId = roleId;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

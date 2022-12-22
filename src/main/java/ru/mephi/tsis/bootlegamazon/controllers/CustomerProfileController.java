@@ -1,6 +1,10 @@
 package ru.mephi.tsis.bootlegamazon.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -13,22 +17,24 @@ import ru.mephi.tsis.bootlegamazon.dao.repositories.RoleRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
 import ru.mephi.tsis.bootlegamazon.models.CustomerProfile;
+import ru.mephi.tsis.bootlegamazon.models.User;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 
 @Controller
 @RequestMapping("/profile")
 public class CustomerProfileController {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private UserService userService;
+    private final UserService userService;
 
-    private UserAuthRepository userAuthRepository;
+    private final UserAuthRepository userAuthRepository;
 
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public CustomerProfileController(UserRepository userRepository, UserService userService, UserAuthRepository userAuthRepository, RoleRepository roleRepository) {
@@ -85,6 +91,56 @@ public class CustomerProfileController {
         }
         userService.update(id, user.getName(), user.getPassword());
         return "redirect:/profile/"+ id;
+    }
+
+    @GetMapping("/all")
+    public String all(
+            Model model,
+            @RequestParam("page") Integer pageNumber,
+            @AuthenticationPrincipal UserDetails user
+    ){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
+
+        int totalPages = userRepository.findAll(pageable).getTotalPages();
+        int previousPage = 0;
+        int nextPage = 0;
+        int currentPage = pageNumber;
+        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+            return "redirect:/items/all?page=0";
+        }
+        if (pageNumber == 0){
+            previousPage = 0;
+            if (totalPages == 1){
+                nextPage = 0;
+            } else {
+                nextPage = currentPage + 1;
+            }
+        } else if (pageNumber == totalPages-1){
+            nextPage = totalPages-1;
+            previousPage = currentPage - 1;
+        } else {
+            nextPage = currentPage + 1;
+            previousPage = currentPage - 1;
+        }
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("nextPage", nextPage);
+        model.addAttribute("previousPage", previousPage);
+
+        ArrayList<User> users = new ArrayList<>();
+        Page<UserEntity> userEntities = userRepository.findAll(pageable);
+        for(UserEntity userEntity : userEntities) {
+            users.add(new User(userEntity.getLogin(), userEntity.getName(), roleRepository.findById(userEntity.getRoleId()).get().getName()));
+        }
+
+        model.addAttribute("users", users);
+        return "profiles-page";
     }
 
 }

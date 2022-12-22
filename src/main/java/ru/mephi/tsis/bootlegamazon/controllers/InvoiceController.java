@@ -14,7 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.BadValueException;
+import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.forms.InvoiceForm;
+import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
@@ -127,9 +129,10 @@ public class InvoiceController {
         }
 
         try {
-            articleService.updateAmount(invoice.getArticleId(), invoice.getAmount());
+            Article article = articleService.getById(invoice.getArticleId());
+            articleService.updateAmount(article.getAmount() + invoice.getArticleId(), invoice.getAmount());
             invoiceService.createInvoice(invoice.getArticleId(), invoice.getAmount());
-        } catch (ArticleNotFoundException | BadValueException e) {
+        } catch (ArticleNotFoundException | BadValueException | CategoryNotFoundException e) {
             throw new RuntimeException(e);
         }
         return "redirect:/admin/panel";
