@@ -66,4 +66,9 @@ public class TestController {
     public String adminPanel(){
         return "admin-panel-page";
     }
+
+    @GetMapping("/order")
+    public String order(){
+        return "order-page";
+    }
 }

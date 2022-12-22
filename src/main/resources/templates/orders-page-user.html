@@ -108,14 +108,14 @@
           <label class="orders-page-text1">№ Заказа</label>
           <label class="orders-page-text1">Статус</label>
           <label class="orders-page-text1">Сумма</label>
-          <label class="orders-page-text1"></label>>
+          <label class="orders-page-text1"></label>
         </div>
         <div class="orders-page-container3" th:each="order : ${orders}">
           <div class="orders-page-container4">
             <label class="orders-page-text1" th:text="${order.getNumber()}"></label>
             <label class="orders-page-text3" th:text="${order.getStatus()}"></label>
             <label class="orders-page-text4" th:text="${order.getPrice()}"></label>
-            <a>
+            <a th:href="@{'/orders/' + ${order.getNumber()}}">
               <button>
                 <svg viewBox="0 0 1024 1024" class="orders-page-icon">
                   <path
@@ -129,7 +129,7 @@
         <div class="orders-page-container5"></div>
 
         <div class="orders-page-container6">
-          <a th:href="@{'/orders/all?page=' + ${previousPage}}">
+          <a th:href="@{'/orders/foruser?page=' + ${previousPage}}">
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="orders-page-icon2">
                 <path
@@ -139,7 +139,7 @@
             </button>
           </a>
           <label class="orders-page-text5" th:text="${currentPage + 1}"></label>
-          <a th:href="@{'/orders/all?page=' + ${nextPage}}">
+          <a th:href="@{'/orders/foruser?page=' + ${nextPage}}">
             <button type="button">
               <svg viewBox="0 0 1024 1024" class="orders-page-icon4">
                 <path

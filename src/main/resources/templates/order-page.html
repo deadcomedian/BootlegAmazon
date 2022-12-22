@@ -102,128 +102,88 @@
           </div>
         </header>
         <div class="order-page-container01">
-          <h1 class="order-page-text">Заказ № ___</h1>
-          <div class="order-page-container02">
+          <h1 class="order-page-text" th:text="'Заказ №' + ${order.getOrderNumber()}"></h1>
+          <div class="order-page-container02" th:if="${!orderOfCurrentUser}">
             <label class="order-page-text01">
-              <span>--Пользователь--</span>
+              <span th:text="'Заказчик: ' + ${userName}"></span>
               <br />
             </label>
           </div>
         </div>
-        <div class="order-page-container03">
+        <div class="order-page-container03" th:each="item : ${items}">
+
           <div class="order-page-container04">
             <div class="order-page-container05">
               <img
                 alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
+                th:src="${item.getItem().getPhoto()}"
                 class="order-page-image"
               />
-              <label class="order-page-text04">Название айтема</label>
+              <label class="order-page-text04" th:text="${item.getItem().getItemName()}"></label>
             </div>
             <div class="order-page-container06">
-              <label class="order-page-text05">15 шт</label>
-              <label class="order-page-text06">1000 ₽</label>
+              <label class="order-page-text05" th:text="${item.getAmount()} + ' шт'"></label>
+              <label class="order-page-text06" th:text="${item.getPrice()} + ' ₽'"></label>
             </div>
           </div>
-          <div class="order-page-container07">
-            <div class="order-page-container08">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="order-page-image1"
-              />
-              <label class="order-page-text07">Название айтема</label>
-            </div>
-            <div class="order-page-container09">
-              <label class="order-page-text08">15 шт</label>
-              <label class="order-page-text09">1000 ₽</label>
-            </div>
-          </div>
-          <div class="order-page-container10">
-            <div class="order-page-container11">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="order-page-image2"
-              />
-              <label class="order-page-text10">Название айтема</label>
-            </div>
-            <div class="order-page-container12">
-              <label class="order-page-text11">15 шт</label>
-              <label class="order-page-text12">1000 ₽</label>
-            </div>
-          </div>
-          <div class="order-page-container13">
-            <div class="order-page-container14">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="order-page-image3"
-              />
-              <label class="order-page-text13">Название айтема</label>
-            </div>
-            <div class="order-page-container15">
-              <label class="order-page-text14">15 шт</label>
-              <label class="order-page-text15">1000 ₽</label>
-            </div>
-          </div>
-          <div class="order-page-container16">
-            <div class="order-page-container17">
-              <img
-                alt="image"
-                src="https://play.teleporthq.io/static/svg/default-img.svg"
-                class="order-page-image4"
-              />
-              <label class="order-page-text16">Название айтема</label>
-            </div>
-            <div class="order-page-container18">
-              <label class="order-page-text17">15 шт</label>
-              <label class="order-page-text18">1000 ₽</label>
-            </div>
-          </div>
+
         </div>
         <div class="order-page-container19">
           <div class="order-page-container20">
-            <span class="order-page-text19">Итого:</span>
-            <label class="order-page-text20">1000 ₽</label>
+            <span class="order-page-text19" >Итого:</span>
+            <label class="order-page-text20" th:text="${order.getOrderPrice()} + ' ₽'"></label>
           </div>
-          <div class="order-page-container21">
+          <div class="order-page-container21" th:if="${!isAdminOrManager}">
             <label class="order-page-text21">
               <span>Статус:</span>
               <br />
             </label>
             <label class="order-page-text24">
-              <span>---СТАТУС---</span>
+              <span th:text="${order.getOrderStatus()}"></span>
               <br />
             </label>
           </div>
+
         </div>
         <div class="order-page-container22">
           <div class="order-page-container23">
             <div class="order-page-container24">
               <label class="order-page-text27">Адрес доставки:</label>
               <label class="order-page-text28">
-                <span>---АДРЕС ДОСТАВКИ---</span>
+                <span th:text="${order.getOrderAddress()}"></span>
                 <br />
               </label>
             </div>
             <div class="order-page-container25">
-              <label class="order-page-text31">
-                Дата доставки:&nbsp;&nbsp;
-              </label>
+              <label class="order-page-text31">Дата доставки:</label>
               <label class="order-page-text32">
-                <span>---ДАТА ДОСТАВКИ---</span>
+                <span th:text="${order.getOrderDate()}"></span>
                 <br />
               </label>
             </div>
           </div>
-          <div class="order-page-container26">
-            <form class="order-page-form">
-              <select class="order-page-select input">
-                <option value="Null">Статус</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
+
+          <div class="order-page-container26" th:if="${isAdminOrManager}">
+            <h2 th:if="${error} != null" th:text="${error}"></h2>
+            <form
+                    class="order-page-form"
+                    th:method="POST"
+                    th:action="@{/orders/editstatus}"
+                    th:object="${order}"
+            >
+              <input type="hidden" th:field="*{userId}"/>
+              <input type="hidden" th:field="*{orderNumber}"/>
+              <input type="hidden" th:field="*{orderAddress}"/>
+              <input type="hidden" th:field="*{orderDate}"/>
+              <input type="hidden" th:field="*{orderPrice}"/>
+              <input type="hidden" th:field="*{orderPaymentId}"/>
+
+              <select class="order-page-select input" th:field="*{orderStatus}">
+                <div th:each="status : ${statuses}">
+                  <option th:text ="${status.getName()}" th:value="${status.getName()}"></option>
+                </div>
               </select>
+
               <div class="order-page-container27">
                 <button type="submit" class="order-page-button">
                   <span>
@@ -232,8 +192,10 @@
                   </span>
                 </button>
               </div>
+
             </form>
           </div>
+
         </div>
         <footer class="footer-footer">
           <span class="footer-text">

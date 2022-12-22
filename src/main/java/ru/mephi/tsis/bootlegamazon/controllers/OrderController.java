@@ -9,15 +9,17 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
-import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.*;
 import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
+import ru.mephi.tsis.bootlegamazon.services.OrderArticleService;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
 import ru.mephi.tsis.bootlegamazon.services.StatusService;
+import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +36,27 @@ public class OrderController {
 
     private final StatusService statusService;
 
+    private final OrderArticleService orderArticleService;
+
     private final UserAuthRepository userAuthRepository;
 
+    private final UserService userService;
+
     @Autowired
-    public OrderController(OrderService orderService, CartService cartService, StatusService statusService, UserAuthRepository userRepository) {
+    public OrderController(
+            OrderService orderService,
+            CartService cartService,
+            StatusService statusService,
+            OrderArticleService orderArticleService1,
+            UserAuthRepository userRepository,
+            UserService userService
+    ){
         this.orderService = orderService;
         this.cartService = cartService;
         this.statusService = statusService;
+        this.orderArticleService = orderArticleService1;
         this.userAuthRepository = userRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/fromcarttest")
@@ -122,21 +137,55 @@ public class OrderController {
         return "orders-page";
     }
 
+    @GetMapping("/{id}")
+    public String byId(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        try {
+            Order order = orderService.getById(id);
+            List<OrderArticle> orderArticles = orderArticleService.getAllArticlesInOrder(id);
+
+            model.addAttribute("order", order);
+            model.addAttribute("items", orderArticles);
+
+            int currentUserId = userAuthRepository.findByUsername(user.getUsername()).getId();
+            int orderUserId = order.getUserId();
+
+            if (currentUserId == orderUserId){
+                model.addAttribute("orderOfCurrentUser", true);
+            } else {
+                model.addAttribute("orderOfCurrentUser", false);
+                String userName = userService.getUserNameById(orderUserId);
+                model.addAttribute("userName", userName);
+            }
+            String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+            if (userRole.equals("Администратор") || userRole.equals("Менеджер")){
+                List<Status> statuses = statusService.getAll();
+                model.addAttribute("statuses", statuses);
+                model.addAttribute("isAdminOrManager", true);
+            } else {
+                model.addAttribute("isAdminOrManager", false);
+            }
+
+        } catch (OrderNotFoundException | StatusNotFoundException | ArticleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        return "order-page";
+    }
+
     @GetMapping("/foruser")
     public String forUser(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
-        //Вроде с этим работает получение UserId по UserDetails
-        // ДЛЯ АДМИНА ВОЗВРАЩАЮТСЯ ЗАКАЗЫ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
-        //Integer userId = 2;
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
         int totalPages = orderService.getTotalPagesUserOrders(pageable, userId);
         int previousPage = 0;
         int nextPage = 0;
+
+        System.out.println("TOTAL PAGES:" + totalPages);
+
         int currentPage = pageNumber;
         this.currentPage = currentPage;
-        if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/orders/all?page=0";
+        if ((pageNumber > totalPages) || (pageNumber < 0)){
+            return "redirect:/orders/foruser?page=0";
         }
 
         if (pageNumber == 0){
@@ -166,27 +215,32 @@ public class OrderController {
         return "orders-page-user";
     }
 
-    @GetMapping("/choosenewstatus")
-    public String showAvailableStatuses(@RequestParam("orderid") Integer orderId, Model model, @AuthenticationPrincipal UserDetails user){
-        model.addAttribute("user", user);
-        List<Status> statuses = statusService.getAll();
-        model.addAttribute("statuses", statuses);
-        model.addAttribute("orderNumber", orderId);
-        return "change-order-status-page";
-    }
-
-    @GetMapping("/changestatus")
-    public String changeOrderStatus(@RequestParam("orderid") Integer orderId, @RequestParam("statusid") Integer statusId, Model model, @AuthenticationPrincipal UserDetails user){
-        model.addAttribute("user", user);
+    @PostMapping("/editstatus")
+    public String changeOrderStatus(@Valid @ModelAttribute("order") Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user){
         try {
-            Order order = orderService.getById(orderId);
-            if (!order.getOrderStatus().equals("Отменён")){
-                orderService.updateOrderStatus(orderId, statusService.getById(statusId).getName());
+
+            int currentUserId = userAuthRepository.findByUsername(user.getUsername()).getId();
+            int orderUserId = order.getUserId();
+
+            if (currentUserId == orderUserId){
+                redirectAttributes.addFlashAttribute("error", "У данного заказа нельзя поменять статус");
+                return "redirect:/orders/" + order.getOrderNumber();
             }
+
+            Order oldOrder = orderService.getById(order.getOrderNumber());
+            String oldStatus = oldOrder.getOrderStatus();
+
+            if (oldStatus.equals("Доставлен") || oldStatus.equals("Отменён")){
+                redirectAttributes.addFlashAttribute("error", "У данного заказа нельзя поменять статус");
+                return "redirect:/orders/" + order.getOrderNumber();
+            }
+
+            orderService.updateOrderStatus(order.getOrderNumber(), order.getOrderStatus());
+
         } catch (OrderNotFoundException | StatusNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return "redirect:/orders/all?page=" + currentPage;
+        return "redirect:/orders/" + order.getOrderNumber();
     }
 
 

@@ -214,7 +214,8 @@ public class ItemsController {
             BindingResult result,
             @RequestParam("image") MultipartFile file,
             RedirectAttributes attributes, Model model,
-            @AuthenticationPrincipal UserDetails user){
+            @AuthenticationPrincipal UserDetails user
+    ) {
         model.addAttribute("user", user);
         if (result.hasErrors()){
             for (Object obj : result.getAllErrors()){
@@ -277,7 +278,8 @@ public class ItemsController {
             @RequestParam("image") MultipartFile file,
             RedirectAttributes attributes,
             Model model,
-            @AuthenticationPrincipal UserDetails user){
+            @AuthenticationPrincipal UserDetails user
+    ){
         model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
