@@ -1,6 +1,8 @@
 package ru.mephi.tsis.bootlegamazon.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,8 @@ public class CartController {
 
     //здесь будет UserDetails
     @GetMapping("")
-    public String cart(Model model){
+    public String cart(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Integer userId = 2;
         try {
             Cart cart = cartService.getCartByUserId(userId);
@@ -40,8 +43,11 @@ public class CartController {
     @PostMapping("/changeamount")
     public String changeArticleAmount(
             @RequestParam("articleid") Integer articleId,
-            @RequestParam("changeamount") String method // increase-decrease
+            @RequestParam("changeamount") String method, // increase-decrease
+            Model model,
+            @AuthenticationPrincipal UserDetails user
     ){
+        model.addAttribute("user", user);
         Integer userId = 2;
         try {
             Cart cart = cartService.getCartByUserId(userId);
@@ -60,7 +66,8 @@ public class CartController {
 
     //здесь будет UserDetails
     @PostMapping("/deletearticle")
-    public String deleteArticleFromCart(@RequestParam("articleid") Integer articleId){
+    public String deleteArticleFromCart(@RequestParam("articleid") Integer articleId, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Integer userId = 2;
         try {
             Cart cart = cartService.getCartByUserId(userId);

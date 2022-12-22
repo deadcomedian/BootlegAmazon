@@ -56,11 +56,16 @@
 
       <div class="profile-page-container">
         <header data-role="Header" class="header-header">
-          <img
-            alt="logo"
-            src="https://i.imgur.com/vizTO84.png"
-            class="header-image"
-          />
+          <button type="button" >
+          <span>
+            <a th:href="@{'/items/all?page=0'}">
+              <img
+                      alt="logo"
+                      src="https://i.imgur.com/vizTO84.png"
+                      class="header-image"
+              /></a>
+          </span>
+          </button>
           <div class="header-container">
             <div class="tool-box-container tool-box-root-class-name">
               <div class="tool-box-container1">
@@ -116,6 +121,7 @@
         </button>
         <button type="button" class="profile-page-button">
           <span>
+            <!-- <a th:href="@{'/orders/foruser'}"> -->
             <span>Посмотреть все свои заказы</span>
             <br />
           </span>

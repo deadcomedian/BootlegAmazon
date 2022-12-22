@@ -193,13 +193,15 @@ public class ItemsController {
     }
 
     @PostMapping("/search")
-    public String search(@RequestParam String search, RedirectAttributes redirectAttributes){
+    public String search(@RequestParam String search, RedirectAttributes redirectAttributes, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         redirectAttributes.addAttribute("search", search);
         return "redirect:/items/all?page=0";
     }
 
     @GetMapping("/new")
-    public String newItem(Model model){
+    public String newItem(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
         model.addAttribute("item", new Article());
         model.addAttribute("categories", categories);
@@ -211,8 +213,9 @@ public class ItemsController {
             @Validated @ModelAttribute("item") Article item,
             BindingResult result,
             @RequestParam("image") MultipartFile file,
-            RedirectAttributes attributes
-    ){
+            RedirectAttributes attributes, Model model,
+            @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         if (result.hasErrors()){
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
@@ -254,7 +257,8 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Integer id, Model model){
+    public String edit(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
             Article article = articleService.getById(id);
@@ -271,8 +275,10 @@ public class ItemsController {
             @Validated @ModelAttribute("item") Article item,
             BindingResult result,
             @RequestParam("image") MultipartFile file,
-            RedirectAttributes attributes
-    ){
+            RedirectAttributes attributes,
+            Model model,
+            @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
             for (Object obj : result.getAllErrors()){
@@ -307,7 +313,8 @@ public class ItemsController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes){
+    public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         redirectAttributes.addAttribute("page", currentPage);
         try {
             articleService.deleteArticle(id);

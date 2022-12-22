@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,7 +41,8 @@ public class CategoryController {
     }
 
     @GetMapping("/all")
-    public String showAll(Model model, @RequestParam ("page") Integer pageNumber){
+    public String showAll(Model model, @RequestParam ("page") Integer pageNumber, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Sort sort = Sort.by(Sort.Direction.ASC,"name");
         Pageable pageable = PageRequest.of(pageNumber,10, sort);
         int totalPages = categoryService.getTotalPages(pageable);
@@ -75,13 +78,15 @@ public class CategoryController {
     }
 
     @GetMapping("/new")
-    public String newCategory(Model model){
+    public String newCategory(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         model.addAttribute("category", new Category());
         return "new-category-page";
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("category") @Validated Category category, BindingResult result, RedirectAttributes attributes){
+    public String create(@ModelAttribute("category") @Validated Category category, BindingResult result, RedirectAttributes attributes, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
 
         if(result.hasErrors()){
             attributes.addFlashAttribute("error", "Заполните название категории (от 2 до 20 символов)");
@@ -99,7 +104,8 @@ public class CategoryController {
     }
 
     @PostMapping("/{id}/delete")
-    public String delete(@PathVariable("id") Integer id, Model model){
+    public String delete(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Pageable pageable = PageRequest.of(0,10);
         try {
             List<ArticleCard> articleCards = articleCardService.getAllByCategoryName(pageable, categoryService.getById(id).getCategoryName());

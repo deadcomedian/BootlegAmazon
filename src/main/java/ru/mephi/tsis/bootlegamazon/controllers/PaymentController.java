@@ -6,6 +6,8 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,9 +62,9 @@ public class PaymentController {
                     @ModelAttribute("order") @Valid Order order,
                     BindingResult bindingResult,
                     Model model,
-                    RedirectAttributes attributes
-            )
-    {
+                    RedirectAttributes attributes,
+                    @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             if (bindingResult.hasErrors()){
                 for (Object obj : bindingResult.getAllErrors()){
@@ -88,7 +90,8 @@ public class PaymentController {
     }
 
     @GetMapping("/cancel")
-    public String paymentCancel() {
+    public String paymentCancel(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         return "payment-cancel-page";
     }
 
@@ -97,8 +100,9 @@ public class PaymentController {
     public String paymentSuccess(
             @RequestParam("paymentId") String paymentId,
             @RequestParam("PayerID") String payerID,
-            @ModelAttribute("order") Order order
-    ) {
+            @ModelAttribute("order") Order order,
+            Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         System.out.println(order);
         try {
             Payment payment = paymentService.executePayment(paymentId, payerID);

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +39,8 @@ public class OrderController {
     }
 
     @GetMapping("/fromcarttest")
-    public String newOrderFromCart(Model model){
+    public String newOrderFromCart(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         //Костыль
         ArticleCard article = new ArticleCard(1,"20000 liye pod vodoy", "Jules Verne", "https://i.imgur.com/ZAbq3yF.jpeg", 500.0);
         ArticleCard article1 = new ArticleCard(2,"2 Kapitana", "Veneamin Kaverin","http://ftp.libs.spb.ru/covers/images/cover_19817029-ks_2021-10-05_12-29-34.jpg", 600.0);
@@ -55,7 +58,8 @@ public class OrderController {
     }
 
     @GetMapping("/new")
-    public String newOrder(Model model){
+    public String newOrder(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Integer userId = 2; //заглушка
         try {
             Cart cart = cartService.getCartByUserId(userId);
@@ -71,7 +75,8 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    public String all(@RequestParam("page") Integer pageNumber, Model model){
+    public String all(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
 
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
 
@@ -112,7 +117,8 @@ public class OrderController {
     }
 
     @GetMapping("/foruser")
-    public String forUser(@RequestParam("page") Integer pageNumber, Model model){
+    public String forUser(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         Integer userId = 2;
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
         int totalPages = orderService.getTotalPagesUserOrders(pageable, userId);
@@ -152,7 +158,8 @@ public class OrderController {
     }
 
     @GetMapping("/choosenewstatus")
-    public String showAvailableStatuses(@RequestParam("orderid") Integer orderId ,Model model){
+    public String showAvailableStatuses(@RequestParam("orderid") Integer orderId, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         List<Status> statuses = statusService.getAll();
         model.addAttribute("statuses", statuses);
         model.addAttribute("orderNumber", orderId);
@@ -160,7 +167,8 @@ public class OrderController {
     }
 
     @GetMapping("/changestatus")
-    public String changeOrderStatus(@RequestParam("orderid") Integer orderId, @RequestParam("statusid") Integer statusId){
+    public String changeOrderStatus(@RequestParam("orderid") Integer orderId, @RequestParam("statusid") Integer statusId, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             Order order = orderService.getById(orderId);
             if (!order.getOrderStatus().equals("Отменён")){
