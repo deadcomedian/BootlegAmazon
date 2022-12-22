@@ -21,6 +21,7 @@ public class AdminController {
 
     @GetMapping("/panel")
     public String adminPanel(Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (userRole.equals("Администратор")){
             model.addAttribute("isAdmin", true);

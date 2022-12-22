@@ -43,10 +43,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                        "/items/add",
                        "/items/{id}/edit",
                        "/items/saveedited",
-                       "/items/{id}/delete").hasAuthority("Администратор")
-                .antMatchers("/categories/**").hasAuthority("Менеджер")
+                       "/items/{id}/delete",
+                       "/invoices/new",
+                       "/invoices/process").hasAuthority("Администратор")
+                .antMatchers("/items/new",
+                        "/items/add",
+                        "/items/{id}/edit",
+                        "/items/saveedited",
+                        "/items/{id}/delete",
+                        "/invoices/new",
+                        "/invoices/process").hasAuthority("Менеджер")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/items/all", "/items/{id}", "/items/search", "/cart").permitAll()
+                .antMatchers("/items/all", "/items/{id}", "/items/search").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()

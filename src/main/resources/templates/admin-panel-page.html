@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Bootleg Amazon</title>
+  <title>Панель администрирования</title>
   <meta property="og:title" content="Travel Agency" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
@@ -76,7 +76,7 @@
           </span>
       </button>
     </a>
-    <a th:href="@{'/categories/all?page=0'}">
+    <a th:href="@{'/categories/all?page=0'}" th:if="${isAdmin}">
       <button type="button" >
           <span>
             <h2>Категории</h2>

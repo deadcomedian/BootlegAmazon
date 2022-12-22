@@ -58,9 +58,10 @@ public class CartController {
             @RequestParam("articleid") Integer articleId,
             @RequestParam("frompage") Integer pageNumber,
             @RequestParam("hrefargs") String hrefArgs,
+            Model model,
             @AuthenticationPrincipal UserDetails user
     ){
-
+        model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
             Cart cart = cartService.getCartByUserId(userId);

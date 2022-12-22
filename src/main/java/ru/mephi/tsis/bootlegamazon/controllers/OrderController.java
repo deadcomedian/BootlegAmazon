@@ -147,6 +147,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public String byId(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             Order order = orderService.getById(id);
             List<OrderArticle> orderArticles = orderArticleService.getAllArticlesInOrder(id);
@@ -230,6 +231,7 @@ public class OrderController {
             RedirectAttributes redirectAttributes,
             @AuthenticationPrincipal UserDetails user
     ){
+        model.addAttribute("user", user);
         try {
 
             String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();

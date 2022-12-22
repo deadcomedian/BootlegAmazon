@@ -69,7 +69,7 @@ public class PaymentController {
                     RedirectAttributes attributes,
                     @AuthenticationPrincipal UserDetails user
             ){
-
+        model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
 

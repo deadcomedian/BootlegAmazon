@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
@@ -45,52 +46,68 @@ public class CustomerProfileController {
     }
 
     @GetMapping("")
-    public String customerProfile(Model model, @AuthenticationPrincipal UserDetails user) {
-        model.addAttribute("currentUser", user);
-        return "profile";
-    }
-
-    @GetMapping("/{id}")
-    public String anyProfile (@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
+    public String customerProfile(Model model, @AuthenticationPrincipal UserDetails currentUser) {
         UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
+        Integer id = loggedUser.getId();
         UserEntity user = userRepository.findById(id).get();
         String role = roleRepository.findById(user.getRoleId()).get().getName();
-        if (!loggedUser.getId().equals(user.getId())) {
-            return "error-page";
-        }
         model.addAttribute("currentUser", user);
         model.addAttribute("role", role);
         model.addAttribute("user", currentUser);
         return "profile";
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
-        UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
-        UserEntity user = userRepository.findById(id).get();
-        if (!loggedUser.getId().equals(user.getId())) {
-            return "error-page";
-        }
-        model.addAttribute("currentUser", user);
+//    @GetMapping("/{id}")
+//    public String anyProfile (@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails currentUser) {
+//        UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
+//        UserEntity user = userRepository.findById(id).get();
+//        String role = roleRepository.findById(user.getRoleId()).get().getName();
+//        if (!loggedUser.getId().equals(user.getId())) {
+//            return "error-page";
+//        }
+//        model.addAttribute("currentUser", user);
+//        model.addAttribute("role", role);
+//        model.addAttribute("user", currentUser);
+//        return "profile";
+//    }
+
+    @GetMapping("/edit")
+    public String edit(Model model, @AuthenticationPrincipal UserDetails user) {
+        UserAuth loggedUser = userAuthRepository.findByUsername(user.getUsername());
+        Integer id = loggedUser.getId();
+        UserEntity currentUser = userRepository.findById(id).get();
+//        if (!loggedUser.getId().equals(user.getId())) {
+//            return "error-page";
+//        }
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("user",user);
+        model.addAttribute("userForm", new UserEntity());
         return "profile-edit-page";
     }
 
     @PostMapping("/saveedit")
-    public String saveEdit(@ModelAttribute("user") @Valid UserEntity user, Model model, @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirectAttributes) {
-        UserAuth loggedUser = userAuthRepository.findByUsername(currentUser.getUsername());
+    public String saveEdit(@ModelAttribute("userForm") @Valid UserEntity userForm, Model model, @AuthenticationPrincipal UserDetails user, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+        UserAuth loggedUser = userAuthRepository.findByUsername(user.getUsername());
         int id = loggedUser.getId();
+        UserEntity currentUser = userRepository.findById(id).get();
 
-        if (user.getName().equals("") || user.getPassword().equals("") || user.getPasswordConfirm().equals("")) {
+        if (userForm.getName().equals("") || userForm.getPassword().equals("") || userForm.getPasswordConfirm().equals("")) {
             redirectAttributes.addFlashAttribute("fieldError", "Все поля должны быть заполнены!");
-            return "redirect:/profile/" + id + "/edit";
+            return "redirect:/profile/edit";
         }
 
-        if (!user.getPassword().equals(user.getPasswordConfirm())){
-            redirectAttributes.addFlashAttribute("passwordError", "Пароли не совпадают");
-            return "redirect:/profile/" + id + "/edit";
+        if (bindingResult.hasErrors()) {
+            return "redirect:/profile/edit";
         }
-        userService.update(id, user.getName(), user.getPassword());
-        return "redirect:/profile/"+ id;
+
+        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
+            redirectAttributes.addFlashAttribute("passwordError", "Пароли не совпадают");
+            return "redirect:/profile/edit";
+        }
+        userService.update(id, userForm.getName(), userForm.getPassword());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("user", user);
+        return "redirect:/profile/";
     }
 
     @GetMapping("/all")
@@ -99,7 +116,7 @@ public class CustomerProfileController {
             @RequestParam("page") Integer pageNumber,
             @AuthenticationPrincipal UserDetails user
     ){
-
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор")){
             model.addAttribute("errorMessage", "Доступ запрещён");
