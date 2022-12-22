@@ -11,6 +11,7 @@ public class ArticleCard {
 
     private Double price;
 
+    private Boolean inStock;
     public String getPhoto() {
         return photo;
     }
@@ -43,12 +44,13 @@ public class ArticleCard {
         this.authorName = authorName;
     }
 
-    public ArticleCard(Integer id, String itemName, String authorName, String photo, Double price) {
+    public ArticleCard(Integer id, String itemName, String authorName, String photo, Double price, Boolean inStock) {
         this.id = id;
         this.itemName = itemName;
         this.authorName = authorName;
         this.photo = photo;
         this.price = price;
+        this.inStock = inStock;
     }
 
     public Integer getId() {
@@ -57,5 +59,13 @@ public class ArticleCard {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Boolean getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
     }
 }

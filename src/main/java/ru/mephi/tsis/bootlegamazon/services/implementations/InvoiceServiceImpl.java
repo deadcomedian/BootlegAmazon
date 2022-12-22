@@ -66,7 +66,8 @@ public class InvoiceServiceImpl implements InvoiceService {
                .orElseThrow(()-> new InvoiceNotFoundException("Could not find invoice with id:" + id));
        ArticleEntity articleEntity = articleRepository.findById(invoiceEntity.getArticleId())
                .orElseThrow(()->new ArticleNotFoundException("Could not find Article with id: " + invoiceEntity.getArticleId()));
-       ArticleCard articleCard = new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice());
+       boolean inStock = articleEntity.getAmount() != 0;
+       ArticleCard articleCard = new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock);
        return new Invoice(invoiceEntity.getId(), articleCard, invoiceEntity.getCount());
    }
 
@@ -92,7 +93,8 @@ public class InvoiceServiceImpl implements InvoiceService {
        for (InvoiceEntity invoiceEntity : invoiceEntities){
            ArticleEntity articleEntity = articleRepository.findById(invoiceEntity.getArticleId())
                    .orElseThrow(()->new ArticleNotFoundException("Could not find Article with id: " + invoiceEntity.getArticleId()));
-           ArticleCard articleCard = new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice());
+           boolean inStock = articleEntity.getAmount() != 0;
+           ArticleCard articleCard = new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock);
            invoices.add(new Invoice(invoiceEntity.getId(), articleCard, invoiceEntity.getCount()));
        }
        return invoices;

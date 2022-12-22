@@ -29,9 +29,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void createCartForUser(Integer userId) {
+    public Cart createCartForUser(Integer userId) throws CartNotFoundException{
         CartEntity cartEntity = new CartEntity(null, userId, true);
         cartRepository.save(cartEntity);
+        cartEntity = cartRepository.findByUserId(userId).orElseThrow(()-> new CartNotFoundException("Cart not found, userId: " + userId));
+        ArrayList<CartArticle> cartArticles = new ArrayList<>();
+        return new Cart(cartEntity.getId(), cartArticles);
+
     }
 
     @Override

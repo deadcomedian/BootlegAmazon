@@ -59,6 +59,7 @@
     <div class="catalog-page-container1">
       <h1 class="catalog-page-text">Админ Панель</h1>
     </div>
+
     <a th:href="@{'/orders/all?page=0'}">
       <button type="button" >
           <span>
@@ -67,7 +68,7 @@
           </span>
       </button>
     </a>
-    <a th:href="@{'/'}">
+    <a th:href="@{'/'}" th:if="${isAdmin}">
       <button type="button" >
           <span>
             <h2>Пользователи</h2>

@@ -1,6 +1,5 @@
 package ru.mephi.tsis.bootlegamazon.services.implementations;
 
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +32,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
     public ArticleCard getById(Integer id) throws ArticleNotFoundException {
         ArticleEntity articleEntity = articleRepository.findById(id)
                 .orElseThrow(()->new ArticleNotFoundException("Could not find Article with id: " + id ));
-        return new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice());
+        boolean inStock = articleEntity.getAmount() != 0;
+        return new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock);
     }
 
     @Override
@@ -41,7 +41,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         Page<ArticleEntity> articleEntities = articleRepository.findAll(pageable);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }
@@ -51,7 +52,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         Page<ArticleEntity> articleEntities = articleRepository.findByName(pageable, itemName);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }
@@ -61,7 +63,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         Page<ArticleEntity> articleEntities = articleRepository.findByAuthor(pageable, author);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }
@@ -69,10 +72,10 @@ public class ArticleCardServiceImpl implements ArticleCardService {
     @Override
     public List<ArticleCard> getAllByAuthorOrName(Pageable pageable, String str) {
         Page<ArticleEntity> articleEntities = articleRepository.findByNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, str);
-        //Page<ArticleEntity> articleEntities = articleRepository.findByNameOrAuthor(pageable, str);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }
@@ -91,7 +94,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         Page<ArticleEntity> articleEntities = articleRepository.findByCategoryId(pageable,categoryId);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }
@@ -102,7 +106,8 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         }
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for(ArticleEntity articleEntity : articleEntities){
-            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice()));
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
         }
         return articleCards;
     }

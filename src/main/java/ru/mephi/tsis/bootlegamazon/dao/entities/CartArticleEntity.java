@@ -24,10 +24,11 @@ public class CartArticleEntity {
     public CartArticleEntity() {
     }
 
-    public CartArticleEntity(Integer cartId, Integer articleId, Integer articleAmount) {
+    public CartArticleEntity(Integer cartId, Integer articleId, Integer articleAmount, Boolean active) {
         this.cartId = cartId;
         this.articleId = articleId;
         this.articleAmount = articleAmount;
+        this.active = active;
     }
 
     public Integer getArticleId() {

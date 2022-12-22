@@ -56,7 +56,7 @@ public class CartArticleServiceImpl implements CartArticleService {
             cartArticleEntity = optional.get();
             cartArticleEntity.setArticleAmount(cartArticleEntity.getArticleAmount()+1);
         } else {
-            cartArticleEntity = new CartArticleEntity(cartId, articleId, 1);
+            cartArticleEntity = new CartArticleEntity(cartId, articleId, 1, true);
         }
         cartArticleRepository.save(cartArticleEntity);
     }

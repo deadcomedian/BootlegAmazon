@@ -59,29 +59,10 @@ public class OrderController {
         this.userService = userService;
     }
 
-    @GetMapping("/fromcarttest")
-    public String newOrderFromCart(Model model, @AuthenticationPrincipal UserDetails user){
-        model.addAttribute("user", user);
-        //Костыль
-        ArticleCard article = new ArticleCard(1,"20000 liye pod vodoy", "Jules Verne", "https://i.imgur.com/ZAbq3yF.jpeg", 500.0);
-        ArticleCard article1 = new ArticleCard(2,"2 Kapitana", "Veneamin Kaverin","http://ftp.libs.spb.ru/covers/images/cover_19817029-ks_2021-10-05_12-29-34.jpg", 600.0);
-        ArrayList<CartArticle> list = new ArrayList<>();
-        CartArticle cartArticle = new CartArticle(article, 1);
-        CartArticle cartArticle1 = new CartArticle(article1, 2);
-        list.add(cartArticle);
-        list.add(cartArticle1);
-        Cart cart = new Cart(6, list);
-        model.addAttribute("cart", cart);
-        int orderNumber = orderService.getOrdersCount() + 1;
-        Order order = new Order(1,orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
-        model.addAttribute("order", order);
-        return "new-order-page";
-    }
-
     @GetMapping("/new")
     public String newOrder(Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
-        Integer userId = 2; //заглушка
+        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
             Cart cart = cartService.getCartByUserId(userId);
             System.out.println(cart.toString());
