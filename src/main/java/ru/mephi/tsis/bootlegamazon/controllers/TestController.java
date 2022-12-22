@@ -71,4 +71,7 @@ public class TestController {
     public String order(){
         return "order-page";
     }
+
+    @GetMapping("/invoice")
+    public String invoice() { return "invoice-page";}
 }

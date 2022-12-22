@@ -87,155 +87,90 @@
         <div class="invoice-page-container01">
           <h1 class="invoice-page-text">Заведение накладной</h1>
         </div>
-        <form class="invoice-page-form">
-          <div class="invoice-page-container02">
-            <div class="invoice-page-container03">
-              <input
-                type="text"
-                required=""
-                placeholder="Название айтема"
-                class="invoice-page-input input"
-              />
-              <div class="invoice-page-container04">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input01 input"
+
+        <div class="invoice-page-container2" th:each="item : ${items}">
+          <div class="invoice-page-container3">
+            <a th:href="@{'/invoices/new?page=' + ${currentPage} + '&selectitem=' + ${item.getId()}}">
+              <div class="invoice-page-container4">
+                <img
+                        alt="image"
+                        th:src="@{${item.getPhoto()}}"
+                        class="invoice-page-image"
                 />
-                <label class="invoice-page-text01">шт</label>
+                <label class="invoice-page-text1" th:text="${item.getItemName()}"></label>
               </div>
-            </div>
-            <div class="invoice-page-container05">
-              <input
-                type="text"
-                required=""
-                placeholder="Название айтема"
-                class="invoice-page-input02 input"
-              />
-              <div class="invoice-page-container06">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input03 input"
-                />
-                <label class="invoice-page-text02">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container07">
-              <input
-                type="text"
-                required=""
-                placeholder="Название айтема"
-                class="invoice-page-input04 input"
-              />
-              <div class="invoice-page-container08">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input05 input"
-                />
-                <label class="invoice-page-text03">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container09">
-              <input
-                type="text"
-                required=""
-                placeholder="Название айтема"
-                class="invoice-page-input06 input"
-              />
-              <div class="invoice-page-container10">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input07 input"
-                />
-                <label class="invoice-page-text04">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container11">
-              <select class="invoice-page-select input">
-                <option value="Null">Статус</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
-              </select>
-              <div class="invoice-page-container12">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input08 input"
-                />
-                <label class="invoice-page-text05">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container13">
-              <select class="invoice-page-select1 input">
-                <option value="Null">Статус</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
-              </select>
-              <div class="invoice-page-container14">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input09 input"
-                />
-                <label class="invoice-page-text06">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container15">
-              <select class="invoice-page-select2 input">
-                <option value="Null">Статус</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
-              </select>
-              <div class="invoice-page-container16">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input10 input"
-                />
-                <label class="invoice-page-text07">шт</label>
-              </div>
-            </div>
-            <div class="invoice-page-container17">
-              <select class="invoice-page-select3 input">
-                <option value="Null">Статус</option>
-                <option value="Option 2">Option 2</option>
-                <option value="Option 3">Option 3</option>
-              </select>
-              <div class="invoice-page-container18">
-                <input
-                  type="text"
-                  required=""
-                  placeholder="Кол-во"
-                  class="invoice-page-input11 input"
-                />
-                <label class="invoice-page-text08">шт</label>
-              </div>
-            </div>
+            </a>
           </div>
-          <div class="invoice-page-container19">
-            <svg viewBox="0 0 1024 1024" class="invoice-page-icon">
-              <path
-                d="M810 554h-256v256h-84v-256h-256v-84h256v-256h84v256h256v84z"
-              ></path>
-            </svg>
-            <button type="submit" class="invoice-page-button">
-              <span>
-                <span>Сохранить</span>
-                <br />
-              </span>
+        </div>
+
+        <div class="invoice-page-container8" th:if="${articleToAdd != null}">
+          <a th:href="@{'/invoices/new?page=' + ${previousPage} + '&selectitem=' + ${articleToAdd.getId()} }">
+            <button type="button">
+              <h2><-  </h2>
             </button>
-          </div>
-        </form>
+          </a>
+          <label class="invoice-page-text6" th:text="${currentPage + 1}"></label>
+          <a th:href="@{'/invoices/new?page=' + ${nextPage}  + '&selectitem=' + ${articleToAdd.getId()} }">
+            <button type="button">
+              <h2>  -></h2>
+            </button>
+          </a>
+        </div>
+
+        <div class="invoice-page-container8" th:if="${articleToAdd == null}">
+          <a th:href="@{'/invoices/new?page=' + ${previousPage}}">
+            <button type="button">
+              <h2><-  </h2>
+            </button>
+          </a>
+          <label class="invoice-page-text6" th:text="${currentPage + 1}"></label>
+          <a th:href="@{'/invoices/new?page=' + ${nextPage}}">
+            <button type="button">
+              <h2>  -></h2>
+            </button>
+          </a>
+        </div>
+
+        <br/>
+        <div class="invoice-page-container02" th:if="${newInvoice}">
+          <div th:if="${error} != null" th:text="${error}"></div>
+          <form
+                  class="invoice-page-form"
+                  th:method="POST"
+                  th:action="@{/invoices/process}"
+                  th:object="${newInvoice}"
+          >
+            <div class="invoice-page-container02">
+
+              <div class="invoice-page-container03">
+
+                <input type="hidden" th:field="*{articleId}"/>
+
+                <label style="font-weight: bold;" th:text="'Выбранный товар: ' + ${articleToAdd.getItemName()}"></label>
+
+                <div class="invoice-page-container04">
+                  <input
+                          type="text"
+                          th:field="*{amount}"
+                          required=""
+                          placeholder="Кол-во"
+                          class="invoice-page-input01 input"
+                  />
+                  <label class="invoice-page-text01">шт.</label>
+                </div>
+              </div>
+
+              <div class="invoice-page-container19">
+                <button type="submit" class="invoice-page-button">
+                  <span>
+                    <span>Сохранить</span>
+                    <br />
+                  </span>
+                </button>
+              </div>
+          </form>
+
+        </div>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

@@ -68,4 +68,16 @@ public class ArticleCard {
     public void setInStock(Boolean inStock) {
         this.inStock = inStock;
     }
+
+    @Override
+    public String toString() {
+        return "ArticleCard{" +
+                "id=" + id +
+                ", itemName='" + itemName + '\'' +
+                ", authorName='" + authorName + '\'' +
+                ", photo='" + photo + '\'' +
+                ", price=" + price +
+                ", inStock=" + inStock +
+                '}';
+    }
 }

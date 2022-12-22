@@ -11,14 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dto.HrefArgs;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
@@ -29,13 +27,8 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -58,12 +51,15 @@ public class ItemsController {
 
     private Map<String, String> errorCodes = new HashMap<>();
 
+    private UserAuthRepository userAuthRepository;
+
     @Autowired
-    public ItemsController(ArticleCardService articleCardService, ArticleService articleService, CategoryService categoryService, MessageSource messageSource) {
+    public ItemsController(ArticleCardService articleCardService, ArticleService articleService, CategoryService categoryService, MessageSource messageSource, UserAuthRepository userAuthRepository) {
         this.articleCardService = articleCardService;
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.messageSource = messageSource;
+        this.userAuthRepository = userAuthRepository;
         errorCodes.put("itemDescription", "Описание");
         errorCodes.put("itemName", "Название книги");
         errorCodes.put("authorName", "Автор");
@@ -201,6 +197,13 @@ public class ItemsController {
 
     @GetMapping("/new")
     public String newItem(Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
         model.addAttribute("item", new Article());
@@ -216,6 +219,13 @@ public class ItemsController {
             RedirectAttributes attributes, Model model,
             @AuthenticationPrincipal UserDetails user
     ) {
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         if (result.hasErrors()){
             for (Object obj : result.getAllErrors()){
@@ -259,6 +269,13 @@ public class ItemsController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         try {
             List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
@@ -280,6 +297,13 @@ public class ItemsController {
             Model model,
             @AuthenticationPrincipal UserDetails user
     ){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
@@ -316,6 +340,13 @@ public class ItemsController {
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes, Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         redirectAttributes.addAttribute("page", currentPage);
         try {

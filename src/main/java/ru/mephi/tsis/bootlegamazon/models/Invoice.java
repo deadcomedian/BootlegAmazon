@@ -35,4 +35,13 @@ public class Invoice {
     public void setArticleCount(Integer articleCount) {
         this.articleCount = articleCount;
     }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", articleCard=" + articleCard +
+                ", articleCount=" + articleCount +
+                '}';
+    }
 }

@@ -124,10 +124,48 @@
   padding-right: 2rem;
   justify-content: space-between;
 }
+.invoice-page-container2 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.invoice-page-container3 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+.invoice-page-container4 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
 .invoice-page-text {
   font-size: 4em;
   font-family: Rubik Dirt;
   line-height: 1em;
+}
+.invoice-page-text1 {
+  font-size: 2rem;
+  align-self: flex-start;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.invoice-page-image {
+  width: 3rem;
+  object-fit: cover;
+  border-color: var(--dl-color-gray-black);
+  border-width: 0.1rem;
 }
 .invoice-page-form {
   width: 100%;
@@ -566,4 +604,56 @@
     text-transform: none;
     text-decoration: none;
   }
+
+  .invoice-page-container8 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 1rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    padding-bottom: 1rem;
+    justify-content: center;
+  }
+
+  .invoice-page-icon10 {
+    fill: var(--dl-color-primary-100);
+    width: 3rem;
+    height: 3rem;
+    align-self: center;
+    margin-left: 1rem;
+    border-color: var(--dl-color-primary-100);
+    border-style: solid;
+    border-width: 0.2rem;
+    margin-right: 1rem;
+    padding-left: 0.3rem;
+    border-radius: var(--dl-radius-radius-round);
+    padding-right: 0.3rem;
+  }
+
+  .invoice-page-text6 {
+    font-size: 1.5rem;
+    align-self: center;
+    font-family: Open Sans;
+    font-weight: 600;
+    line-height: 1.55;
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+
+  .invoice-page-icon12 {
+    fill: var(--dl-color-primary-100);
+    width: 3rem;
+    height: 3rem;
+    align-self: center;
+    margin-left: 1rem;
+    border-color: var(--dl-color-primary-100);
+    border-style: solid;
+    border-width: 0.2rem;
+    margin-right: 1rem;
+    padding-left: 0.3rem;
+    border-radius: var(--dl-radius-radius-round);
+    padding-right: 0.3rem;
+  }
+
 }

@@ -9,20 +9,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Category;
 
 import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
-import ru.mephi.tsis.bootlegamazon.services.implementations.ArticleCardServiceImpl;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -34,14 +32,24 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final ArticleCardService articleCardService;
 
+    private final UserAuthRepository userAuthRepository;
+
     @Autowired
-    public CategoryController(CategoryService categoryService, ArticleCardService articleCardService) {
+    public CategoryController(CategoryService categoryService, ArticleCardService articleCardService, UserAuthRepository userAuthRepository) {
         this.categoryService = categoryService;
         this.articleCardService = articleCardService;
+        this.userAuthRepository = userAuthRepository;
     }
 
     @GetMapping("/all")
     public String showAll(Model model, @RequestParam ("page") Integer pageNumber, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         Sort sort = Sort.by(Sort.Direction.ASC,"name");
         Pageable pageable = PageRequest.of(pageNumber,10, sort);
@@ -79,6 +87,13 @@ public class CategoryController {
 
     @GetMapping("/new")
     public String newCategory(Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         model.addAttribute("category", new Category());
         return "new-category-page";
@@ -86,6 +101,13 @@ public class CategoryController {
 
     @PostMapping("/add")
     public String create(@ModelAttribute("category") @Validated Category category, BindingResult result, RedirectAttributes attributes, Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
 
         if(result.hasErrors()){
@@ -105,6 +127,13 @@ public class CategoryController {
 
     @PostMapping("/{id}/delete")
     public String delete(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
         Pageable pageable = PageRequest.of(0,10);
         try {
