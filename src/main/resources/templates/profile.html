@@ -1,7 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <title>Profile-page - Travel Agency</title>
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+  <property name="templateResolver" ref="templateResolver"></property>
+  <property name="additionalDialects">
+    <set>
+      <bean class="org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect"></bean>
+    </set>
+  </property>
+</bean>
+
+<head>
+    <title>Профиль</title>
     <meta property="og:title" content="Profile-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
@@ -93,8 +103,17 @@
           <label class="profile-page-text06" th:text="'Логин: ' + ${currentUser.login}"></label>
           <label class="profile-page-text07" th:text="'ФИО: ' + ${currentUser.name}"></label>
           <label class="profile-page-text08" th:text="'Номер телефона: ' + ${currentUser.phone}"></label>
-          <label class="profile-page-text09">Роль</label>
+          <div sec:authorize="hasAuthority('Администратор')">
+          <label class="profile-page-text09"  th:text=" ${role}"></label>
+            </sec:authorize> </div>
         </div>
+        <button type="button" class="profile-page-button">
+          <span>
+            <a th:href="@{/profile/{id}/edit(id=${currentUser.id})}">
+              <span>Редактировать</span></a>
+            <br />
+          </span>
+        </button>
         <button type="button" class="profile-page-button">
           <span>
             <span>Посмотреть все свои заказы</span>
@@ -103,16 +122,22 @@
         </button>
         <button type="button" class="profile-page-button1">
           <span>
+            <a th:href="@{'/items/all?page=0'}">
             <span>Перейти в каталог</span>
             <br />
-          </span>
+            </a> </span>
         </button>
+        <div sec:authorize="hasAuthority('Администратор')">
         <button type="button" class="profile-page-button2">
           <span>
+            <a th:href="@{'/admin/panel'}">
             <span>Перейти в Админ-панель</span>
             <br />
           </span>
         </button>
+          </sec:authorize> </div>
+        <a th:href="@{/logout}">Выйти</a>
+
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

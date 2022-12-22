@@ -65,6 +65,27 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public void updateName(Integer id, String name) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        userEntity.setName(name);
+        userRepository.save(userEntity);
+    }
+
+    public void updatePassword(Integer id, String password) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        userEntity.setPassword(password);
+        userRepository.save(userEntity);
+    }
+
+    public void update(Integer id, String name, String password) {
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        userEntity.setName(name);
+        userEntity.setPassword(password);
+        userRepository.save(userEntity);
+    }
 
 }
 

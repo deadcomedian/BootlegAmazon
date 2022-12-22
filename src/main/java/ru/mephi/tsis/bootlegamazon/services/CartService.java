@@ -11,5 +11,8 @@ public interface CartService {
     Cart getCartByUserId(Integer userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException;
     void addArticleToCart(Integer cartId, Integer articleId) throws CartNotFoundException;
     void removeArticleFromCart(Integer cartId, Integer articleId) throws CartNotFoundException, CartArticleNotFoundException;
+
+    void deleteArticleFromCartCompletely(Integer cartId, Integer articleId) throws CartArticleNotFoundException;
+
     void deleteCart(Integer cartId) throws CartNotFoundException;
 }

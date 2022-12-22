@@ -47,7 +47,12 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public void removeArticleFromCart(Integer cartId, Integer articleId) throws CartArticleNotFoundException {
-        cartArticleService.removeArticleFromCart(cartId, articleId);
+        cartArticleService.removeArticleFromCart(articleId, cartId);
+    }
+
+    @Override
+    public void deleteArticleFromCartCompletely(Integer cartId, Integer articleId) throws CartArticleNotFoundException {
+        cartArticleService.deleteArticleFromCartCompletely(articleId, cartId);
     }
 
     @Override

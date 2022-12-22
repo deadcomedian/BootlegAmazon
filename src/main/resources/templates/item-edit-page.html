@@ -79,6 +79,7 @@
             </div>
           </div>
         </header>
+        <div th:if="${error} != null" th:text="${error}"></div>
         <form
           class="new-item-page-form"
           th:method="POST"

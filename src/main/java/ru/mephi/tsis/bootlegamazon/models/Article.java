@@ -1,12 +1,32 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
+import javax.validation.constraints.*;
+
 public class Article {
 
     private Integer id;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Size(min=2, max=20)
     private String itemName;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Size(min=2, max=20)
     private String authorName;
+
     private String categoryName;
+
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Size(min=2, max=300)
     private String itemDescription;
+
+    @Min(0)
     private double itemPrice;
     private double itemRating;
     private String itemPhoto;

@@ -1,11 +1,18 @@
 package ru.mephi.tsis.bootlegamazon.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.View;
@@ -22,7 +29,10 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
+import javax.validation.Valid;
+import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
@@ -44,11 +54,20 @@ public class ItemsController {
 
     private CategoryService categoryService;
 
+    private MessageSource messageSource;
+
+    private Map<String, String> errorCodes = new HashMap<>();
+
     @Autowired
-    public ItemsController(ArticleCardService articleCardService, ArticleService articleService, CategoryService categoryService) {
+    public ItemsController(ArticleCardService articleCardService, ArticleService articleService, CategoryService categoryService, MessageSource messageSource) {
         this.articleCardService = articleCardService;
         this.articleService = articleService;
         this.categoryService = categoryService;
+        this.messageSource = messageSource;
+        errorCodes.put("itemDescription", "Описание");
+        errorCodes.put("itemName", "Название книги");
+        errorCodes.put("authorName", "Автор");
+        errorCodes.put("itemPrice", "Цена");
     }
 
     //http://localhost:8080/items/all?page=0
@@ -61,8 +80,10 @@ public class ItemsController {
             @RequestParam("stock") Optional<Boolean> inStock, //фильтрация по наличию
             @RequestParam("pricefrom") Optional<Double> priceFrom, //фильтрация по цене - от
             @RequestParam("priceto") Optional<Double> priceTo, //фильтрация по цене - до
-            @RequestParam("search") Optional<String> searchField // поиск
+            @RequestParam("search") Optional<String> searchField, // поиск
+            @AuthenticationPrincipal UserDetails user
     ) {
+        model.addAttribute("user", user);
         HrefArgs hrefArgs = new HrefArgs();
         //Я девопс, пишу как умею
         HashMap<String,Sort> sortMethodMap = new HashMap<>();
@@ -160,7 +181,8 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}")
-    public String byId(@PathVariable Integer id, Model model){
+    public String byId(@PathVariable Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
         try {
             Article article = articleService.getById(id);
             model.addAttribute("article",article);
@@ -185,36 +207,46 @@ public class ItemsController {
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
-        System.out.println(item.toString());
-        try {
-            if (!file.isEmpty()){
-                String filename = file.getOriginalFilename();
-                Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
-                Files.write(fileNameAndPath, file.getBytes());
-                articleService.createArticle
-                        (
-                                categoryService.getByCategoryName(item.getCategoryName()),
-                                item.getItemName(),
-                                item.getAuthorName(),
-                                item.getItemDescription(),
-                                "../images/" + filename,
-                                item.getItemPrice(),
-                                5.0
-                        );
-
-            } else {
-                articleService.createArticle
-                        (
-                                categoryService.getByCategoryName(item.getCategoryName()),
-                                item.getItemName(),
-                                item.getAuthorName(),
-                                item.getItemDescription(),
-                                "",
-                                item.getItemPrice(),
-                                5.0
-                        );
+    public String create(
+            @Validated @ModelAttribute("item") Article item,
+            BindingResult result,
+            @RequestParam("image") MultipartFile file,
+            RedirectAttributes attributes
+    ){
+        if (result.hasErrors()){
+            for (Object obj : result.getAllErrors()){
+                FieldError fieldError = (FieldError) obj;
+                attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
+                return "redirect:/items/new";
             }
+        }
+        if (file.isEmpty()){
+            attributes.addFlashAttribute("error", "Загрузите файл");
+            return "redirect:/items/new";
+        }
+        try {
+            File uploadDir = new File(UPLOAD_DIRECTORY);
+
+            if (!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+
+            String uuid = UUID.randomUUID().toString();
+
+            String filename = file.getOriginalFilename();
+            filename = uuid + filename;
+            Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
+            Files.write(fileNameAndPath, file.getBytes());
+            articleService.createArticle
+                    (
+                            categoryService.getByCategoryName(item.getCategoryName()),
+                            item.getItemName(),
+                            item.getAuthorName(),
+                            item.getItemDescription(),
+                            "/img/" + filename,
+                            item.getItemPrice(),
+                            5.0
+                    );
         } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -235,14 +267,37 @@ public class ItemsController {
     }
 
     @PostMapping("/saveedited")
-    public String saveEdited(@ModelAttribute("item") Article item, @RequestParam("image") MultipartFile file){
+    public String saveEdited(
+            @Validated @ModelAttribute("item") Article item,
+            BindingResult result,
+            @RequestParam("image") MultipartFile file,
+            RedirectAttributes attributes
+    ){
         int id = item.getId();
+        if (result.hasErrors()){
+            for (Object obj : result.getAllErrors()){
+                FieldError fieldError = (FieldError) obj;
+                attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
+                return "redirect:/items/new";
+            }
+        }
         try {
+            File uploadDir = new File(UPLOAD_DIRECTORY);
+
+            if (!uploadDir.exists()){
+                uploadDir.mkdir();
+            }
+
+            String uuid = UUID.randomUUID().toString();
             if (!file.isEmpty()){
                 String filename = file.getOriginalFilename();
+                filename = uuid + filename;
                 Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
                 Files.write(fileNameAndPath, file.getBytes());
-                item.setItemPhoto("../images/" + filename);
+                item.setItemPhoto("/img/" + filename);
+            } else {
+                String oldPhoto = articleService.getById(item.getId()).getItemPhoto();
+                item.setItemPhoto(oldPhoto);
             }
             articleService.update(item);
         } catch (ArticleNotFoundException | CategoryNotFoundException | IOException e) {

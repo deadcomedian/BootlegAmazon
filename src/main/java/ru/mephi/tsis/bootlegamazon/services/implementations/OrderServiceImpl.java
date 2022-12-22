@@ -2,19 +2,24 @@ package ru.mephi.tsis.bootlegamazon.services.implementations;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.mephi.tsis.bootlegamazon.dao.entities.OrderArticleEntity;
 import ru.mephi.tsis.bootlegamazon.dao.entities.OrderEntity;
 import ru.mephi.tsis.bootlegamazon.dao.entities.StatusEntity;
+import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.OrderArticleRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.OrderRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.StatusRepository;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.OrderNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.StatusNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Order;
+import ru.mephi.tsis.bootlegamazon.models.OrderCard;
 import ru.mephi.tsis.bootlegamazon.services.OrderService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -25,12 +30,15 @@ public class OrderServiceImpl implements OrderService {
     private final OrderArticleRepository orderArticleRepository;
     private final StatusRepository statusRepository;
 
+    private final UserAuthRepository userAuthRepository;
+
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderArticleRepository orderArticleRepository, StatusRepository statusRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderArticleRepository orderArticleRepository, StatusRepository statusRepository, UserAuthRepository userAuthRepository) {
         this.orderRepository = orderRepository;
         this.orderArticleRepository = orderArticleRepository;
         this.statusRepository = statusRepository;
+        this.userAuthRepository = userAuthRepository;
     }
 
     private double getOrderPrice (Integer id){
@@ -64,9 +72,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAll(Comparator<OrderEntity> comparator) throws StatusNotFoundException {
-        List<OrderEntity> orderEntities = Lists.newArrayList(orderRepository.findAll());
-        return processOrders(orderEntities, comparator);
+    public List<OrderCard> getAll(Pageable pageable) throws StatusNotFoundException {
+        Page<OrderEntity> orderEntities = orderRepository.findAll(pageable);
+        ArrayList<OrderCard> orders = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntities){
+            StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
+                    .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
+            Iterable<OrderArticleEntity> orderArticleEntities = orderArticleRepository.findAllByOrderId(orderEntity.getId());
+            double price = 0.0;
+            for (OrderArticleEntity orderArticleEntity : orderArticleEntities){
+                price += orderArticleEntity.getArticleOrderPrice() * orderArticleEntity.getArticleAmount();
+            }
+            UserAuth user = userAuthRepository.findById(orderEntity.getUserId()).orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + orderEntity.getUserId()));
+            orders.add(new OrderCard(
+                    orderEntity.getId(),
+                    user.getUsername(),
+                    statusEntity.getName(),
+                    price
+                    ));
+        }
+        return orders;
     }
 
     @Override
@@ -141,9 +166,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllByUserId(Integer userId, Comparator<OrderEntity> comparator) throws StatusNotFoundException {
-        List<OrderEntity> orderEntities = Lists.newArrayList(orderRepository.findAllByUserId(userId));
-        return processOrders(orderEntities, comparator);
+    public int getTotalPages(Pageable pageable) {
+        return orderRepository.findAll(pageable).getTotalPages();
+    }
+
+    @Override
+    public int getTotalPagesUserOrders(Pageable pageable, Integer userId) {
+        return orderRepository.findAllByUserId(pageable, userId).getTotalPages();
+    }
+
+    @Override
+    public List<OrderCard> getAllByUserId(Pageable pageable, Integer userId) throws StatusNotFoundException {
+        Page<OrderEntity> orderEntities = orderRepository.findAllByUserId(pageable,userId);
+        ArrayList<OrderCard> orders = new ArrayList<>();
+        for (OrderEntity orderEntity : orderEntities){
+            StatusEntity statusEntity = statusRepository.findById(orderEntity.getStatusId())
+                    .orElseThrow(()->new StatusNotFoundException("Could not find Status with id:" + orderEntity.getStatusId()));
+            Iterable<OrderArticleEntity> orderArticleEntities = orderArticleRepository.findAllByOrderId(orderEntity.getId());
+            double price = 0.0;
+            for (OrderArticleEntity orderArticleEntity : orderArticleEntities){
+                price += orderArticleEntity.getArticleOrderPrice() * orderArticleEntity.getArticleAmount();
+            }
+            orders.add(new OrderCard(
+                    orderEntity.getId(),
+                    "",
+                    statusEntity.getName(),
+                    price
+            ));
+        }
+        return orders;
     }
 
     private List<Order> processOrders(List<OrderEntity> orderEntities, Comparator<OrderEntity> comparator) throws StatusNotFoundException{

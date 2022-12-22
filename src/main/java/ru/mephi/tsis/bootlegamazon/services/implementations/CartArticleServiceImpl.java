@@ -83,4 +83,13 @@ public class CartArticleServiceImpl implements CartArticleService {
         }
         cartArticleRepository.saveAll(cartArticleEntities);
     }
+
+    @Override
+    public void deleteArticleFromCartCompletely(Integer articleId, Integer cartId) throws CartArticleNotFoundException {
+        CartArticleEntity cartArticleEntity = cartArticleRepository
+                .findByCartIdAndArticleId(cartId, articleId)
+                .orElseThrow(()-> new CartArticleNotFoundException("CartArticle not found cartId:" + cartId + ", articleId:" + articleId ));
+        cartArticleEntity.setActive(false);
+        cartArticleRepository.save(cartArticleEntity);
+    }
 }

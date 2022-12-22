@@ -1,8 +1,17 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
+import javax.validation.constraints.*;
+//import jakarta.validation.constraints.*;
+//import org.springframework.validation.*;
+
 public class Category {
 
     private Integer id;
+
+    @NotNull
+    @Size(min = 2, max = 20)
+    @NotEmpty
+    @NotBlank
     private String categoryName;
 
     public Category() {

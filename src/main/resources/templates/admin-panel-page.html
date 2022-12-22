@@ -52,24 +52,56 @@
       />
     </header>
     <div class="catalog-page-container1">
-      <h1 class="catalog-page-text">Оплата не удалась</h1>
+      <h1 class="catalog-page-text">Админ Панель</h1>
     </div>
-      <a th:href="@{'/items/all?page=0'}">
-        <button type="button">
+    <a th:href="@{'/orders/all?page=0'}">
+      <button type="button" >
           <span>
-            <h2>На главную</h2>
+            <h2>Заказы</h2>
             <br />
           </span>
-        </button>
-      </a>
-      <a th:href="@{'/cart'}">
-        <button type="button">
+      </button>
+    </a>
+    <a th:href="@{'/'}">
+      <button type="button" >
           <span>
-            <h2>В корзину</h2>
+            <h2>Пользователи</h2>
             <br />
           </span>
-        </button>
-      </a>
+      </button>
+    </a>
+    <a th:href="@{'/categories/all?page=0'}">
+      <button type="button" >
+          <span>
+            <h2>Категории</h2>
+            <br />
+          </span>
+      </button>
+    </a>
+    <a th:href="@{'/'}">
+      <button type="button" >
+          <span>
+            <h2>Завести накладную</h2>
+            <br />
+          </span>
+      </button>
+    </a>
+    <a th:href="@{'/profile'}">
+      <button type="button" >
+          <span>
+            <h2>Назад в профиль</h2>
+            <br />
+          </span>
+      </button>
+    </a>
+    <a th:href="@{'/items/all?page=0'}">
+      <button type="button">
+          <span>
+            <h2>В каталог</h2>
+            <br />
+          </span>
+      </button>
+    </a>
     <footer class="footer-footer">
               <span class="footer-text">
                 <span>© 2022 С18-501, все права зарегистрированы.</span>
@@ -84,4 +116,3 @@
 ></script>
 </body>
 </html>
-

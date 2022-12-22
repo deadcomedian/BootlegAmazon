@@ -20,6 +20,9 @@ public class Cart {
         this.price = price;
     }
 
+    public Cart() {
+    }
+
     public ArrayList<CartArticle> getItems() {
         return items;
     }
@@ -36,7 +39,20 @@ public class Cart {
         this.price = price;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id=" + id +
+                ", items=" + items +
+                ", price=" + price +
+                '}';
     }
 }

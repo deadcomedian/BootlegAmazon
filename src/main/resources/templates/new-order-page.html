@@ -113,6 +113,7 @@
           </div>
         </div>
         <!---->
+        <h2 th:if="${error} != null" th:text="${error}"></h2>
         <form th:method="POST" th:action="@{/pay}" th:object="${order}">
           <div class="new-order-page-container21">
             <label class="new-order-page-text18">
