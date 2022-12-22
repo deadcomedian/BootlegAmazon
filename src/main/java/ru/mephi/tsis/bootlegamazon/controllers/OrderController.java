@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.mephi.tsis.bootlegamazon.dao.entities.UserAuth;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.*;
 import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
@@ -31,11 +34,14 @@ public class OrderController {
 
     private final StatusService statusService;
 
+    private final UserAuthRepository userAuthRepository;
+
     @Autowired
-    public OrderController(OrderService orderService, CartService cartService, StatusService statusService) {
+    public OrderController(OrderService orderService, CartService cartService, StatusService statusService, UserAuthRepository userRepository) {
         this.orderService = orderService;
         this.cartService = cartService;
         this.statusService = statusService;
+        this.userAuthRepository = userRepository;
     }
 
     @GetMapping("/fromcarttest")
@@ -119,7 +125,10 @@ public class OrderController {
     @GetMapping("/foruser")
     public String forUser(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
-        Integer userId = 2;
+        //Вроде с этим работает получение UserId по UserDetails
+        // ДЛЯ АДМИНА ВОЗВРАЩАЮТСЯ ЗАКАЗЫ ВСЕХ ПОЛЬЗОВАТЕЛЕЙ
+        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+        //Integer userId = 2;
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
         int totalPages = orderService.getTotalPagesUserOrders(pageable, userId);
         int previousPage = 0;

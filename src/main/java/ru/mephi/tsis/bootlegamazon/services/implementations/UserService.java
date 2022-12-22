@@ -87,5 +87,17 @@ public class UserService implements UserDetailsService {
         userRepository.save(userEntity);
     }
 
+    public String getUserNameById(Integer id){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        return userEntity.getName();
+    }
+
+    public String getUserLoginById(Integer id){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new UsernameNotFoundException("User not found with id:" + id));
+        return userEntity.getLogin();
+    }
+
 }
 
