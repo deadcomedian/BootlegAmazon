@@ -124,14 +124,20 @@
 
         <div class="profiles-page-container2">
           <div class="profiles-page-container3" th:each="user : ${users}">
+
             <label class="profiles-page-text1" th:text="${user.getLogin()}"></label>
             <label class="profiles-page-text2" th:text="${user.getName()}"></label>
-            <label class="profiles-page-text3" th:text="${user.getRole()}">Роль</label>
-            <svg viewBox="0 0 1024 1024" class="profiles-page-icon">
-              <path
-                      d="M884 300l-78 78-160-160 78-78q12-12 30-12t30 12l100 100q12 12 12 30t-12 30zM128 736l472-472 160 160-472 472h-160v-160z"
-              ></path>
-            </svg>
+            <label class="profiles-page-text3" th:text="${user.getRole()}"></label>
+            <a th:href="@{/profile/adminchange(userid=${user.getId()})}">
+              <button>
+                <svg viewBox="0 0 1024 1024" class="profiles-page-icon">
+                  <path
+                          d="M884 300l-78 78-160-160 78-78q12-12 30-12t30 12l100 100q12 12 12 30t-12 30zM128 736l472-472 160 160-472 472h-160v-160z"
+                  ></path>
+                </svg>
+              </button>
+            </a>
+
           </div>
         </div>
 
@@ -156,6 +162,12 @@
             </button>
           </a>
         </div>
+        <br/>
+        <button type="button" class="new-edit-profile-page-button1">
+          <h2>
+            <a th:href="@{/admin/panel}">Вернуться</a>
+          </h2>
+        </button>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>
