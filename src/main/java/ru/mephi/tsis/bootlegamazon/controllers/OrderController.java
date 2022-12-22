@@ -13,15 +13,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.*;
 import ru.mephi.tsis.bootlegamazon.models.*;
-import ru.mephi.tsis.bootlegamazon.services.CartService;
-import ru.mephi.tsis.bootlegamazon.services.OrderArticleService;
-import ru.mephi.tsis.bootlegamazon.services.OrderService;
-import ru.mephi.tsis.bootlegamazon.services.StatusService;
+import ru.mephi.tsis.bootlegamazon.services.*;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,6 +38,8 @@ public class OrderController {
 
     private final UserService userService;
 
+    private final ArticleService articleService;
+
     @Autowired
     public OrderController(
             OrderService orderService,
@@ -49,23 +47,45 @@ public class OrderController {
             StatusService statusService,
             OrderArticleService orderArticleService1,
             UserAuthRepository userRepository,
-            UserService userService
-    ){
+            UserService userService,
+            ArticleService articleService){
         this.orderService = orderService;
         this.cartService = cartService;
         this.statusService = statusService;
         this.orderArticleService = orderArticleService1;
         this.userAuthRepository = userRepository;
         this.userService = userService;
+        this.articleService = articleService;
     }
 
     @GetMapping("/new")
-    public String newOrder(Model model, @AuthenticationPrincipal UserDetails user){
+    public String newOrder(
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            RedirectAttributes redirectAttributes
+    ){
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
+
+            //проверка на наличие товара на складе
             Cart cart = cartService.getCartByUserId(userId);
-            System.out.println(cart.toString());
+            List<CartArticle> cartArticles = cart.getItems();
+            for (CartArticle cartArticle : cartArticles){
+                   Article article = articleService.getById(cartArticle.getArticle().getId());
+                   if(article.getAmount() < cartArticle.getAmount()){
+                       redirectAttributes.addFlashAttribute
+                               (
+                                       "error",
+                                       article.getAuthorName() + ". "
+                                               + article.getItemName() + " в наличии "
+                                               + article.getAmount() + "шт. \n"
+                                               + "Пожалуйста, уменьшите количество данного товара в корзине."
+                               );
+                       return "redirect:/cart";
+                   }
+            }
+
             model.addAttribute("cart", cart);
             int orderNumber = orderService.getOrdersCount() + 1;
             Order order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
@@ -78,6 +98,13 @@ public class OrderController {
 
     @GetMapping("/all")
     public String all(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
+
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
         model.addAttribute("user", user);
 
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
@@ -197,8 +224,19 @@ public class OrderController {
     }
 
     @PostMapping("/editstatus")
-    public String changeOrderStatus(@Valid @ModelAttribute("order") Order order, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails user){
+    public String changeOrderStatus(
+            Model model,
+            @Valid @ModelAttribute("order") Order order,
+            RedirectAttributes redirectAttributes,
+            @AuthenticationPrincipal UserDetails user
+    ){
         try {
+
+            String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+            if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+                model.addAttribute("errorMessage", "Доступ запрещён");
+                return "error-page";
+            }
 
             int currentUserId = userAuthRepository.findByUsername(user.getUsername()).getId();
             int orderUserId = order.getUserId();
@@ -233,4 +271,3 @@ public class OrderController {
 // Авторизация
 // Настройки
 // сделать пользователя менеджером
-// добавить картинку книжке

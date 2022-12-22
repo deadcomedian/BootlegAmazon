@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.BadValueException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CartNotFoundException;
@@ -45,14 +46,17 @@ public class PaymentController {
 
     private Map<String, String> errorCodes = new HashMap<>();
 
+    private UserAuthRepository userAuthRepository;
+
     @Autowired
-    public PaymentController(PaymentService paymentService, OrderService orderService, CartService cartService, OrderArticleService orderArticleService, ArticleService articleService, MessageSource messageSource) {
+    public PaymentController(PaymentService paymentService, OrderService orderService, CartService cartService, OrderArticleService orderArticleService, ArticleService articleService, MessageSource messageSource, UserAuthRepository userAuthRepository) {
         this.paymentService = paymentService;
         this.orderService = orderService;
         this.cartService = cartService;
         this.orderArticleService = orderArticleService;
         this.articleService = articleService;
         this.messageSource = messageSource;
+        this.userAuthRepository = userAuthRepository;
         errorCodes.put("orderAddress", "Описание");
         errorCodes.put("orderPrice", "Название книги");
     }
@@ -63,9 +67,12 @@ public class PaymentController {
                     BindingResult bindingResult,
                     Model model,
                     RedirectAttributes attributes,
-                    @AuthenticationPrincipal UserDetails user){
-        model.addAttribute("user", user);
+                    @AuthenticationPrincipal UserDetails user
+            ){
+
+        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
+
             if (bindingResult.hasErrors()){
                 for (Object obj : bindingResult.getAllErrors()){
                     FieldError fieldError = (FieldError) obj;
@@ -73,6 +80,34 @@ public class PaymentController {
                     return "redirect:/orders/new";
                 }
             }
+
+            //последняя проверка на наличие товара на складе
+            Cart cart = cartService.getCartByUserId(userId);
+            List<CartArticle> cartArticles = cart.getItems();
+            for (CartArticle cartArticle : cartArticles){
+                Article article = articleService.getById(cartArticle.getArticle().getId());
+                if(article.getAmount() < cartArticle.getAmount()){
+                    attributes.addFlashAttribute
+                            (
+                                    "error",
+                                    article.getAuthorName() + ". "
+                                            + article.getItemName() + " в наличии "
+                                            + article.getAmount() + "шт. \n"
+                                            + "Пожалуйста, уменьшите количество данного товара в корзине."
+                            );
+                    return "redirect:/orders/new";
+                }
+            }
+
+
+        } catch (CartNotFoundException | CategoryNotFoundException | ArticleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        model.addAttribute("user", user);
+        try {
+
             double total = order.getOrderPrice();
             Payment payment = paymentService.createPayment(total, "http://localhost:8080/pay/cancel", "http://localhost:8080/pay/success");
 

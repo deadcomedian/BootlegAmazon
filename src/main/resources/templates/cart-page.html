@@ -104,6 +104,7 @@
         <div class="cart-page-container1">
           <h1 class="cart-page-text">Корзина</h1>
         </div>
+        <div th:if="${error} != null" th:text="${error}"></div>
         <div class="cart-page-container2" th:each="item : ${cart.items}">
           <div class="cart-page-container3">
             <div class="cart-page-container4">
@@ -143,7 +144,7 @@
             </form>
           </div>
         </div>
-        <div class="cart-page-container6">
+        <div class="cart-page-container6" th:if="${cart.getPrice() > 0.0}">
           <div class="cart-page-container7">
             <span class="cart-page-text4">Итого:</span>
             <label class="cart-page-text5" th:text="${cart.getPrice()} + ' ₽'"></label>
@@ -151,10 +152,10 @@
           <div class="cart-page-container8">
             <a th:href="@{'/orders/new'}">
               <button type="submit" class="cart-page-button">
-              <span>
-                <span>Оформить</span>
-                <br />
-              </span>
+                <span>
+                  <span>Оформить</span>
+                  <br />
+                </span>
               </button>
             </a>
           </div>
