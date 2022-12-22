@@ -130,7 +130,7 @@ public class InvoiceController {
 
         try {
             Article article = articleService.getById(invoice.getArticleId());
-            articleService.updateAmount(article.getAmount() + invoice.getArticleId(), invoice.getAmount());
+            articleService.updateAmount(invoice.getArticleId(), article.getAmount() + invoice.getAmount());
             invoiceService.createInvoice(invoice.getArticleId(), invoice.getAmount());
         } catch (ArticleNotFoundException | BadValueException | CategoryNotFoundException e) {
             throw new RuntimeException(e);
