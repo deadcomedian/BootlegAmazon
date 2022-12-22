@@ -16,6 +16,8 @@ import ru.mephi.tsis.bootlegamazon.models.Cart;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/cart")
 @SessionAttributes("cart")
@@ -56,8 +58,8 @@ public class CartController {
     @GetMapping("/addtocart")
     public String addArticleToCart(
             @RequestParam("articleid") Integer articleId,
-            @RequestParam("frompage") Integer pageNumber,
-            @RequestParam("hrefargs") String hrefArgs,
+            @RequestParam("frompage") Optional<Integer> pageNumber,
+            @RequestParam("hrefargs") Optional<String> hrefArgs,
             @AuthenticationPrincipal UserDetails user
     ){
 
@@ -68,7 +70,15 @@ public class CartController {
         } catch (CartNotFoundException | CategoryNotFoundException | ArticleNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return "redirect:/items/all?page=" + pageNumber + hrefArgs;
+        if (pageNumber.isPresent()){
+            if(hrefArgs.isPresent()){
+                return "redirect:/items/all?page=" + pageNumber + hrefArgs;
+            } else {
+                return "redirect:/items/all?page=" + pageNumber;
+            }
+        } else {
+            return "redirect:/items/" + articleId;
+        }
     }
 
 

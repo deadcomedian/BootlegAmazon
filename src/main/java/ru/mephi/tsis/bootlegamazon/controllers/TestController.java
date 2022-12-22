@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Article;
@@ -74,4 +73,7 @@ public class TestController {
 
     @GetMapping("/invoice")
     public String invoice() { return "invoice-page";}
+
+    @GetMapping("/editrole")
+    public String editRole() { return "profile-admin-edit-page"; }
 }

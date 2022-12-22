@@ -16,12 +16,15 @@ import ru.mephi.tsis.bootlegamazon.dao.entities.UserEntity;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.RoleRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserRepository;
-import ru.mephi.tsis.bootlegamazon.models.CustomerProfile;
+import ru.mephi.tsis.bootlegamazon.exceptions.RoleNotFoundException;
+import ru.mephi.tsis.bootlegamazon.models.Role;
 import ru.mephi.tsis.bootlegamazon.models.User;
+import ru.mephi.tsis.bootlegamazon.services.RoleService;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -36,12 +39,15 @@ public class CustomerProfileController {
 
     private final RoleRepository roleRepository;
 
+    private final RoleService roleService;
+
     @Autowired
-    public CustomerProfileController(UserRepository userRepository, UserService userService, UserAuthRepository userAuthRepository, RoleRepository roleRepository) {
+    public CustomerProfileController(UserRepository userRepository, UserService userService, UserAuthRepository userAuthRepository, RoleRepository roleRepository, RoleService roleService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.userAuthRepository = userAuthRepository;
         this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping("")
@@ -136,11 +142,81 @@ public class CustomerProfileController {
         ArrayList<User> users = new ArrayList<>();
         Page<UserEntity> userEntities = userRepository.findAll(pageable);
         for(UserEntity userEntity : userEntities) {
-            users.add(new User(userEntity.getLogin(), userEntity.getName(), roleRepository.findById(userEntity.getRoleId()).get().getName()));
+            users.add(new User(userEntity.getId(), userEntity.getLogin(), userEntity.getName(), roleRepository.findById(userEntity.getRoleId()).get().getName()));
         }
 
         model.addAttribute("users", users);
+
         return "profiles-page";
+    }
+
+    @GetMapping("/adminchange")
+    public String editRole(
+            Model model,
+            @RequestParam("userid") Integer userId,
+            @AuthenticationPrincipal UserDetails currentUser
+    ){
+
+        String userRole = userAuthRepository.findByUsername(currentUser.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
+        UserEntity userEntity = userRepository.findById(userId).get();
+        User user = null;
+        try {
+            user = new User(userEntity.getId(), userEntity.getLogin(), userEntity.getName(), roleService.getById(userEntity.getRoleId()).getRoleName());
+        } catch (RoleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        model.addAttribute("user", user);
+        List<Role> roles = roleService.getAll(((o1, o2) -> o1.getName().compareTo(o2.getName())));
+        model.addAttribute("roles", roles);
+        return "profile-admin-edit-page";
+    }
+
+    @PostMapping("/savechangedrole")
+    public String saveChangedRole(
+            Model model,
+            @ModelAttribute("user") User user,
+            RedirectAttributes attributes,
+            @AuthenticationPrincipal UserDetails currentUser
+    ){
+        String userRole = userAuthRepository.findByUsername(currentUser.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
+        UserEntity userEntity = userRepository.findById(user.getId()).get();
+        try {
+            userEntity.setRoleId(roleService.getByName(user.getRole(), (o1, o2) -> o1.getName().compareTo(o2.getName())).getRoleId());
+            userRepository.save(userEntity);
+        } catch (RoleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        attributes.addAttribute("userid", user.getId());
+        return "redirect:/profile/adminchange";
+    }
+
+    @PostMapping("/delete")
+    public String deleteUser(
+            Model model,
+            @ModelAttribute("user") User user,
+            RedirectAttributes attributes,
+            @AuthenticationPrincipal UserDetails currentUser
+    ){
+        String userRole = userAuthRepository.findByUsername(currentUser.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
+        UserEntity userEntity = userRepository.findById(user.getId()).get();
+        userEntity.setActive(false);
+        userRepository.save(userEntity);
+        return "redirect:/profile/all?page=0";
     }
 
 }
