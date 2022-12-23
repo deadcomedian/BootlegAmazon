@@ -13,7 +13,7 @@
   flex-direction: column;
 }
 .catalog-card-image {
-  width: 20rem;
+  width: 10rem;
   object-fit: cover;
 }
 .catalog-card-text {
