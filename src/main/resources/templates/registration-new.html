@@ -64,37 +64,48 @@
 
         </header>
         <div class="authorization-page-container1">
-            <h1 class="authorization-page-text">РЕГИСТРАЦИЯ</h1>
+            <h1 class="authorization-page-text">
+                <span>Регистрация</span>
+                <br/>
+            </h1>
+        </div>
             <span class="authorization-page-text1">
             <span>Создайте аккаунт, чтобы совершать покупки</span>
+                <br/>
           </span>
-            <form th:method="POST" th:action="@{/registration/create}" th:object="${userForm}">
+            <form enctype="application/x-www-form-urlencoded"
+                  class="new-edit-profile-page-form"
+                  th:method="POST" th:action="@{/registration/create}" th:object="${userForm}">
                 <div>
                     <label>
-                        <input type="text" th:field="*{name}" placeholder="ФИО">
+                        <input type="text" th:field="*{name}" placeholder="ФИО" class="new-edit-profile-page-input input">
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="text" th:field="*{phone}" placeholder="Телефон">
+                        <input type="text" th:field="*{phone}" placeholder="Телефон" class="new-edit-profile-page-input input">
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="text" th:field="*{login}" placeholder="Логин">
-                        <errors th:if="${usernameError}"> Пользователь с таким именем или телефоном уже существует </errors>
+                        <input type="text" th:field="*{login}" placeholder="Логин" class="new-edit-profile-page-input input">
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="password" th:field="*{password}" placeholder="Пароль">
+                        <input type="password" th:field="*{password}" placeholder="Пароль" class="new-edit-profile-page-input input">
                     </label>
                 </div>
                 <div>
                     <label>
-                        <input type="password" th:field="*{passwordConfirm}" placeholder="Повторите пароль">
-                        <errors th:if="${passwordError}"> Пароли не совпадают </errors>
+                        <input type="password" th:field="*{passwordConfirm}" placeholder="Повторите пароль" class="new-edit-profile-page-input input">
                     </label>
+                </div>
+                <div>
+                    <errors th:if="${usernameError}"> Пользователь с таким именем или телефоном уже существует </errors>
+                </div>
+                <div>
+                    <errors th:if="${passwordError}"> Пароли не совпадают </errors>
                 </div>
                 <div>
                     <errors th:if="${fieldError}"> Все поля должны быть заполнены! </errors>

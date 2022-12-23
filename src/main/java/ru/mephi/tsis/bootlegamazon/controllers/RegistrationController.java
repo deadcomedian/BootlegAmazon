@@ -27,7 +27,7 @@ public class RegistrationController {
     @GetMapping("")
     public String registration(Model model) {
         model.addAttribute("userForm", new UserEntity());
-        return "registration-new";
+        return "registration-page";
     }
 
     @PostMapping("/create")
