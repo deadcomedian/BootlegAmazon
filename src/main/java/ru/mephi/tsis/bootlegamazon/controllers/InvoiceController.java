@@ -18,6 +18,7 @@ import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.forms.InvoiceForm;
 import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
+import ru.mephi.tsis.bootlegamazon.models.Invoice;
 import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.InvoiceService;
@@ -44,6 +45,57 @@ public class InvoiceController {
         this.articleService = articleService;
         this.invoiceService = invoiceService;
         this.userAuthRepository = userAuthRepository;
+    }
+
+    @GetMapping("/all")
+    public String all(
+            Model model,
+            @RequestParam("page") Integer pageNumber,
+            @AuthenticationPrincipal UserDetails user
+    ){
+        String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
+        if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
+            model.addAttribute("errorMessage", "Доступ запрещён");
+            return "error-page";
+        }
+
+        Pageable pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
+
+        int totalPages = invoiceService.getTotalPages(pageable);
+        int previousPage = 0;
+        int nextPage = 0;
+        int currentPage = pageNumber;
+        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+            return "redirect:/invoice/new?page=0";
+        }
+        if (pageNumber == 0){
+            previousPage = 0;
+            if (totalPages == 1){
+                nextPage = 0;
+            } else {
+                nextPage = currentPage + 1;
+            }
+        } else if (pageNumber == totalPages-1){
+            nextPage = totalPages-1;
+            previousPage = currentPage - 1;
+        } else {
+            nextPage = currentPage + 1;
+            previousPage = currentPage - 1;
+        }
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("nextPage", nextPage);
+        model.addAttribute("previousPage", previousPage);
+
+
+
+        try {
+            List<Invoice> invoices = invoiceService.getAll(pageable);
+            model.addAttribute("invoices", invoices);
+        } catch (ArticleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        return "invoices-page";
     }
 
     @GetMapping("/new")

@@ -72,9 +72,9 @@ public class CartController {
         }
         if (pageNumber.isPresent()){
             if(hrefArgs.isPresent()){
-                return "redirect:/items/all?page=" + pageNumber + hrefArgs;
+                return "redirect:/items/all?page=" + pageNumber.get() + hrefArgs.get();
             } else {
-                return "redirect:/items/all?page=" + pageNumber;
+                return "redirect:/items/all?page=" + pageNumber.get();
             }
         } else {
             return "redirect:/items/" + articleId;

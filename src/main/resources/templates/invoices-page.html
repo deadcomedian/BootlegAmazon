@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Invoices-page - Travel Agency</title>
+    <title>Накладные - BootlegAmazon</title>
     <meta property="og:title" content="Invoices-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
@@ -85,27 +85,48 @@
         <div class="invoices-page-container2">
           <div class="invoices-page-container3">
             <label class="invoices-page-text1">№ накладной</label>
-            <svg viewBox="0 0 1024 1024" class="invoices-page-icon">
-              <path
-                d="M512 384q52 0 90 38t38 90-38 90-90 38-90-38-38-90 38-90 90-38zM512 726q88 0 151-63t63-151-63-151-151-63-151 63-63 151 63 151 151 63zM512 192q158 0 286 88t184 232q-56 144-184 232t-286 88-286-88-184-232q56-144 184-232t286-88z"
-              ></path>
-            </svg>
+            <label class="invoices-page-text1">Товар</label>
+            <label class="invoices-page-text1">Количество</label>
           </div>
         </div>
+
+        <div class="invoices-page-container2" th:each="invoice : ${invoices}">
+          <div class="invoices-page-container3">
+            <label class="invoices-page-text1" th:text="${invoice.getId()}"></label>
+            <label class="invoices-page-text1" th:text="${invoice.getArticleCard().getItemName()}"></label>
+            <label class="invoices-page-text1" th:text="${invoice.getArticleCount()}"></label>
+          </div>
+        </div>
+
         <div class="invoices-page-container4"></div>
         <div class="invoices-page-container5">
-          <svg viewBox="0 0 1024 1024" class="invoices-page-icon2">
-            <path
-              d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
-            ></path>
-          </svg>
-          <label class="invoices-page-text2">1</label>
-          <svg viewBox="0 0 1024 1024" class="invoices-page-icon4">
-            <path
-              d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
-            ></path>
-          </svg>
+          <a th:href="@{/invoices/all(page=${previousPage})}">
+            <button>
+              <svg viewBox="0 0 1024 1024" class="invoices-page-icon2">
+                <path
+                        d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
+                ></path>
+              </svg>
+            </button>
+          </a>
+          <label class="invoices-page-text2" th:text="${currentPage + 1}"></label>
+          <a th:href="@{/invoices/all(page=${nextPage})}">
+            <button>
+              <svg viewBox="0 0 1024 1024" class="invoices-page-icon4">
+                <path
+                        d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
+                ></path>
+              </svg>
+            </button>
+          </a>
         </div>
+
+        <button type="button" class="new-edit-profile-page-button1">
+          <h2>
+            <a th:href="@{/admin/panel}">Вернуться</a>
+          </h2>
+        </button>
+
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

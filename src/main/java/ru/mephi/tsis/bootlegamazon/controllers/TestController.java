@@ -76,4 +76,7 @@ public class TestController {
 
     @GetMapping("/editrole")
     public String editRole() { return "profile-admin-edit-page"; }
+
+    @GetMapping("/invoices")
+    public String invoices(){ return "invoices-page";}
 }
