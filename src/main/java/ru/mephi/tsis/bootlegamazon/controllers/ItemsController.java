@@ -39,7 +39,7 @@ import java.util.*;
 @RequestMapping("/items")
 public class ItemsController {
 
-    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/images";
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/target/classes/static/images";
 
     private Integer currentPage;
     private ArticleCardService articleCardService;
@@ -257,7 +257,7 @@ public class ItemsController {
                             item.getItemName(),
                             item.getAuthorName(),
                             item.getItemDescription(),
-                            "/img/" + filename,
+                            "/images/" + filename,
                             item.getItemPrice(),
                             5.0
                     );
@@ -326,7 +326,7 @@ public class ItemsController {
                 filename = uuid + filename;
                 Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, filename);
                 Files.write(fileNameAndPath, file.getBytes());
-                item.setItemPhoto("/img/" + filename);
+                item.setItemPhoto("/images/" + filename);
             } else {
                 String oldPhoto = articleService.getById(item.getId()).getItemPhoto();
                 item.setItemPhoto(oldPhoto);
