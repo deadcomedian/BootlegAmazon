@@ -137,6 +137,9 @@
           <div sec:authorize="hasAuthority('Администратор')">
           <label class="profile-page-text09"  th:text=" ${role}"></label>
             </sec:authorize> </div>
+          <div sec:authorize="hasAuthority('Менеджер')">
+            <label class="profile-page-text09"  th:text=" ${role}"></label>
+            </sec:authorize> </div>
         </div>
         <button type="button" class="profile-page-button">
           <span>
