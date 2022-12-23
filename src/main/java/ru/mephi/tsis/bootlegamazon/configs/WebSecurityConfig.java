@@ -55,7 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/invoices/all",
                         "/invoices/process").hasAnyAuthority("Администратор", "Менеджер")
                 //Доступ разрешен всем пользователей
-                .antMatchers("/items/all", "/items/{id}", "/items/search").permitAll()
+                .antMatchers(
+                        "/items/all",
+                        "/items/{id}",
+                        "/items/search").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()

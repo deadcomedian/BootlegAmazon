@@ -26,7 +26,7 @@ public class Article {
     @Size(min=2, max=300)
     private String itemDescription;
 
-    @Min(0)
+    @Min(1)
     private double itemPrice;
     private double itemRating;
     private String itemPhoto;

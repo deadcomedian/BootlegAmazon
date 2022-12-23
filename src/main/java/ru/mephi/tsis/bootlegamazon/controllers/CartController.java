@@ -64,12 +64,21 @@ public class CartController {
     ){
 
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+        Cart cart = null;
         try {
-            Cart cart = cartService.getCartByUserId(userId);
+            cart = cartService.getCartByUserId(userId);
             cartService.addArticleToCart(cart.getId(), articleId);
-        } catch (CartNotFoundException | CategoryNotFoundException | ArticleNotFoundException e) {
+        } catch (CartNotFoundException e){
+            try {
+                cart = cartService.createCartForUser(userId);
+                cartService.addArticleToCart(cart.getId(), articleId);
+            } catch (CartNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }catch (CategoryNotFoundException | ArticleNotFoundException e) {
             throw new RuntimeException(e);
         }
+
         if (pageNumber.isPresent()){
             if(hrefArgs.isPresent()){
                 return "redirect:/items/all?page=" + pageNumber.get() + hrefArgs.get();
