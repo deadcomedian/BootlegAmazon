@@ -297,8 +297,8 @@
         </div>
       </div>
     </div>
-    <div class="catalog-page-gallery" th:each="articleCard : ${articleCards}">
-      <div class="catalog-card-gallery-card catalog-card-root-class-name">
+    <div class="catalog-page-gallery">
+      <div class="catalog-card-gallery-card catalog-card-root-class-name" th:each="articleCard : ${articleCards}">
         <div class="catalog-card-container">
           <a th:href="@{'/items/' + ${articleCard.id}}">
             <img
@@ -311,7 +311,9 @@
             </h1>
           </a>
           <div class="catalog-card-container1">
-            <label class="catalog-card-text1"><span th:text="${articleCard.authorName}"></span></label>
+            <label class="catalog-card-text1">
+              <span th:text="${articleCard.authorName}"></span>
+            </label>
           </div>
           <div class="catalog-card-container2">
             <label class="catalog-card-text2"><span th:text="${articleCard.price} + ' ₽'"></span></label>
