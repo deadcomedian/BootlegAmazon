@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">>
   <head>
     <title>Товар</title>
     <meta property="og:title" content="Item-page - Travel Agency" />
@@ -117,6 +117,8 @@
         </header>
         <div class="item-page-container1">
           <h1 class="item-page-text" th:text="${article.itemName}"></h1>
+
+          <div sec:authorize="hasAuthority('Администратор')">
           <a th:href="@{/items/{id}/edit(id=${article.id})}">
             <svg viewBox="0 0 1024 1024" class="item-page-icon">
               <path
@@ -124,6 +126,9 @@
               ></path>
             </svg>
           </a>
+            </sec:authorize> </div>
+
+          <div sec:authorize="hasAuthority('Администратор')">
           <form th:method="POST" th:action="@{/items/{id}/delete(id=${article.id})}">
             <button type="submit">
               <svg viewBox="0 0 1024 1024" class="item-page-icon">
@@ -133,6 +138,30 @@
               </svg>
             </button>
           </form>
+            </sec:authorize> </div>
+
+          <div sec:authorize="hasAuthority('Менеджер')">
+            <a th:href="@{/items/{id}/edit(id=${article.id})}">
+              <svg viewBox="0 0 1024 1024" class="item-page-icon">
+                <path
+                        d="M884 300l-78 78-160-160 78-78q12-12 30-12t30 12l100 100q12 12 12 30t-12 30zM128 736l472-472 160 160-472 472h-160v-160z"
+                ></path>
+              </svg>
+            </a>
+            </sec:authorize> </div>
+
+          <div sec:authorize="hasAuthority('Менеджер')">
+            <form th:method="POST" th:action="@{/items/{id}/delete(id=${article.id})}">
+              <button type="submit">
+                <svg viewBox="0 0 1024 1024" class="item-page-icon">
+                  <path
+                          d="M662 170h148v86h-596v-86h148l44-42h212zM360 506l92 92-90 90 60 60 90-90 90 90 60-60-90-90 90-92-60-60-90 92-90-92zM256 810v-512h512v512q0 34-26 60t-60 26h-340q-34 0-60-26t-26-60z"
+                  ></path>
+                </svg>
+              </button>
+            </form>
+            </sec:authorize> </div>
+
         </div>
         <div class="item-page-container2">
           <div class="item-page-container3">
