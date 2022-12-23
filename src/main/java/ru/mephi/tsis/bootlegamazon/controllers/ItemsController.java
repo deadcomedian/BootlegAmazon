@@ -92,10 +92,10 @@ public class ItemsController {
         //сортировка
         Pageable pageable;
         if(sortMethod.isPresent()){
-            pageable = PageRequest.of(pageNumber, 6, sortMethodMap.get(sortMethod.get()));
+            pageable = PageRequest.of(pageNumber, 12, sortMethodMap.get(sortMethod.get()));
             hrefArgs.setSortMethod(sortMethod.get());
         } else {
-            pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
+            pageable = PageRequest.of(pageNumber, 12, Sort.Direction.ASC, "id");
         }
 
         //поиск

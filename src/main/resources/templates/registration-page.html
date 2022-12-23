@@ -98,7 +98,9 @@
                     <input
                             type="text"
                             th:field="*{login}"
+                            pattern="[ 0-9-A-Za-z]{4,}"
                             placeholder="Логин"
+                            title="Логин должен содержать не менее 4 символов латинского алфавита и цифр"
                             class="new-edit-profile-page-input3 input"/>
                 </label>
             </div>
