@@ -9,13 +9,13 @@ public class Article {
     @NotNull
     @NotEmpty
     @NotBlank
-    @Size(min=2, max=20)
+    @Size(min=2, max=500)
     private String itemName;
 
     @NotNull
     @NotEmpty
     @NotBlank
-    @Size(min=2, max=20)
+    @Size(min=2, max=300)
     private String authorName;
 
     private String categoryName;
@@ -23,7 +23,7 @@ public class Article {
     @NotNull
     @NotEmpty
     @NotBlank
-    @Size(min=2, max=300)
+    @Size(min=2, max=1500)
     private String itemDescription;
 
     @Min(1)

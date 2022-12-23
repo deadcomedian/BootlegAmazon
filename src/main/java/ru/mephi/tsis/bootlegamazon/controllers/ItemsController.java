@@ -310,7 +310,7 @@ public class ItemsController {
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
-                return "redirect:/items/new";
+                return "redirect:/items/" + id + "/edit";
             }
         }
         try {
