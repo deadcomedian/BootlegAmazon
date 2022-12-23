@@ -1,0 +1,227 @@
+.tool-box-container {
+  display: flex;
+  position: relative;
+}
+.tool-box-container1 {
+  display: flex;
+  position: relative;
+  padding-top: 2.5rem;
+  padding-bottom: 0.5rem;
+}
+.tool-box-input {
+  width: 20rem;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  font-family: Open Sans;
+  border-radius: 1rem;
+}
+.tool-box-search {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-cart {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-profile {
+  width: 5rem;
+  height: 3rem;
+}
+
+@media(max-width: 991px) {
+  .tool-box-input {
+    width: 15rem;
+  }
+  .tool-box-search {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-cart {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-profile {
+    width: 4rem;
+    height: 2.5rem;
+  }
+}
+@media(max-width: 767px) {
+  .tool-box-input {
+    width: 10rem;
+  }
+  .tool-box-search {
+    width: 3rem;
+    height: 2rem;
+  }
+  .tool-box-cart {
+    width: 2rem;
+    height: 2rem;
+  }
+  .tool-box-profile {
+    width: 3rem;
+    height: 2rem;
+  }
+}
+@media(max-width: 479px) {
+  .tool-box-input {
+    width: 5rem;
+  }
+}
+
+.header-header {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  justify-content: space-between;
+}
+.header-image {
+  width: auto;
+  height: 6rem;
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media(max-width: 479px) {
+  .header-image {
+    height: 4rem;
+  }
+}
+
+.footer-footer {
+  width: 100%;
+  display: flex;
+  position: relative;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  justify-content: center;
+}
+.footer-text {
+  text-align: center;
+  font-family: Open Sans;
+}
+
+.invoices-page-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.invoices-page-container1 {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  margin-top: 2rem;
+  align-items: flex-start;
+  padding-left: 4rem;
+  margin-bottom: 2rem;
+  padding-right: 4rem;
+  justify-content: space-between;
+}
+.invoices-page-text {
+  font-size: 4em;
+  font-family: Rubik Dirt;
+  line-height: 1em;
+}
+.invoices-page-container2 {
+  width: 100%;
+  display: flex;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.invoices-page-container3 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+}
+.invoices-page-text1 {
+  font-size: 2rem;
+  align-self: flex-start;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.invoices-page-icon {
+  fill: var(--dl-color-primary-admin);
+  width: 4rem;
+  height: 4rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-admin);
+  border-style: solid;
+  border-width: 0.2rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
+.invoices-page-container4 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 1rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  justify-content: center;
+}
+.invoices-page-container5 {
+  flex: 0 0 auto;
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.invoices-page-icon2 {
+  fill: var(--dl-color-primary-100);
+  width: 2rem;
+  height: 2rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-100);
+  border-style: solid;
+  border-width: 0.1rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
+.invoices-page-text2 {
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 400;
+  line-height: 1.55;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.invoices-page-icon4 {
+  fill: var(--dl-color-primary-100);
+  width: 2rem;
+  height: 2rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-100);
+  border-style: solid;
+  border-width: 0.1rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
