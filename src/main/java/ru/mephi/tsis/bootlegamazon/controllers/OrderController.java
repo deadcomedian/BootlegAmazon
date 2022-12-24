@@ -264,6 +264,18 @@ public class OrderController {
                 return "redirect:/orders/" + order.getOrderNumber();
             }
 
+            String newStatus = order.getOrderStatus();
+
+            if (oldStatus.equals("Инициализирован") && newStatus.equals("Доставлен")){
+                redirectAttributes.addFlashAttribute("error", "Ошибка: заказ не был подтверждён");
+                return "redirect:/orders/" + order.getOrderNumber();
+            }
+
+            if (oldStatus.equals("Подтверждён") && !newStatus.equals("Доставлен")){
+                redirectAttributes.addFlashAttribute("error", "Ошибка: запрещённый статус заказа");
+                return "redirect:/orders/" + order.getOrderNumber();
+            }
+
             orderService.updateOrderStatus(order.getOrderNumber(), order.getOrderStatus());
 
         } catch (OrderNotFoundException | StatusNotFoundException e) {

@@ -160,13 +160,13 @@
               </label>
             </div>
           </div>
-          <h2 th:if="${error} != null" th:text="${error}"></h2>
           <form
                   class="order-page-form"
                   th:method="POST"
                   th:action="@{/orders/editstatus}"
                   th:object="${order}"
           >
+            <h2 th:if="${error} != null" th:text="${error}"></h2>
             <input type="hidden" th:field="*{userId}"/>
             <input type="hidden" th:field="*{orderNumber}"/>
             <input type="hidden" th:field="*{orderAddress}"/>
