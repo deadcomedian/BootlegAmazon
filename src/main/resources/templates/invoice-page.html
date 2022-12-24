@@ -139,82 +139,95 @@
           <a th:href="@{'/invoices/new?page=' + ${nextPage}  + '&selectitem=' + ${articleToAdd.getId()} }">
             <button type="button">
               <h2>  -></h2>
-            </button>
-          </a>
-        </div>
+              <svg viewBox="0 0 1024 1024" class="categories-page-icon12">
+                <path
+                        d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
+                ></path>
+              </svg>
+              </button>
+            </a>
+          </div>
 
-        <div class="invoice-page-container8" th:if="${articleToAdd == null}">
-          <a th:href="@{'/invoices/new?page=' + ${previousPage}}">
-            <button type="button">
-              <h2><-  </h2>
-            </button>
-          </a>
-          <label class="invoice-page-text6" th:text="${currentPage + 1}"></label>
-          <a th:href="@{'/invoices/new?page=' + ${nextPage}}">
-            <button type="button">
-              <h2>  -></h2>
-            </button>
-          </a>
-        </div>
+          <div class="invoice-page-container8" th:if="${articleToAdd == null}">
+            <a th:href="@{'/invoices/new?page=' + ${previousPage}}">
+              <button type="button">
+                <svg viewBox="0 0 1024 1024" class="invoice-page-icon10">
+                  <path
+                          d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
+                  ></path>
+                </svg>
+              </button>
+            </a>
+            <label class="invoice-page-text6" th:text="${currentPage + 1}"></label>
+            <a th:href="@{'/invoices/new?page=' + ${nextPage}}">
+              <button type="button">
+                <svg viewBox="0 0 1024 1024" class="invoice-page-icon12">
+                  <path
+                          d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
+                  ></path>
+                </svg>
+              </button>
+            </a>
+          </div>
 
-        <br/>
-        <div class="invoice-page-container02" th:if="${newInvoice}">
-          <div th:if="${error} != null" th:text="${error}"></div>
-          <form
-                  class="invoice-page-form"
-                  th:method="POST"
-                  th:action="@{/invoices/process}"
-                  th:object="${newInvoice}"
-          >
-            <div class="invoice-page-container02">
+          <br/>
+          <div class="invoice-page-container02" th:if="${newInvoice}">
+            <div th:if="${error} != null" th:text="${error}"></div>
+            <form
+                    class="invoice-page-form"
+                    th:method="POST"
+                    th:action="@{/invoices/process}"
+                    th:object="${newInvoice}"
+            >
+              <div class="invoice-page-container02">
 
-              <div class="invoice-page-container03">
+                <div class="invoice-page-container03">
 
-                <input type="hidden" th:field="*{articleId}"/>
+                  <input type="hidden" th:field="*{articleId}"/>
 
-                <label style="font-weight: bold;" th:text="'Выбранный товар: ' + ${articleToAdd.getItemName()}"></label>
+                  <label style="font-weight: bold;" th:text="'Выбранный товар: ' + ${articleToAdd.getItemName()}"></label>
 
-                <div class="invoice-page-container04">
-                  <input
-                          type="text"
-                          th:field="*{amount}"
-                          required=""
-                          placeholder="Кол-во"
-                          class="invoice-page-input01 input"
-                  />
-                  <label class="invoice-page-text01">шт.</label>
+                  <div class="invoice-page-container04">
+                    <input
+                            type="text"
+                            th:field="*{amount}"
+                            required=""
+                            placeholder="Кол-во"
+                            class="invoice-page-input01 input"
+                    />
+                    <label class="invoice-page-text01">шт.</label>
+                  </div>
                 </div>
-              </div>
 
-              <div class="invoice-page-container19">
-                <button type="submit" class="invoice-page-button">
-                  <span>
-                    <span>Сохранить</span>
-                    <br />
-                  </span>
-                </button>
-              </div>
-          </form>
+                <div class="invoice-page-container19">
+                  <button type="submit" class="invoice-page-button">
+                    <span>
+                      <span>Сохранить</span>
+                      <br />
+                    </span>
+                  </button>
+                </div>
+            </form>
 
+          </div>
+          <br/>
+          <button type="button" class="new-edit-profile-page-button1">
+            <h2>
+              <a th:href="@{/admin/panel}">Вернуться</a>
+            </h2>
+          </button>
+          <footer class="footer-footer">
+            <span class="footer-text">
+              <span>© 2022 С18-501, все права зарегистрированы.</span>
+            </span>
+          </footer>
         </div>
-        <br/>
-        <button type="button" class="new-edit-profile-page-button1">
-          <h2>
-            <a th:href="@{/admin/panel}">Вернуться</a>
-          </h2>
-        </button>
-        <footer class="footer-footer">
-          <span class="footer-text">
-            <span>© 2022 С18-501, все права зарегистрированы.</span>
-          </span>
-        </footer>
       </div>
-    </div>
-    <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
-    <script
-      data-section-id="header"
-      src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
-    ></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-  </body>
-</html>
+      <script src="https://unpkg.com/@teleporthq/teleport-custom-scripts"></script>
+      <script
+        data-section-id="header"
+        src="https://unpkg.com/@teleporthq/teleport-custom-scripts"
+      ></script>
+      <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    </body>
+  </html>
