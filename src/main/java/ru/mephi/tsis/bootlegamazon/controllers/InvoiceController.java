@@ -59,7 +59,7 @@ public class InvoiceController {
             return "error-page";
         }
 
-        Pageable pageable = PageRequest.of(pageNumber, 3, Sort.Direction.ASC, "id");
+        Pageable pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
 
         int totalPages = invoiceService.getTotalPages(pageable);
         int previousPage = 0;
