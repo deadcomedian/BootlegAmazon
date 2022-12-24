@@ -91,6 +91,7 @@ public class ItemsController {
 
         //сортировка
         Pageable pageable;
+        List<ArticleCard> articleCards;
         if(sortMethod.isPresent()){
             pageable = PageRequest.of(pageNumber, 12, sortMethodMap.get(sortMethod.get()));
             hrefArgs.setSortMethod(sortMethod.get());
@@ -98,13 +99,38 @@ public class ItemsController {
             pageable = PageRequest.of(pageNumber, 12, Sort.Direction.ASC, "id");
         }
 
+        int totalPages = 0;
+        if (searchField.isPresent()){
+            totalPages = articleCardService.getTotalPagesWithSearch(pageable, searchField.get());
+        } else {
+            totalPages = articleCardService.getTotalPages(pageable);
+        }
+        int previousPage = 0;
+        int nextPage = 0;
+        int currentPage = pageNumber;
+        this.currentPage = currentPage;
+        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+            return "redirect:/items/all?page=0";
+        }
+
+        if (pageNumber == 0){
+            previousPage = 0;
+            if (totalPages == 1){
+                nextPage = 0;
+            } else {
+                nextPage = currentPage + 1;
+            }
+        } else if (pageNumber == totalPages-1){
+            nextPage = totalPages-1;
+            previousPage = currentPage - 1;
+        } else {
+            nextPage = currentPage + 1;
+            previousPage = currentPage - 1;
+        }
+
         //поиск
-        List<ArticleCard> articleCards;
         if(searchField.isPresent()){
             String searchString = searchField.get();
-            searchString = new String(searchString.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-            //System.out.println(searchString);
-            System.out.println(searchString);
             articleCards = articleCardService.getAllByAuthorOrName(pageable, searchString);
             if(articleCards.size() == 0){
                 model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
@@ -140,30 +166,6 @@ public class ItemsController {
             hrefArgs.setPriceTo(priceTo.get());
         } else {
 
-        }
-
-        int totalPages = articleCardService.getTotalPages(pageable);
-        int previousPage = 0;
-        int nextPage = 0;
-        int currentPage = pageNumber;
-        this.currentPage = currentPage;
-        if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/items/all?page=0";
-        }
-
-        if (pageNumber == 0){
-            previousPage = 0;
-            if (totalPages == 1){
-                nextPage = 0;
-            } else {
-                nextPage = currentPage + 1;
-            }
-        } else if (pageNumber == totalPages-1){
-            nextPage = totalPages-1;
-            previousPage = currentPage - 1;
-        } else {
-            nextPage = currentPage + 1;
-            previousPage = currentPage - 1;
         }
 
         List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
@@ -216,7 +218,8 @@ public class ItemsController {
             @Validated @ModelAttribute("item") Article item,
             BindingResult result,
             @RequestParam("image") MultipartFile file,
-            RedirectAttributes attributes, Model model,
+            RedirectAttributes attributes,
+            Model model,
             @AuthenticationPrincipal UserDetails user
     ) {
 

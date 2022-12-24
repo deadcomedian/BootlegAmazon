@@ -19,6 +19,8 @@ public interface ArticleCardService {
 
     int getTotalPages(Pageable pageable);
 
+    int getTotalPagesWithSearch(Pageable pageable, String searchString);
+
     List<ArticleCard> getAllByCategoryName(Pageable pageable, String categoryName) throws CategoryNotFoundException;
 
 }

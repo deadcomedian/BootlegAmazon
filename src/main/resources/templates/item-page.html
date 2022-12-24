@@ -193,6 +193,11 @@
           <label class="item-page-text5" th:text="'Автор: ' + ${article.authorName}"></label>
           <span class="item-page-text6" th:text="${article.itemDescription}"></span>
         </div>
+        <button type="button" class="new-edit-profile-page-button1">
+          <h2>
+            <a th:href="@{/items/all?page=0}">Вернуться</a>
+          </h2>
+        </button>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

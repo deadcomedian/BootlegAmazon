@@ -87,6 +87,11 @@ public class ArticleCardServiceImpl implements ArticleCardService {
     }
 
     @Override
+    public int getTotalPagesWithSearch(Pageable pageable, String searchString) {
+        return articleRepository.findByActiveIsTrueAndNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, searchString, true).getTotalPages();
+    }
+
+    @Override
     public List<ArticleCard> getAllByCategoryName(Pageable pageable, String categoryName) throws CategoryNotFoundException {
         CategoryEntity categoryEntity = categoryRepository.findByName(categoryName)
                 .orElseThrow(()->new CategoryNotFoundException("Category not found with name: " + categoryName));
