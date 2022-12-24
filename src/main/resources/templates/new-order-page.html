@@ -169,13 +169,12 @@
               Дата доставки:&nbsp;&nbsp;
             </label>
             <div class="new-order-page-container24">
-              <!--DATA CONSTRAINTS-->
               <input
                       type="date"
                       th:field="*{orderDate}"
                       placeholder="Дата доставки"
                       class="new-order-page-input1 input"
-                      min="2022-01-01"
+                      th:min="${minOrderDate}"
                       max="2070-12-31"
               />
             </div>

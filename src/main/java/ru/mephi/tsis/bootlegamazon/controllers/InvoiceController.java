@@ -53,6 +53,7 @@ public class InvoiceController {
             @RequestParam("page") Integer pageNumber,
             @AuthenticationPrincipal UserDetails user
     ){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
             model.addAttribute("errorMessage", "Доступ запрещён");

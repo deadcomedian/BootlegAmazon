@@ -88,7 +88,9 @@ public class OrderController {
 
             model.addAttribute("cart", cart);
             int orderNumber = orderService.getOrdersCount() + 1;
-            Order order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
+            LocalDate minOrderDate = LocalDate.now().plusDays(1);
+            Order order = new Order(userId, orderNumber, "Инициализирован", "", minOrderDate, cart.getPrice(), "");
+            model.addAttribute("minOrderDate", minOrderDate);
             model.addAttribute("order", order);
         } catch (CartNotFoundException | ArticleNotFoundException | CategoryNotFoundException e) {
             throw new RuntimeException(e);

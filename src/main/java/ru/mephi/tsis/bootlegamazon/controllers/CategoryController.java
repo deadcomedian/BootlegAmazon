@@ -22,6 +22,8 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/categories")
@@ -110,19 +112,28 @@ public class CategoryController {
 
         model.addAttribute("user", user);
 
+        //Pattern pattern =  Pattern.compile("[а-яА-ЯёЁ\\p{Punct}]*");
+        //Matcher matcher = pattern.matcher(category.getCategoryName());
+        boolean valid = Pattern.compile("[а-яА-ЯёЁ\\p{Punct}]*").matcher(category.getCategoryName()).matches();
+        if(!valid){
+            attributes.addFlashAttribute("error", "Только русские буквы");
+            return "redirect:/categories/new";
+        }
+
         if(result.hasErrors()){
             attributes.addFlashAttribute("error", "Заполните название категории (от 2 до 20 символов)");
             return "redirect:/categories/new";
-        } else {
-            try {
-                Category check = categoryService.getByCategoryName(category.getCategoryName());
-                attributes.addFlashAttribute("error", "Категория с таким названием уже существует");
-                return "redirect:/categories/new";
-            } catch (CategoryNotFoundException e) {
-                categoryService.createCategory(category.getCategoryName());
-                return "redirect:/categories/all?page=" + currentPage;
-            }
         }
+
+        try {
+            Category check = categoryService.getByCategoryName(category.getCategoryName());
+            attributes.addFlashAttribute("error", "Категория с таким названием уже существует");
+            return "redirect:/categories/new";
+        } catch (CategoryNotFoundException e) {
+            categoryService.createCategory(category.getCategoryName());
+            return "redirect:/categories/all?page=" + currentPage;
+        }
+
     }
 
     @PostMapping("/{id}/delete")
