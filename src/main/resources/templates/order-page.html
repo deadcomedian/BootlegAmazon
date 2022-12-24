@@ -112,7 +112,7 @@
         </header>
         <div class="order-page-container01">
           <h1 class="order-page-text" th:text="'Заказ №' + ${order.getOrderNumber()}"></h1>
-          <div class="order-page-container02" th:if="${!orderOfCurrentUser}">
+          <div class="order-page-container02">
             <label class="order-page-text01">
               <span th:text="'Заказчик: ' + ${userName}"></span>
               <br />
@@ -142,17 +142,6 @@
             <span class="order-page-text19" >Итого:</span>
             <label class="order-page-text20" th:text="${order.getOrderPrice()} + ' ₽'"></label>
           </div>
-          <div class="order-page-container21" th:if="${!isAdminOrManager}">
-            <label class="order-page-text21">
-              <span>Статус:</span>
-              <br />
-            </label>
-            <label class="order-page-text24">
-              <span th:text="${order.getOrderStatus()}"></span>
-              <br />
-            </label>
-          </div>
-
         </div>
         <div class="order-page-container22">
           <div class="order-page-container23">
@@ -171,39 +160,37 @@
               </label>
             </div>
           </div>
+          <h2 th:if="${error} != null" th:text="${error}"></h2>
+          <form
+                  class="order-page-form"
+                  th:method="POST"
+                  th:action="@{/orders/editstatus}"
+                  th:object="${order}"
+          >
+            <input type="hidden" th:field="*{userId}"/>
+            <input type="hidden" th:field="*{orderNumber}"/>
+            <input type="hidden" th:field="*{orderAddress}"/>
+            <input type="hidden" th:field="*{orderDate}"/>
+            <input type="hidden" th:field="*{orderPrice}"/>
+            <input type="hidden" th:field="*{orderPaymentId}"/>
 
-          <div class="order-page-container26" th:if="${isAdminOrManager}">
-            <h2 th:if="${error} != null" th:text="${error}"></h2>
-            <form
-                    class="order-page-form"
-                    th:method="POST"
-                    th:action="@{/orders/editstatus}"
-                    th:object="${order}"
-            >
-              <input type="hidden" th:field="*{userId}"/>
-              <input type="hidden" th:field="*{orderNumber}"/>
-              <input type="hidden" th:field="*{orderAddress}"/>
-              <input type="hidden" th:field="*{orderDate}"/>
-              <input type="hidden" th:field="*{orderPrice}"/>
-              <input type="hidden" th:field="*{orderPaymentId}"/>
-
-              <select class="order-page-select input" th:field="*{orderStatus}">
-                <div th:each="status : ${statuses}">
-                  <option th:text ="${status.getName()}" th:value="${status.getName()}"></option>
-                </div>
-              </select>
-
-              <div class="order-page-container27">
-                <button type="submit" class="order-page-button">
-                  <span>
-                    <span>Сохранить</span>
-                    <br />
-                  </span>
-                </button>
+            <select class="order-page-select input" th:field="*{orderStatus}">
+              <div th:each="status : ${statuses}">
+                <option th:text ="${status.getName()}" th:value="${status.getName()}"></option>
               </div>
+            </select>
 
-            </form>
-          </div>
+            <div class="order-page-container27">
+              <button type="submit" class="order-page-button">
+                <span>
+                  <span>Сохранить</span>
+                  <br />
+                </span>
+              </button>
+            </div>
+
+          </form>
+
 
         </div>
         <button type="button" class="new-edit-profile-page-button1">

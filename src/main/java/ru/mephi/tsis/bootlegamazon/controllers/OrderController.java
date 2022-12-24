@@ -104,6 +104,7 @@ public class OrderController {
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
+        model.addAttribute("isForUser", false);
 
         model.addAttribute("user", user);
 
@@ -155,33 +156,40 @@ public class OrderController {
             model.addAttribute("order", order);
             model.addAttribute("items", orderArticles);
 
-            int currentUserId = userAuthRepository.findByUsername(user.getUsername()).getId();
             int orderUserId = order.getUserId();
 
-            if (currentUserId == orderUserId){
-                model.addAttribute("orderOfCurrentUser", true);
-            } else {
-                model.addAttribute("orderOfCurrentUser", false);
-                String userName = userService.getUserNameById(orderUserId);
-                model.addAttribute("userName", userName);
-            }
-            String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
-            if (userRole.equals("Администратор") || userRole.equals("Менеджер")){
-                List<Status> statuses = statusService.getAll();
-                model.addAttribute("statuses", statuses);
-                model.addAttribute("isAdminOrManager", true);
-            } else {
-                model.addAttribute("isAdminOrManager", false);
-            }
+            String userName = userService.getUserNameById(orderUserId);
+            model.addAttribute("userName", userName);
+
+            List<Status> statuses = statusService.getAll();
+            model.addAttribute("statuses", statuses);
+            return "order-page";
 
         } catch (OrderNotFoundException | StatusNotFoundException | ArticleNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return "order-page";
+    }
+
+    @GetMapping("/{id}/foruser")
+    public String byIdForUser(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
+        try {
+            Order order = orderService.getById(id);
+            List<OrderArticle> orderArticles = orderArticleService.getAllArticlesInOrder(id);
+
+            model.addAttribute("order", order);
+            model.addAttribute("items", orderArticles);
+
+            return "order-page-user";
+
+        } catch (OrderNotFoundException | StatusNotFoundException | ArticleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/foruser")
     public String forUser(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("isForUser", true);
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));

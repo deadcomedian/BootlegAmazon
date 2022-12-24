@@ -124,7 +124,7 @@
             <label class="orders-page-text1" th:text="${order.getNumber()}"></label>
             <label class="orders-page-text3" th:text="${order.getStatus()}"></label>
             <label class="orders-page-text4" th:text="${order.getPrice()}"></label>
-            <a th:href="@{'/orders/' + ${order.getNumber()}}">
+            <a th:href="@{'/orders/' + ${order.getNumber()} + '/foruser'}">
               <button>
                 <svg viewBox="0 0 1024 1024" class="orders-page-icon">
                   <path
@@ -158,6 +158,11 @@
             </button>
           </a>
         </div>
+        <button type="button" class="new-edit-profile-page-button1">
+          <h2>
+            <a th:href="@{/profile}">Вернуться</a>
+          </h2>
+        </button>
         <footer class="footer-footer">
           <span class="footer-text">
             <span>© 2022 С18-501, все права зарегистрированы.</span>

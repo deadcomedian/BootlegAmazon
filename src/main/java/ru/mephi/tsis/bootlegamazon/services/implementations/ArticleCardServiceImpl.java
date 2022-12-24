@@ -71,7 +71,7 @@ public class ArticleCardServiceImpl implements ArticleCardService {
 
     @Override
     public List<ArticleCard> getAllByAuthorOrName(Pageable pageable, String str) {
-        Page<ArticleEntity> articleEntities = articleRepository.findByNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, str);
+        Page<ArticleEntity> articleEntities = articleRepository.findByActiveIsTrueAndNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, str, true);
         ArrayList<ArticleCard> articleCards = new ArrayList<>();
         for (ArticleEntity articleEntity : articleEntities){
             boolean inStock = articleEntity.getAmount() != 0;

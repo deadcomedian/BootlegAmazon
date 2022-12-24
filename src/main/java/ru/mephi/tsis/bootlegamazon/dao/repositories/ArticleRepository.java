@@ -3,13 +3,10 @@ package ru.mephi.tsis.bootlegamazon.dao.repositories;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ru.mephi.tsis.bootlegamazon.dao.entities.ArticleEntity;
-
-import java.util.List;
 
 @Repository
 @Component
@@ -22,9 +19,8 @@ public interface ArticleRepository extends PagingAndSortingRepository<ArticleEnt
     @Query("select a from ArticleEntity a where a.author = ?1 and a.active = true")
     Page<ArticleEntity> findByAuthor(Pageable pageable, String author);
 
-    @Query("select a from ArticleEntity a " +
-            "where upper(a.name) like upper(concat('%', ?1, '%')) or upper(a.author) like upper(concat('%', ?1, '%'))")
-    Page<ArticleEntity> findByNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(Pageable pageable, String str);
+
+    Page<ArticleEntity> findByActiveIsTrueAndNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(Pageable pageable, String str, Boolean active);
 
     @Override
     @Query("select a from ArticleEntity a where a.active = true")
