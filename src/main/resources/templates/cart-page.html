@@ -123,8 +123,8 @@
                 th:src="@{${item.getArticle().getPhoto()}}"
                 class="cart-page-image"
               />
-              </a>
               <label class="cart-page-text1" th:text="${item.getArticle().getItemName()}"></label>
+              </a>
             </div>
             <div class="cart-page-container5">
               <form th:method="POST" th:action="@{'/cart/changeamount?articleid=' + ${item.getArticle().getId()} + '&changeamount=decrease'}">
