@@ -117,11 +117,13 @@
         <div class="cart-page-container2" th:each="item : ${cart.items}">
           <div class="cart-page-container3">
             <div class="cart-page-container4">
+              <a th:href="@{'/items/' + ${item.getArticle().getId()}}">
               <img
                 alt="image"
                 th:src="@{${item.getArticle().getPhoto()}}"
                 class="cart-page-image"
               />
+              </a>
               <label class="cart-page-text1" th:text="${item.getArticle().getItemName()}"></label>
             </div>
             <div class="cart-page-container5">
