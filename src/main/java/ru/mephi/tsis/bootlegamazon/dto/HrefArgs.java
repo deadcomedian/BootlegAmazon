@@ -100,4 +100,19 @@ public class HrefArgs {
             return "?search=" + searchField;
         }
     }
+
+    public String getHrefArgsExceptFiltration(){
+        if (this.argsCount > 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            if (sortMethod != null){
+                stringBuilder.append("&sort=").append(sortMethod);
+            }
+            if (searchField != null){
+                stringBuilder.append("&search=").append(searchField);
+            }
+            return stringBuilder.toString();
+        } else {
+            return "";
+        }
+    }
 }

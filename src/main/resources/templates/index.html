@@ -292,14 +292,12 @@
                   th:field="*{priceFrom}"
                   placeholder="Цена от"
                   class="new-category-page-input input"
-                  required="false"
           />
           <input
                   type="text"
                   th:field="*{priceTo}"
                   placeholder="Цена до"
                   class="new-category-page-input input"
-                  required="false"
           />
           <label for="categories">Категория</label>
           <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
@@ -317,6 +315,12 @@
           </div>
 
         </form>
+
+        <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
+          <button>
+            <label>Сбросить фильтрацию</label>
+          </button>
+        </a>
 <!--        <div class="button-filter-container button-filter-root-class-name">-->
 <!--          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр-->
 <!--          </div>-->

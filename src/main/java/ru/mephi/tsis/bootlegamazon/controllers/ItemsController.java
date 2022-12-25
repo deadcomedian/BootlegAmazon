@@ -150,9 +150,12 @@ public class ItemsController {
             articleCards = articleCardService.getAll(pageable);
         }
 
+        FilterForm filterForm = new FilterForm();
+
         //фильтрация по категории
         if(categoryName.isPresent()){
             System.out.println(categoryName.get());
+            filterForm.setCategoryName(categoryName.get());
             hrefArgs.setCategoryName(categoryName.get());
         } else {
 
@@ -160,6 +163,7 @@ public class ItemsController {
 
         //фильтрация по наличию
         if(inStock.isPresent()){
+            filterForm.setInStock(inStock.get());
             System.out.println(inStock.get());
             hrefArgs.setInStock(inStock.get());
         } else {
@@ -168,6 +172,7 @@ public class ItemsController {
 
         //фильтрация по цене
         if (priceFrom.isPresent()){
+            filterForm.setPriceFrom(priceFrom.get());
             System.out.println(priceFrom.get());
             hrefArgs.setPriceFrom(priceFrom.get());
         } else {
@@ -175,6 +180,7 @@ public class ItemsController {
         }
 
         if (priceTo.isPresent()){
+            filterForm.setPriceTo(priceTo.get());
             System.out.println(priceTo.get());
             hrefArgs.setPriceTo(priceTo.get());
         } else {
@@ -189,8 +195,6 @@ public class ItemsController {
         model.addAttribute("previousPage", previousPage);
         model.addAttribute("sortMethods", Arrays.stream(sortMethodMap.keySet().toArray()).sorted().toArray());
         model.addAttribute("hrefArgs", hrefArgs);
-
-        FilterForm filterForm = new FilterForm();
         model.addAttribute("filterForm", filterForm);
 
         return "index";
@@ -223,7 +227,7 @@ public class ItemsController {
             RedirectAttributes attributes
     ){
         System.out.println(filter);
-        if (!filter.getCategoryName().equals("Any")){
+        if (!filter.getCategoryName().equals("any")){
             attributes.addAttribute("category", filter.getCategoryName());
         }
         if(filter.getInStock()){
