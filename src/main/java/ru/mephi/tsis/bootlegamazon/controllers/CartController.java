@@ -17,7 +17,10 @@ import ru.mephi.tsis.bootlegamazon.models.Cart;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/cart")
@@ -37,9 +40,22 @@ public class CartController {
     }
 
     @GetMapping("")
-    public String cart(Model model, @AuthenticationPrincipal UserDetails user){
+    public String cart(
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
+    ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
-        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         System.out.println(userId);
         Cart cart = null;
         try {
@@ -63,10 +79,20 @@ public class CartController {
             @RequestParam("articleid") Integer articleId,
             @RequestParam("frompage") Optional<Integer> pageNumber,
             @RequestParam("hrefargs") Optional<String> hrefArgs,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
     ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
 
-        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+        //Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         Cart cart = null;
 
         int currentArticleAmountInStock = 0;
@@ -117,10 +143,21 @@ public class CartController {
             @RequestParam("changeamount") String method, // increase-decrease
             Model model,
             @AuthenticationPrincipal UserDetails user,
-            RedirectAttributes attributes
+            RedirectAttributes attributes,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
     ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
-        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+        //Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
             Cart cart = cartService.getCartByUserId(userId);
             if(method.equals("increase")){
@@ -152,9 +189,24 @@ public class CartController {
     }
 
     @PostMapping("/deletearticle")
-    public String deleteArticleFromCart(@RequestParam("articleid") Integer articleId, Model model, @AuthenticationPrincipal UserDetails user){
+    public String deleteArticleFromCart(
+            @RequestParam("articleid") Integer articleId,
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
+    ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
-        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();;
+        //Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();;
         try {
             Cart cart = cartService.getCartByUserId(userId);
             cartService.deleteArticleFromCartCompletely(cart.getId(), articleId);

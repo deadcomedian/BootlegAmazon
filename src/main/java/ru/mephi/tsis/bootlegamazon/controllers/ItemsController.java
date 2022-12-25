@@ -5,6 +5,9 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -28,6 +31,8 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +84,9 @@ public class ItemsController {
             @RequestParam("pricefrom") Optional<Double> priceFrom, //фильтрация по цене - от
             @RequestParam("priceto") Optional<Double> priceTo, //фильтрация по цене - до
             @RequestParam("search") Optional<String> searchField, // поиск
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userCookie
     ) {
         //init block
         model.addAttribute("user", user);
@@ -104,6 +111,16 @@ public class ItemsController {
         int currentPage = pageNumber;
         this.currentPage = currentPage;
         List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+
+        System.out.println(userCookie);
+
+        if(userCookie.equals("DEFAULT-USER-ID")){
+            Cookie cookie = new Cookie("user-id", UUID.randomUUID().toString());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
 
         //args processing block
         //сортировка
@@ -147,8 +164,6 @@ public class ItemsController {
             searchStr = searchField.get();
             hrefArgs.setSearchField(searchStr);
         }
-
-        System.out.println("FILTER:" + filterForm);
 
         //page calculations block
         if(searching && filtering){

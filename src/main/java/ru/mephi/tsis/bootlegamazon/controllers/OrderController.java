@@ -16,9 +16,12 @@ import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.*;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/orders")
@@ -62,14 +65,26 @@ public class OrderController {
     public String newOrder(
             Model model,
             @AuthenticationPrincipal UserDetails user,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userCookie
     ){
+
+        if(userCookie.equals("DEFAULT-USER-ID")){
+            userCookie = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userCookie);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
 
             //проверка на наличие товара на складе
-            Cart cart = cartService.getCartByUserId(userId);
+            Cart cart = cartService.getCartByUserId(userCookie);
             List<CartArticle> cartArticles = cart.getItems();
             for (CartArticle cartArticle : cartArticles){
                    Article article = articleService.getById(cartArticle.getArticle().getId());

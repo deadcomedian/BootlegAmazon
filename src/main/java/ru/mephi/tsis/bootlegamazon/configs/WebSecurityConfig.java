@@ -59,7 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/items/all",
                         "/items/{id}",
                         "/items/search",
-                        "/items/filter").permitAll()
+                        "/items/filter",
+                        "/cart",
+                        "/cart/addtocart",
+                        "/cart/changeamount",
+                        "/cart/deletearticle").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
