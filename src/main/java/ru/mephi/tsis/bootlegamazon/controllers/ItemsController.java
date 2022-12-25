@@ -145,6 +145,7 @@ public class ItemsController {
         if (searchField.isPresent()){
             searching = true;
             searchStr = searchField.get();
+            hrefArgs.setSearchField(searchStr);
         }
 
         System.out.println("FILTER:" + filterForm);
