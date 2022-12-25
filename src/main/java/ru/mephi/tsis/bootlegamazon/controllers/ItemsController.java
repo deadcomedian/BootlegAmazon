@@ -75,7 +75,7 @@ public class ItemsController {
             @RequestParam("page") Integer pageNumber,
             @RequestParam("sort") Optional<String> sortMethod, //сортировка
             @RequestParam("category") Optional<String> categoryName, //фильтрация по категории
-            @RequestParam("stock") Optional<Boolean> inStock, //фильтрация по наличию
+            @RequestParam("instock") Optional<Boolean> inStock, //фильтрация по наличию
             @RequestParam("pricefrom") Optional<Double> priceFrom, //фильтрация по цене - от
             @RequestParam("priceto") Optional<Double> priceTo, //фильтрация по цене - до
             @RequestParam("search") Optional<String> searchField, // поиск
@@ -152,6 +152,7 @@ public class ItemsController {
 
         //фильтрация по категории
         if(categoryName.isPresent()){
+            System.out.println(categoryName.get());
             hrefArgs.setCategoryName(categoryName.get());
         } else {
 
@@ -159,6 +160,7 @@ public class ItemsController {
 
         //фильтрация по наличию
         if(inStock.isPresent()){
+            System.out.println(inStock.get());
             hrefArgs.setInStock(inStock.get());
         } else {
 
@@ -166,12 +168,14 @@ public class ItemsController {
 
         //фильтрация по цене
         if (priceFrom.isPresent()){
+            System.out.println(priceFrom.get());
             hrefArgs.setPriceFrom(priceFrom.get());
         } else {
 
         }
 
         if (priceTo.isPresent()){
+            System.out.println(priceTo.get());
             hrefArgs.setPriceTo(priceTo.get());
         } else {
 
@@ -215,9 +219,25 @@ public class ItemsController {
     @PostMapping("/filter")
     public String filter(
             @ModelAttribute("filter") FilterForm filter,
+            @RequestParam("search") Optional<String> searchField,
             RedirectAttributes attributes
     ){
         System.out.println(filter);
+        if (!filter.getCategoryName().equals("Any")){
+            attributes.addAttribute("category", filter.getCategoryName());
+        }
+        if(filter.getInStock()){
+            attributes.addAttribute("instock", true);
+        }
+        if(filter.getPriceFrom() != null){
+            attributes.addAttribute("pricefrom", filter.getPriceFrom());
+        }
+        if(filter.getPriceTo() != null){
+            attributes.addAttribute("priceto", filter.getPriceTo());
+        }
+        if(searchField.isPresent()){
+            attributes.addAttribute("search", searchField.get());
+        }
         return "redirect:/items/all?page=0";
     }
 
@@ -286,7 +306,7 @@ public class ItemsController {
                             item.getItemDescription(),
                             "/images/" + filename,
                             item.getItemPrice(),
-                            5.0
+                            0.0
                     );
         } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);

@@ -284,22 +284,22 @@
         </div>
         <form
                 th:method="POST"
-                th:action="@{/items/filter}"
+                th:action="@{'/items/filter' + ${hrefArgs.getSearchField()}}"
                 th:object="${filterForm}"
         >
           <input
                   type="text"
                   th:field="*{priceFrom}"
                   placeholder="Цена от"
-                  required=""
-                  class="new-item-page-input1 input"
+                  class="new-category-page-input input"
+                  required="false"
           />
           <input
                   type="text"
                   th:field="*{priceTo}"
                   placeholder="Цена до"
-                  required=""
-                  class="new-item-page-input1 input"
+                  class="new-category-page-input input"
+                  required="false"
           />
           <label for="categories">Категория</label>
           <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">

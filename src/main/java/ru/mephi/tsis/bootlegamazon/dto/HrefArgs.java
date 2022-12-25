@@ -49,7 +49,7 @@ public class HrefArgs {
                 stringBuilder.append("&category=").append(categoryName);
             }
             if (inStock != null){
-                stringBuilder.append("&stock=").append(inStock);
+                stringBuilder.append("&instock=").append(inStock);
             }
             if (priceFrom != null){
                 stringBuilder.append("&pricefrom=").append(priceFrom);
@@ -76,7 +76,7 @@ public class HrefArgs {
                 stringBuilder.append("&category=").append(categoryName);
             }
             if (inStock != null && !parameterName.equals("stock")){
-                stringBuilder.append("&stock=").append(inStock);
+                stringBuilder.append("&instock=").append(inStock);
             }
             if (priceFrom != null && !parameterName.equals("pricefrom")){
                 stringBuilder.append("&pricefrom=").append(priceFrom);
@@ -93,4 +93,11 @@ public class HrefArgs {
         }
     }
 
+    public String getSearchField() {
+        if (searchField == null){
+            return "";
+        } else {
+            return "?search=" + searchField;
+        }
+    }
 }
