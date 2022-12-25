@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CartArticleNotFoundException;
@@ -39,6 +40,7 @@ public class CartController {
     public String cart(Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+        System.out.println(userId);
         Cart cart = null;
         try {
             cart = cartService.getCartByUserId(userId);
@@ -57,6 +59,7 @@ public class CartController {
 
     @GetMapping("/addtocart")
     public String addArticleToCart(
+            Model model,
             @RequestParam("articleid") Integer articleId,
             @RequestParam("frompage") Optional<Integer> pageNumber,
             @RequestParam("hrefargs") Optional<String> hrefArgs,
@@ -65,8 +68,25 @@ public class CartController {
 
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         Cart cart = null;
+
+        int currentArticleAmountInStock = 0;
+        try {
+            Article article = articleService.getById(articleId);
+            currentArticleAmountInStock = article.getAmount();
+        } catch (ArticleNotFoundException | CategoryNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         try {
             cart = cartService.getCartByUserId(userId);
+
+
+            int articleAmountInCart = cart.getItemAmountByArticleId(articleId);
+            if (articleAmountInCart == currentArticleAmountInStock){
+                model.addAttribute("errorMessage", "Вы уже добавили максимальное количество этого товара");
+                return "error-page";
+            }
+
             cartService.addArticleToCart(cart.getId(), articleId);
         } catch (CartNotFoundException e){
             try {
@@ -96,13 +116,29 @@ public class CartController {
             @RequestParam("articleid") Integer articleId,
             @RequestParam("changeamount") String method, // increase-decrease
             Model model,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            RedirectAttributes attributes
     ){
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
             Cart cart = cartService.getCartByUserId(userId);
             if(method.equals("increase")){
+
+                int currentArticleAmountInStock = 0;
+                try {
+                    Article article = articleService.getById(articleId);
+                    currentArticleAmountInStock = article.getAmount();
+                } catch (ArticleNotFoundException | CategoryNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+
+                int articleAmountInCart = cart.getItemAmountByArticleId(articleId);
+                if (articleAmountInCart == currentArticleAmountInStock){
+                    attributes.addFlashAttribute("error", "Вы уже добавили максимальное количество этого товара");
+                    return "redirect:/cart";
+                }
+
                 cartService.addArticleToCart(cart.getId(),articleId);
             } else if (method.equals("decrease")){
                 cartService.removeArticleFromCart(cart.getId(),articleId);

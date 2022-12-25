@@ -109,7 +109,13 @@ public class ItemsController {
         int nextPage = 0;
         int currentPage = pageNumber;
         this.currentPage = currentPage;
-        if ((pageNumber >= totalPages) || (pageNumber < 0)){
+
+        if((totalPages == 0)){
+            model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
+            return "error-page";
+        }
+
+        if (((totalPages > 0 ) && (pageNumber >= totalPages)) || (pageNumber < 0)){
             return "redirect:/items/all?page=0";
         }
 
@@ -131,6 +137,7 @@ public class ItemsController {
         //поиск
         if(searchField.isPresent()){
             String searchString = searchField.get();
+            System.out.println(searchString);
             articleCards = articleCardService.getAllByAuthorOrName(pageable, searchString);
             if(articleCards.size() == 0){
                 model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
@@ -193,6 +200,7 @@ public class ItemsController {
     @PostMapping("/search")
     public String search(@RequestParam String search, RedirectAttributes redirectAttributes, Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
+        System.out.println(search);
         redirectAttributes.addAttribute("search", search);
         return "redirect:/items/all?page=0";
     }

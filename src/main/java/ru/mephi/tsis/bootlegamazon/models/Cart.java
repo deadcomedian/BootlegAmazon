@@ -1,12 +1,16 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cart {
 
     private Integer id;
     private ArrayList<CartArticle> items;
+
+    private Map<Integer, Integer> itemsAmountMap;
     private Double price;
 
     public Cart(Integer id, List<CartArticle> items) {
@@ -14,8 +18,10 @@ public class Cart {
         this.items = new ArrayList<>();
         this.items.addAll(items);
         double price = 0.0;
+        this.itemsAmountMap = new HashMap<>();
         for (CartArticle item : items){
             price += item.getArticle().getPrice()*item.getAmount();
+            this.itemsAmountMap.put(item.getArticle().getId(), item.getAmount());
         }
         this.price = price;
     }
@@ -45,6 +51,10 @@ public class Cart {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getItemAmountByArticleId(Integer articleId){
+        return itemsAmountMap.get(articleId);
     }
 
     @Override

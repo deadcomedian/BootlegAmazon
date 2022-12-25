@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart getCartByUserId(Integer userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException {
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseThrow(()-> new CartNotFoundException("Cart not found, userId: " + userId));
-        return new Cart( cartEntity.getId(),cartArticleService.getAllArticlesForCartByCartId(cartEntity.getId()));
+        return new Cart( cartEntity.getId(), cartArticleService.getAllArticlesForCartByCartId(cartEntity.getId()));
     }
 
     @Override
