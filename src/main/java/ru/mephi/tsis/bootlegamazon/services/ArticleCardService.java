@@ -17,9 +17,16 @@ public interface ArticleCardService {
 
     List<ArticleCard> getAllByAuthorOrName(Pageable pageable, String str);
 
+    List<ArticleCard> getAllFiltered(Pageable pageable, Double priceFrom, Double priceTo, Integer categoryId, Integer amount);
+
+    List<ArticleCard> getAllSearchedAndFiltered(Pageable pageable, String searchStr, Double priceFrom, Double priceTo, Integer categoryId, Integer amount);
+
     int getTotalPages(Pageable pageable);
 
     int getTotalPagesWithSearch(Pageable pageable, String searchString);
+
+    int getTotalPagesWithSearchAndFiltering(Pageable pageable, String searchStr, Double priceFrom, Double priceTo, Integer categoryId, Integer amount);
+    int getTotalPagesWithFilter(Pageable pageable, Double priceFrom, Double priceTo, Integer categoryId, Integer amount);
 
     List<ArticleCard> getAllByCategoryName(Pageable pageable, String categoryName) throws CategoryNotFoundException;
 

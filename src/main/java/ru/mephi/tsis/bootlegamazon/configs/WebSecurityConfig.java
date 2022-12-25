@@ -58,7 +58,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/items/all",
                         "/items/{id}",
-                        "/items/search").permitAll()
+                        "/items/search",
+                        "/items/filter").permitAll()
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()

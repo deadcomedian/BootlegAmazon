@@ -81,46 +81,91 @@ public class ItemsController {
             @RequestParam("search") Optional<String> searchField, // поиск
             @AuthenticationPrincipal UserDetails user
     ) {
+        //init block
         model.addAttribute("user", user);
-        HrefArgs hrefArgs = new HrefArgs();
-        //Я девопс, пишу как умею
+        boolean filtering = false;
+        boolean searching = false;
+        String searchStr = null;
+        Integer filterCategoryId = null;
+        Integer amountToUseWithFilter = null;
         HashMap<String,Sort> sortMethodMap = new HashMap<>();
         sortMethodMap.put("По умолчанию", Sort.by(Sort.Direction.ASC, "id")); //default
         sortMethodMap.put("Сначала дешевле", Sort.by(Sort.Direction.ASC, "price"));
         sortMethodMap.put("Сначала дороже", Sort.by(Sort.Direction.DESC, "price"));
         sortMethodMap.put("Ниже рейтинг", Sort.by(Sort.Direction.ASC, "rating"));
         sortMethodMap.put("Выше рейтинг", Sort.by(Sort.Direction.DESC, "rating"));
-
-        //сортировка
+        HrefArgs hrefArgs = new HrefArgs();
+        FilterForm filterForm = new FilterForm();
         Pageable pageable;
         List<ArticleCard> articleCards;
+        int totalPages = 0;
+        int previousPage = 0;
+        int nextPage = 0;
+        int currentPage = pageNumber;
+        this.currentPage = currentPage;
+        List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+
+        //args processing block
+        //сортировка
         if(sortMethod.isPresent()){
             pageable = PageRequest.of(pageNumber, 12, sortMethodMap.get(sortMethod.get()));
             hrefArgs.setSortMethod(sortMethod.get());
         } else {
             pageable = PageRequest.of(pageNumber, 12, Sort.Direction.ASC, "id");
         }
-
-        int totalPages = 0;
+        //фильтрация по категории
+        if(categoryName.isPresent()){
+            filtering = true;
+            filterForm.setCategoryName(categoryName.get());
+            hrefArgs.setCategoryName(categoryName.get());
+            try {
+                filterCategoryId = categoryService.getByCategoryName(categoryName.get()).getId();
+            } catch (CategoryNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //фильтрация по наличию
+        if(inStock.isPresent()){
+            filtering = true;
+            filterForm.setInStock(inStock.get());
+            hrefArgs.setInStock(inStock.get());
+            amountToUseWithFilter = 1;
+        }
+        //фильтрация по цене
+        if (priceFrom.isPresent()){
+            filtering = true;
+            filterForm.setPriceFrom(priceFrom.get());
+            hrefArgs.setPriceFrom(priceFrom.get());
+        }
+        if (priceTo.isPresent()){
+            filtering = true;
+            filterForm.setPriceTo(priceTo.get());
+            hrefArgs.setPriceTo(priceTo.get());
+        }
         if (searchField.isPresent()){
-            totalPages = articleCardService.getTotalPagesWithSearch(pageable, searchField.get());
+            searching = true;
+            searchStr = searchField.get();
+        }
+
+        System.out.println("FILTER:" + filterForm);
+
+        //page calculations block
+        if(searching && filtering){
+            totalPages = articleCardService.getTotalPagesWithSearchAndFiltering(pageable, searchStr, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else if (searching) {
+            totalPages = articleCardService.getTotalPagesWithSearch(pageable, searchStr);
+        } else if (filtering) {
+            totalPages = articleCardService.getTotalPagesWithFilter(pageable, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
         } else {
             totalPages = articleCardService.getTotalPages(pageable);
         }
-        int previousPage = 0;
-        int nextPage = 0;
-        int currentPage = pageNumber;
-        this.currentPage = currentPage;
-
         if((totalPages == 0)){
             model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
             return "error-page";
         }
-
         if (((totalPages > 0 ) && (pageNumber >= totalPages)) || (pageNumber < 0)){
             return "redirect:/items/all?page=0";
         }
-
         if (pageNumber == 0){
             previousPage = 0;
             if (totalPages == 1){
@@ -136,58 +181,22 @@ public class ItemsController {
             previousPage = currentPage - 1;
         }
 
-        //поиск
-        if(searchField.isPresent()){
-            String searchString = searchField.get();
-            System.out.println(searchString);
-            articleCards = articleCardService.getAllByAuthorOrName(pageable, searchString);
-            if(articleCards.size() == 0){
-                model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
-                return "error-page";
-            }
-            hrefArgs.setSearchField(searchString);
+        //harvest articles block
+        if(searching && filtering){
+            articleCards = articleCardService.getAllSearchedAndFiltered(pageable, searchStr, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else if (searching) {
+            articleCards = articleCardService.getAllByAuthorOrName(pageable, searchStr);
+        } else if (filtering) {
+            articleCards = articleCardService.getAllFiltered(pageable, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
         } else {
             articleCards = articleCardService.getAll(pageable);
         }
-
-        FilterForm filterForm = new FilterForm();
-
-        //фильтрация по категории
-        if(categoryName.isPresent()){
-            System.out.println(categoryName.get());
-            filterForm.setCategoryName(categoryName.get());
-            hrefArgs.setCategoryName(categoryName.get());
-        } else {
-
+        if(articleCards.size() == 0){
+            model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
+            return "error-page";
         }
 
-        //фильтрация по наличию
-        if(inStock.isPresent()){
-            filterForm.setInStock(inStock.get());
-            System.out.println(inStock.get());
-            hrefArgs.setInStock(inStock.get());
-        } else {
-
-        }
-
-        //фильтрация по цене
-        if (priceFrom.isPresent()){
-            filterForm.setPriceFrom(priceFrom.get());
-            System.out.println(priceFrom.get());
-            hrefArgs.setPriceFrom(priceFrom.get());
-        } else {
-
-        }
-
-        if (priceTo.isPresent()){
-            filterForm.setPriceTo(priceTo.get());
-            System.out.println(priceTo.get());
-            hrefArgs.setPriceTo(priceTo.get());
-        } else {
-
-        }
-
-        List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+        //construct view block
         model.addAttribute("categories", categories);
         model.addAttribute("articleCards", articleCards);
         model.addAttribute("currentPage", currentPage);

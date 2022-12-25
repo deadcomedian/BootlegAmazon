@@ -80,6 +80,28 @@ public class ArticleCardServiceImpl implements ArticleCardService {
         return articleCards;
     }
 
+    @Override
+    public List<ArticleCard> getAllFiltered(Pageable pageable, Double priceFrom, Double priceTo, Integer categoryId, Integer amount) {
+        Page<ArticleEntity> articleEntities = articleRepository.findAllByPriceAndCategoryIdAndAmount(pageable, priceFrom, priceTo, categoryId, amount);
+        ArrayList<ArticleCard> articleCards = new ArrayList<>();
+        for (ArticleEntity articleEntity : articleEntities){
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
+        }
+        return articleCards;
+    }
+
+    @Override
+    public List<ArticleCard> getAllSearchedAndFiltered(Pageable pageable, String searchStr, Double priceFrom, Double priceTo, Integer categoryId, Integer amount) {
+        Page<ArticleEntity> articleEntities = articleRepository.findAllByNameAndPriceAndCategoryIdAndAmount(pageable, searchStr, priceFrom, priceTo, categoryId, amount);
+        ArrayList<ArticleCard> articleCards = new ArrayList<>();
+        for (ArticleEntity articleEntity : articleEntities){
+            boolean inStock = articleEntity.getAmount() != 0;
+            articleCards.add(new ArticleCard(articleEntity.getId(), articleEntity.getName(), articleEntity.getAuthor(), articleEntity.getPhoto(), articleEntity.getPrice(), inStock));
+        }
+        return articleCards;
+    }
+
     //получать counts
     @Override
     public int getTotalPages(Pageable pageable) {
@@ -89,6 +111,16 @@ public class ArticleCardServiceImpl implements ArticleCardService {
     @Override
     public int getTotalPagesWithSearch(Pageable pageable, String searchString) {
         return articleRepository.findByActiveIsTrueAndNameContainingIgnoreCaseOrAuthorContainingIgnoreCase(pageable, searchString, true).getTotalPages();
+    }
+
+    @Override
+    public int getTotalPagesWithSearchAndFiltering(Pageable pageable, String searchStr, Double priceFrom, Double priceTo, Integer categoryId, Integer amount) {
+        return articleRepository.findAllByNameAndPriceAndCategoryIdAndAmount(pageable, searchStr, priceFrom, priceTo, categoryId, amount).getTotalPages();
+    }
+
+    @Override
+    public int getTotalPagesWithFilter(Pageable pageable, Double priceFrom, Double priceTo, Integer categoryId, Integer amount) {
+        return articleRepository.findAllByPriceAndCategoryIdAndAmount(pageable, priceFrom, priceTo, categoryId, amount).getTotalPages();
     }
 
     @Override
