@@ -280,22 +280,49 @@
           </script>
         </div>
         <div class="button-filter-container button-filter-root-class-name">
-          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр
-            <span class="popuptext" id="filterPopup">
-                    <div class="list">
-                      tut filtr
-                    </div>
-                  </span>
-          </div>
-          <script>
-            // When the user clicks on div, open the popup
-            function filterPopupFunction() {
-              var popup = document.getElementById("filterPopup");
-              popup.classList.toggle("show");
-            }
-          </script>
+
         </div>
+        <form
+                th:method="POST"
+                th:action="@{/items/filter}"
+                th:object="${filterForm}"
+        >
+          <input
+                  type="text"
+                  th:field="*{priceFrom}"
+                  placeholder="Цена от"
+                  required=""
+                  class="new-item-page-input1 input"
+          />
+          <input
+                  type="text"
+                  th:field="*{priceTo}"
+                  placeholder="Цена до"
+                  required=""
+                  class="new-item-page-input1 input"
+          />
+          <label for="categories">Категория</label>
+          <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
+            <option th:text ="Любая" th:value="any"></option>
+            <div th:each="category : ${categories}">
+              <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+            </div>
+          </select>
+          <label for="inStock">В наличии</label>
+          <input type="checkbox" id="inStock" th:field="*{inStock}">
+          <div class="button-filter-button">
+            <button type="submit">
+              Отфильтровать
+            </button>
+          </div>
+
+        </form>
+<!--        <div class="button-filter-container button-filter-root-class-name">-->
+<!--          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
+
     </div>
     <div class="catalog-page-gallery">
       <div class="catalog-card-gallery-card catalog-card-root-class-name" th:each="articleCard : ${articleCards}">

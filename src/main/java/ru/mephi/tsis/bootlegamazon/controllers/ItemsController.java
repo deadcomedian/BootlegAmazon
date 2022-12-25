@@ -20,6 +20,7 @@ import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
 import ru.mephi.tsis.bootlegamazon.dto.HrefArgs;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
+import ru.mephi.tsis.bootlegamazon.forms.FilterForm;
 import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Category;
@@ -27,6 +28,7 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -176,12 +178,17 @@ public class ItemsController {
         }
 
         List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+        model.addAttribute("categories", categories);
         model.addAttribute("articleCards", articleCards);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("nextPage", nextPage);
         model.addAttribute("previousPage", previousPage);
         model.addAttribute("sortMethods", Arrays.stream(sortMethodMap.keySet().toArray()).sorted().toArray());
         model.addAttribute("hrefArgs", hrefArgs);
+
+        FilterForm filterForm = new FilterForm();
+        model.addAttribute("filterForm", filterForm);
+
         return "index";
     }
 
@@ -202,6 +209,15 @@ public class ItemsController {
         model.addAttribute("user", user);
         System.out.println(search);
         redirectAttributes.addAttribute("search", search);
+        return "redirect:/items/all?page=0";
+    }
+
+    @PostMapping("/filter")
+    public String filter(
+            @ModelAttribute("filter") FilterForm filter,
+            RedirectAttributes attributes
+    ){
+        System.out.println(filter);
         return "redirect:/items/all?page=0";
     }
 
