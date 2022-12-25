@@ -54,7 +54,10 @@ public class Cart {
     }
 
     public Integer getItemAmountByArticleId(Integer articleId){
-        return itemsAmountMap.get(articleId);
+        if (itemsAmountMap.get(articleId)!=null)
+            return itemsAmountMap.get(articleId);
+        else
+            return 0;
     }
 
     @Override
