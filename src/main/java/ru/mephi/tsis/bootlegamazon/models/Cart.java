@@ -1,9 +1,6 @@
 package ru.mephi.tsis.bootlegamazon.models;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Cart {
 
@@ -54,10 +51,12 @@ public class Cart {
     }
 
     public Integer getItemAmountByArticleId(Integer articleId){
-        if (itemsAmountMap.get(articleId)!=null)
+        Set<Integer> keys = itemsAmountMap.keySet();
+        if (keys.contains(articleId)){
             return itemsAmountMap.get(articleId);
-        else
+        } else {
             return 0;
+        }
     }
 
     @Override
