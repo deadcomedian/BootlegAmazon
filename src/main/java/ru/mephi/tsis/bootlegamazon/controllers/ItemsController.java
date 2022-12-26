@@ -41,7 +41,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/items")
-@SessionAttributes("item")
+//@SessionAttributes("item")
 public class ItemsController {
 
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/target/classes/static/images";
@@ -279,10 +279,10 @@ public class ItemsController {
             return "error-page";
         }
 
-        Article article = (Article) req.getSession().getAttribute("item");
+        Article article = (Article) req.getSession().getAttribute("newItem");
         if (article != null){
             model.addAttribute("item", article);
-            req.getSession().removeAttribute("item");
+            req.getSession().removeAttribute("newItem");
         } else {
             model.addAttribute("item", new Article());
         }
@@ -312,7 +312,7 @@ public class ItemsController {
 
         model.addAttribute("user", user);
         if (result.hasErrors()){
-            session.setAttribute("item", item);
+            session.setAttribute("newItem", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
@@ -321,7 +321,7 @@ public class ItemsController {
         }
         if (file.isEmpty()){
             attributes.addFlashAttribute("error", "Загрузите файл");
-            session.setAttribute("item", item);
+            session.setAttribute("newItem", item);
             return "redirect:/items/new";
         }
         try {
@@ -347,6 +347,7 @@ public class ItemsController {
                             item.getItemPrice(),
                             0.0
                     );
+            session.removeAttribute("newItem");
         } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -369,9 +370,9 @@ public class ItemsController {
 
         try {
 
-            Article article = (Article) req.getSession().getAttribute("item");
+            Article article = (Article) req.getSession().getAttribute("editItem");
             if (article != null){
-                req.getSession().removeAttribute("item");
+                req.getSession().removeAttribute("editItem");
             } else {
                 article = articleService.getById(id);
             }
@@ -406,7 +407,7 @@ public class ItemsController {
         model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
-            session.setAttribute("item", item);
+            session.setAttribute("editItem", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
@@ -432,6 +433,7 @@ public class ItemsController {
                 item.setItemPhoto(oldPhoto);
             }
             articleService.update(item);
+            session.removeAttribute("editItem");
         } catch (ArticleNotFoundException | CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
