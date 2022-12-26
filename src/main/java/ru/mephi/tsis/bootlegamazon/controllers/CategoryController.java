@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/categories")
-@SessionAttributes("category")
+//@SessionAttributes("category")
 public class CategoryController {
 
     private int currentPage;
@@ -154,6 +154,7 @@ public class CategoryController {
             return "redirect:/categories/new";
         } catch (CategoryNotFoundException e) {
             categoryService.createCategory(category.getCategoryName());
+            session.removeAttribute("category");
             return "redirect:/categories/all?page=" + currentPage;
         }
 
