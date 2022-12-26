@@ -32,7 +32,9 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +46,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/items")
+@SessionAttributes("item")
 public class ItemsController {
 
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/target/classes/static/images";
@@ -271,17 +274,28 @@ public class ItemsController {
     }
 
     @GetMapping("/new")
-    public String newItem(Model model, @AuthenticationPrincipal UserDetails user){
-
+    public String newItem(
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletRequest req
+    ){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
 
-        model.addAttribute("user", user);
+        Article article = (Article) req.getSession().getAttribute("item");
+        if (article != null){
+            model.addAttribute("item", article);
+            req.getSession().removeAttribute("item");
+        } else {
+            model.addAttribute("item", new Article());
+        }
+
         List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
-        model.addAttribute("item", new Article());
+
         model.addAttribute("categories", categories);
         return "new-item-page";
     }
@@ -293,7 +307,8 @@ public class ItemsController {
             @RequestParam("image") MultipartFile file,
             RedirectAttributes attributes,
             Model model,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpSession session
     ) {
 
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
@@ -304,6 +319,7 @@ public class ItemsController {
 
         model.addAttribute("user", user);
         if (result.hasErrors()){
+            session.setAttribute("item", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
@@ -312,6 +328,7 @@ public class ItemsController {
         }
         if (file.isEmpty()){
             attributes.addFlashAttribute("error", "Загрузите файл");
+            session.setAttribute("item", item);
             return "redirect:/items/new";
         }
         try {
@@ -344,23 +361,35 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
-
+    public String edit(
+            @PathVariable("id") Integer id,
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletRequest req
+    ){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
 
-        model.addAttribute("user", user);
         try {
-            List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
-            Article article = articleService.getById(id);
-            model.addAttribute("item",article);
-            model.addAttribute("categories", categories);
+
+            Article article = (Article) req.getSession().getAttribute("item");
+            if (article != null){
+                req.getSession().removeAttribute("item");
+            } else {
+                article = articleService.getById(id);
+            }
+            model.addAttribute("item", article);
+
         } catch (ArticleNotFoundException | CategoryNotFoundException e) {
             throw new RuntimeException("BAD ID :" + id, e);
         }
+
+        List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
+        model.addAttribute("categories", categories);
         return "item-edit-page";
     }
 
@@ -371,7 +400,8 @@ public class ItemsController {
             @RequestParam("image") MultipartFile file,
             RedirectAttributes attributes,
             Model model,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpSession session
     ){
 
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
@@ -383,6 +413,7 @@ public class ItemsController {
         model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
+            session.setAttribute("item", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));

@@ -56,8 +56,7 @@ public class PaymentController {
         this.articleService = articleService;
         this.messageSource = messageSource;
         this.userAuthRepository = userAuthRepository;
-        errorCodes.put("orderAddress", "Описание");
-        errorCodes.put("orderPrice", "Название книги");
+        errorCodes.put("orderAddress", "Адрес");
     }
     @PostMapping("")
     public String payment
@@ -80,7 +79,7 @@ public class PaymentController {
         }
 
         model.addAttribute("user", user);
-        //Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+
         try {
 
             if (bindingResult.hasErrors()){
