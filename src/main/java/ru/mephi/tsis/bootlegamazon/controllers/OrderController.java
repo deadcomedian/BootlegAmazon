@@ -16,9 +16,12 @@ import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.*;
 import ru.mephi.tsis.bootlegamazon.services.implementations.UserService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/orders")
@@ -62,14 +65,26 @@ public class OrderController {
     public String newOrder(
             Model model,
             @AuthenticationPrincipal UserDetails user,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userCookie
     ){
+
+        if(userCookie.equals("DEFAULT-USER-ID")){
+            userCookie = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userCookie);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         try {
 
             //проверка на наличие товара на складе
-            Cart cart = cartService.getCartByUserId(userId);
+            Cart cart = cartService.getCartByUserId(userCookie);
             List<CartArticle> cartArticles = cart.getItems();
             for (CartArticle cartArticle : cartArticles){
                    Article article = articleService.getById(cartArticle.getArticle().getId());
@@ -88,7 +103,9 @@ public class OrderController {
 
             model.addAttribute("cart", cart);
             int orderNumber = orderService.getOrdersCount() + 1;
-            Order order = new Order(userId, orderNumber, "Инициализирован", "", LocalDate.parse("1970-01-01"), cart.getPrice(), "");
+            LocalDate minOrderDate = LocalDate.now().plusDays(1);
+            Order order = new Order(userId, orderNumber, "Инициализирован", "", minOrderDate, cart.getPrice(), "");
+            model.addAttribute("minOrderDate", minOrderDate);
             model.addAttribute("order", order);
         } catch (CartNotFoundException | ArticleNotFoundException | CategoryNotFoundException e) {
             throw new RuntimeException(e);
@@ -104,6 +121,7 @@ public class OrderController {
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
+        model.addAttribute("isForUser", false);
 
         model.addAttribute("user", user);
 
@@ -155,33 +173,40 @@ public class OrderController {
             model.addAttribute("order", order);
             model.addAttribute("items", orderArticles);
 
-            int currentUserId = userAuthRepository.findByUsername(user.getUsername()).getId();
             int orderUserId = order.getUserId();
 
-            if (currentUserId == orderUserId){
-                model.addAttribute("orderOfCurrentUser", true);
-            } else {
-                model.addAttribute("orderOfCurrentUser", false);
-                String userName = userService.getUserNameById(orderUserId);
-                model.addAttribute("userName", userName);
-            }
-            String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
-            if (userRole.equals("Администратор") || userRole.equals("Менеджер")){
-                List<Status> statuses = statusService.getAll();
-                model.addAttribute("statuses", statuses);
-                model.addAttribute("isAdminOrManager", true);
-            } else {
-                model.addAttribute("isAdminOrManager", false);
-            }
+            String userName = userService.getUserNameById(orderUserId);
+            model.addAttribute("userName", userName);
+
+            List<Status> statuses = statusService.getAll();
+            model.addAttribute("statuses", statuses);
+            return "order-page";
 
         } catch (OrderNotFoundException | StatusNotFoundException | ArticleNotFoundException e) {
             throw new RuntimeException(e);
         }
-        return "order-page";
+    }
+
+    @GetMapping("/{id}/foruser")
+    public String byIdForUser(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("user", user);
+        try {
+            Order order = orderService.getById(id);
+            List<OrderArticle> orderArticles = orderArticleService.getAllArticlesInOrder(id);
+
+            model.addAttribute("order", order);
+            model.addAttribute("items", orderArticles);
+
+            return "order-page-user";
+
+        } catch (OrderNotFoundException | StatusNotFoundException | ArticleNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/foruser")
     public String forUser(@RequestParam("page") Integer pageNumber, Model model, @AuthenticationPrincipal UserDetails user){
+        model.addAttribute("isForUser", true);
         model.addAttribute("user", user);
         Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
         Pageable pageable = PageRequest.of(pageNumber, 8, Sort.by(Sort.Direction.ASC, "date"));
@@ -253,6 +278,18 @@ public class OrderController {
 
             if (oldStatus.equals("Доставлен") || oldStatus.equals("Отменён")){
                 redirectAttributes.addFlashAttribute("error", "У данного заказа нельзя поменять статус");
+                return "redirect:/orders/" + order.getOrderNumber();
+            }
+
+            String newStatus = order.getOrderStatus();
+
+            if (oldStatus.equals("Инициализирован") && newStatus.equals("Доставлен")){
+                redirectAttributes.addFlashAttribute("error", "Ошибка: заказ не был подтверждён");
+                return "redirect:/orders/" + order.getOrderNumber();
+            }
+
+            if (oldStatus.equals("Подтверждён") && !newStatus.equals("Доставлен")){
+                redirectAttributes.addFlashAttribute("error", "Ошибка: запрещённый статус заказа");
                 return "redirect:/orders/" + order.getOrderNumber();
             }
 

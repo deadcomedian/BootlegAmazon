@@ -60,29 +60,15 @@
             <div class="tool-box-container tool-box-root-class-name">
               <div class="tool-box-container1">
 
-                <div th:if="${user == null}">
-                  <button>
-                    <a th:href="@{/login}">
-                      <svg viewBox="0 0 1024 1024" class="tool-box-cart">
-                        <path
-                                d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
-                        ></path>
-                      </svg>
-                    </a>
-                  </button>
-                </div>
-
-                <div th:if="${user != null}">
-                  <button>
-                    <a th:href="@{'/cart'}">
-                      <svg viewBox="0 0 1024 1024" class="tool-box-cart">
-                        <path
-                                d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
-                        ></path>
-                      </svg>
-                    </a>
-                  </button>
-                </div>
+                <button>
+                  <a th:href="@{'/cart'}">
+                    <svg viewBox="0 0 1024 1024" class="tool-box-cart">
+                      <path
+                              d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
+                      ></path>
+                    </svg>
+                  </a>
+                </button>
 
                 <div th:if="${user != null}">
                 <a th:href="@{/profile}">
@@ -112,7 +98,7 @@
         </header>
         <div class="order-page-container01">
           <h1 class="order-page-text" th:text="'Заказ №' + ${order.getOrderNumber()}"></h1>
-          <div class="order-page-container02" th:if="${!orderOfCurrentUser}">
+          <div class="order-page-container02">
             <label class="order-page-text01">
               <span th:text="'Заказчик: ' + ${userName}"></span>
               <br />
@@ -142,17 +128,6 @@
             <span class="order-page-text19" >Итого:</span>
             <label class="order-page-text20" th:text="${order.getOrderPrice()} + ' ₽'"></label>
           </div>
-          <div class="order-page-container21" th:if="${!isAdminOrManager}">
-            <label class="order-page-text21">
-              <span>Статус:</span>
-              <br />
-            </label>
-            <label class="order-page-text24">
-              <span th:text="${order.getOrderStatus()}"></span>
-              <br />
-            </label>
-          </div>
-
         </div>
         <div class="order-page-container22">
           <div class="order-page-container23">
@@ -171,39 +146,37 @@
               </label>
             </div>
           </div>
-
-          <div class="order-page-container26" th:if="${isAdminOrManager}">
+          <form
+                  class="order-page-form"
+                  th:method="POST"
+                  th:action="@{/orders/editstatus}"
+                  th:object="${order}"
+          >
             <h2 th:if="${error} != null" th:text="${error}"></h2>
-            <form
-                    class="order-page-form"
-                    th:method="POST"
-                    th:action="@{/orders/editstatus}"
-                    th:object="${order}"
-            >
-              <input type="hidden" th:field="*{userId}"/>
-              <input type="hidden" th:field="*{orderNumber}"/>
-              <input type="hidden" th:field="*{orderAddress}"/>
-              <input type="hidden" th:field="*{orderDate}"/>
-              <input type="hidden" th:field="*{orderPrice}"/>
-              <input type="hidden" th:field="*{orderPaymentId}"/>
+            <input type="hidden" th:field="*{userId}"/>
+            <input type="hidden" th:field="*{orderNumber}"/>
+            <input type="hidden" th:field="*{orderAddress}"/>
+            <input type="hidden" th:field="*{orderDate}"/>
+            <input type="hidden" th:field="*{orderPrice}"/>
+            <input type="hidden" th:field="*{orderPaymentId}"/>
 
-              <select class="order-page-select input" th:field="*{orderStatus}">
-                <div th:each="status : ${statuses}">
-                  <option th:text ="${status.getName()}" th:value="${status.getName()}"></option>
-                </div>
-              </select>
-
-              <div class="order-page-container27">
-                <button type="submit" class="order-page-button">
-                  <span>
-                    <span>Сохранить</span>
-                    <br />
-                  </span>
-                </button>
+            <select class="order-page-select input" th:field="*{orderStatus}">
+              <div th:each="status : ${statuses}">
+                <option th:text ="${status.getName()}" th:value="${status.getName()}"></option>
               </div>
+            </select>
 
-            </form>
-          </div>
+            <div class="order-page-container27">
+              <button type="submit" class="order-page-button">
+                <span>
+                  <span>Сохранить</span>
+                  <br />
+                </span>
+              </button>
+            </div>
+
+          </form>
+
 
         </div>
         <button type="button" class="new-edit-profile-page-button1">

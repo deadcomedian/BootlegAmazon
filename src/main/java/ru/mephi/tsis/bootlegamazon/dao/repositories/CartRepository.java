@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface CartRepository extends CrudRepository<CartEntity, Integer> {
     //R'n'D & change
     @Query("select c from CartEntity c where c.userId = ?1 and c.active = true")
-    Optional<CartEntity> findByUserId(Integer userId);
+    Optional<CartEntity> findByUserId(String userId);
 }

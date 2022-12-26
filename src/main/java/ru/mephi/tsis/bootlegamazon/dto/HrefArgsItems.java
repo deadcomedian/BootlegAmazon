@@ -1,6 +1,6 @@
 package ru.mephi.tsis.bootlegamazon.dto;
 
-public class HrefArgs {
+public class HrefArgsItems {
     private int argsCount;
     private String sortMethod;
     private String categoryName;
@@ -49,7 +49,7 @@ public class HrefArgs {
                 stringBuilder.append("&category=").append(categoryName);
             }
             if (inStock != null){
-                stringBuilder.append("&stock=").append(inStock);
+                stringBuilder.append("&instock=").append(inStock);
             }
             if (priceFrom != null){
                 stringBuilder.append("&pricefrom=").append(priceFrom);
@@ -76,7 +76,7 @@ public class HrefArgs {
                 stringBuilder.append("&category=").append(categoryName);
             }
             if (inStock != null && !parameterName.equals("stock")){
-                stringBuilder.append("&stock=").append(inStock);
+                stringBuilder.append("&instock=").append(inStock);
             }
             if (priceFrom != null && !parameterName.equals("pricefrom")){
                 stringBuilder.append("&pricefrom=").append(priceFrom);
@@ -93,4 +93,26 @@ public class HrefArgs {
         }
     }
 
+    public String getSearchField() {
+        if (searchField == null){
+            return "";
+        } else {
+            return "?search=" + searchField;
+        }
+    }
+
+    public String getHrefArgsExceptFiltration(){
+        if (this.argsCount > 0){
+            StringBuilder stringBuilder = new StringBuilder();
+            if (sortMethod != null){
+                stringBuilder.append("&sort=").append(sortMethod);
+            }
+            if (searchField != null){
+                stringBuilder.append("&search=").append(searchField);
+            }
+            return stringBuilder.toString();
+        } else {
+            return "";
+        }
+    }
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
-    <title>Заказы</title>
-    <meta property="og:title" content="Orders-page - Travel Agency" />
+    <title>Заказ</title>
+    <meta property="og:title" content="Order-page - Travel Agency" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
@@ -42,9 +42,9 @@
   </head>
   <body>
     <div>
-      <link href="/style/orders-page.css" rel="stylesheet" />
+      <link href="/style/order-page.css" rel="stylesheet" />
 
-      <div class="orders-page-container">
+      <div class="order-page-container">
         <header data-role="Header" class="header-header">
           <button type="button" class="profile-page-button1">
           <span>
@@ -96,57 +96,65 @@
             </div>
           </div>
         </header>
-        <div class="orders-page-container1">
-          <h1 class="orders-page-text">Все заказы</h1>
+        <div class="order-page-container01">
+          <h1 class="order-page-text" th:text="'Заказ №' + ${order.getOrderNumber()}"></h1>
         </div>
-        <div class="orders-page-container4">
-          <label class="orders-page-text1">№ Заказа</label>
-          <label class="orders-page-text1">Статус</label>
-          <label class="orders-page-text1">Сумма</label>
-          <label class="orders-page-text1"></label>
-        </div>
-        <div class="orders-page-container3" th:each="order : ${orders}">
-          <div class="orders-page-container4">
-            <label class="orders-page-text1" th:text="${order.getNumber()}"></label>
-            <label class="orders-page-text3" th:text="${order.getStatus()}"></label>
-            <label class="orders-page-text4" th:text="${order.getPrice()}"></label>
-            <a th:href="@{'/orders/' + ${order.getNumber()} + '/foruser'}">
-              <button>
-                <svg viewBox="0 0 1024 1024" class="orders-page-icon">
-                  <path
-                          d="M512 384q52 0 90 38t38 90-38 90-90 38-90-38-38-90 38-90 90-38zM512 726q88 0 151-63t63-151-63-151-151-63-151 63-63 151 63 151 151 63zM512 192q158 0 286 88t184 232q-56 144-184 232t-286 88-286-88-184-232q56-144 184-232t286-88z"
-                  ></path>
-                </svg>
-              </button>
-            </a>
-          </div>
-        </div>
-        <div class="orders-page-container5"></div>
+        <div class="order-page-container03" th:each="item : ${items}">
 
-        <div class="orders-page-container6">
-          <a th:href="@{'/orders/foruser?page=' + ${previousPage}}">
-            <button type="button">
-              <svg viewBox="0 0 1024 1024" class="orders-page-icon2">
-                <path
-                        d="M542.165 780.501l-225.835-225.835h494.336c23.552 0 42.667-19.115 42.667-42.667s-19.115-42.667-42.667-42.667h-494.336l225.835-225.835c16.683-16.683 16.683-43.691 0-60.331s-43.691-16.683-60.331 0l-298.667 298.667c-4.096 4.096-7.168 8.789-9.259 13.824-2.176 5.205-3.243 10.795-3.243 16.341 0 10.923 4.181 21.845 12.501 30.165l298.667 298.667c16.683 16.683 43.691 16.683 60.331 0s16.683-43.691 0-60.331z"
-                ></path>
-              </svg>
-            </button>
-          </a>
-          <label class="orders-page-text5" th:text="${currentPage + 1}"></label>
-          <a th:href="@{'/orders/foruser?page=' + ${nextPage}}">
-            <button type="button">
-              <svg viewBox="0 0 1024 1024" class="orders-page-icon4">
-                <path
-                        d="M481.835 243.499l225.835 225.835h-494.336c-23.552 0-42.667 19.115-42.667 42.667s19.115 42.667 42.667 42.667h494.336l-225.835 225.835c-16.683 16.683-16.683 43.691 0 60.331s43.691 16.683 60.331 0l298.667-298.667c3.925-3.925 7.083-8.619 9.259-13.824 4.309-10.453 4.309-22.229 0-32.683-2.091-5.035-5.163-9.728-9.259-13.824l-298.667-298.667c-16.683-16.683-43.691-16.683-60.331 0s-16.683 43.691 0 60.331z"
-                ></path>
-              </svg>
-            </button>
-          </a>
+          <div class="order-page-container04">
+            <div class="order-page-container05">
+              <img
+                alt="image"
+                th:src="${item.getItem().getPhoto()}"
+                class="order-page-image"
+              />
+              <label class="order-page-text04" th:text="${item.getItem().getItemName()}"></label>
+            </div>
+            <div class="order-page-container06">
+              <label class="order-page-text05" th:text="${item.getAmount()} + ' шт'"></label>
+              <label class="order-page-text06" th:text="${item.getPrice()} + ' ₽'"></label>
+            </div>
+          </div>
+
+        </div>
+        <div class="order-page-container19">
+          <div class="order-page-container20">
+            <span class="order-page-text19" >Итого:</span>
+            <label class="order-page-text20" th:text="${order.getOrderPrice()} + ' ₽'"></label>
+          </div>
+          <div class="order-page-container21">
+            <label class="order-page-text21">
+              <span>Статус:</span>
+              <br />
+            </label>
+            <label class="order-page-text24">
+              <span th:text="${order.getOrderStatus()}"></span>
+              <br />
+            </label>
+          </div>
+
+        </div>
+        <div class="order-page-container22">
+          <div class="order-page-container23">
+            <div class="order-page-container24">
+              <label class="order-page-text27">Адрес доставки:</label>
+              <label class="order-page-text28">
+                <span th:text="${order.getOrderAddress()}"></span>
+                <br />
+              </label>
+            </div>
+            <div class="order-page-container25">
+              <label class="order-page-text31">Дата доставки:</label>
+              <label class="order-page-text32">
+                <span th:text="${order.getOrderDate()}"></span>
+                <br />
+              </label>
+            </div>
+          </div>
         </div>
         <button type="button" class="new-edit-profile-page-button1">
           <h2>
-            <a th:href="@{/profile}">Вернуться</a>
+            <a th:href="@{/orders/foruser?page=0}">Вернуться</a>
           </h2>
         </button>
         <footer class="footer-footer">

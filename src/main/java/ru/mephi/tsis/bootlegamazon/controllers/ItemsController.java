@@ -17,9 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
-import ru.mephi.tsis.bootlegamazon.dto.HrefArgs;
+import ru.mephi.tsis.bootlegamazon.dto.HrefArgsItems;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
+import ru.mephi.tsis.bootlegamazon.forms.FilterForm;
 import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Category;
@@ -27,9 +28,12 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CategoryService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -37,6 +41,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/items")
+//@SessionAttributes("item")
 public class ItemsController {
 
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/target/classes/static/images";
@@ -73,84 +78,107 @@ public class ItemsController {
             @RequestParam("page") Integer pageNumber,
             @RequestParam("sort") Optional<String> sortMethod, //сортировка
             @RequestParam("category") Optional<String> categoryName, //фильтрация по категории
-            @RequestParam("stock") Optional<Boolean> inStock, //фильтрация по наличию
+            @RequestParam("instock") Optional<Boolean> inStock, //фильтрация по наличию
             @RequestParam("pricefrom") Optional<Double> priceFrom, //фильтрация по цене - от
             @RequestParam("priceto") Optional<Double> priceTo, //фильтрация по цене - до
             @RequestParam("search") Optional<String> searchField, // поиск
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userCookie
     ) {
+        //init block
         model.addAttribute("user", user);
-        HrefArgs hrefArgs = new HrefArgs();
-        //Я девопс, пишу как умею
+        boolean filtering = false;
+        boolean searching = false;
+        String searchStr = null;
+        Integer filterCategoryId = null;
+        Integer amountToUseWithFilter = null;
         HashMap<String,Sort> sortMethodMap = new HashMap<>();
         sortMethodMap.put("По умолчанию", Sort.by(Sort.Direction.ASC, "id")); //default
         sortMethodMap.put("Сначала дешевле", Sort.by(Sort.Direction.ASC, "price"));
         sortMethodMap.put("Сначала дороже", Sort.by(Sort.Direction.DESC, "price"));
         sortMethodMap.put("Ниже рейтинг", Sort.by(Sort.Direction.ASC, "rating"));
         sortMethodMap.put("Выше рейтинг", Sort.by(Sort.Direction.DESC, "rating"));
-
-        //сортировка
+        HrefArgsItems hrefArgs = new HrefArgsItems();
+        FilterForm filterForm = new FilterForm();
         Pageable pageable;
-        if(sortMethod.isPresent()){
-            pageable = PageRequest.of(pageNumber, 6, sortMethodMap.get(sortMethod.get()));
-            hrefArgs.setSortMethod(sortMethod.get());
-        } else {
-            pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
-        }
-
-        //поиск
         List<ArticleCard> articleCards;
-        if(searchField.isPresent()){
-            String searchString = searchField.get();
-            searchString = new String(searchString.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-            //System.out.println(searchString);
-            System.out.println(searchString);
-            articleCards = articleCardService.getAllByAuthorOrName(pageable, searchString);
-            if(articleCards.size() == 0){
-                model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
-                return "error-page";
-            }
-            hrefArgs.setSearchField(searchString);
-        } else {
-            articleCards = articleCardService.getAll(pageable);
-        }
-
-        //фильтрация по категории
-        if(categoryName.isPresent()){
-            hrefArgs.setCategoryName(categoryName.get());
-        } else {
-
-        }
-
-        //фильтрация по наличию
-        if(inStock.isPresent()){
-            hrefArgs.setInStock(inStock.get());
-        } else {
-
-        }
-
-        //фильтрация по цене
-        if (priceFrom.isPresent()){
-            hrefArgs.setPriceFrom(priceFrom.get());
-        } else {
-
-        }
-
-        if (priceTo.isPresent()){
-            hrefArgs.setPriceTo(priceTo.get());
-        } else {
-
-        }
-
-        int totalPages = articleCardService.getTotalPages(pageable);
+        int totalPages = 0;
         int previousPage = 0;
         int nextPage = 0;
         int currentPage = pageNumber;
         this.currentPage = currentPage;
-        if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/items/all?page=0";
+        List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+        
+        if(userCookie.equals("DEFAULT-USER-ID")){
+            Cookie cookie = new Cookie("user-id", UUID.randomUUID().toString());
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
         }
 
+        //args processing block
+        //сортировка
+        if(sortMethod.isPresent()){
+            pageable = PageRequest.of(pageNumber, 12, sortMethodMap.get(sortMethod.get()));
+            hrefArgs.setSortMethod(sortMethod.get());
+        } else {
+            pageable = PageRequest.of(pageNumber, 12, Sort.Direction.ASC, "id");
+        }
+        //фильтрация по категории
+        if(categoryName.isPresent()){
+            filtering = true;
+            filterForm.setCategoryName(categoryName.get());
+            hrefArgs.setCategoryName(categoryName.get());
+            try {
+                filterCategoryId = categoryService.getByCategoryName(categoryName.get()).getId();
+            } catch (CategoryNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        //фильтрация по наличию
+        if(inStock.isPresent()){
+            filtering = true;
+            filterForm.setInStock(inStock.get());
+            hrefArgs.setInStock(inStock.get());
+            amountToUseWithFilter = 1;
+        }
+        //фильтрация по цене
+        if (priceFrom.isPresent()){
+            filtering = true;
+            filterForm.setPriceFrom(priceFrom.get());
+            hrefArgs.setPriceFrom(priceFrom.get());
+        }
+        if (priceTo.isPresent()){
+            filtering = true;
+            filterForm.setPriceTo(priceTo.get());
+            hrefArgs.setPriceTo(priceTo.get());
+        }
+        //поиск
+        if (searchField.isPresent()){
+            searching = true;
+            searchStr = searchField.get();
+            hrefArgs.setSearchField(searchStr);
+        }
+
+        //page calculations block
+        if(searching && filtering){
+            totalPages = articleCardService.getTotalPagesWithSearchAndFiltering(pageable, searchStr, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else if (searching) {
+            totalPages = articleCardService.getTotalPagesWithSearch(pageable, searchStr);
+        } else if (filtering) {
+            totalPages = articleCardService.getTotalPagesWithFilter(pageable, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else {
+            totalPages = articleCardService.getTotalPages(pageable);
+        }
+        if(totalPages == 0){
+            model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
+            return "error-page";
+        }
+        if (((totalPages > 0 ) && (pageNumber >= totalPages)) || (pageNumber < 0)){
+            return "redirect:/items/all?page=0";
+        }
         if (pageNumber == 0){
             previousPage = 0;
             if (totalPages == 1){
@@ -166,13 +194,31 @@ public class ItemsController {
             previousPage = currentPage - 1;
         }
 
-        List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
+        //harvest articles block
+        if(searching && filtering){
+            articleCards = articleCardService.getAllSearchedAndFiltered(pageable, searchStr, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else if (searching) {
+            articleCards = articleCardService.getAllByAuthorOrName(pageable, searchStr);
+        } else if (filtering) {
+            articleCards = articleCardService.getAllFiltered(pageable, filterForm.getPriceFrom(), filterForm.getPriceTo(), filterCategoryId, amountToUseWithFilter);
+        } else {
+            articleCards = articleCardService.getAll(pageable);
+        }
+        if(articleCards.size() == 0){
+            model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
+            return "error-page";
+        }
+
+        //construct view block
+        model.addAttribute("categories", categories);
         model.addAttribute("articleCards", articleCards);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("nextPage", nextPage);
         model.addAttribute("previousPage", previousPage);
         model.addAttribute("sortMethods", Arrays.stream(sortMethodMap.keySet().toArray()).sorted().toArray());
         model.addAttribute("hrefArgs", hrefArgs);
+        model.addAttribute("filterForm", filterForm);
+
         return "index";
     }
 
@@ -195,18 +241,54 @@ public class ItemsController {
         return "redirect:/items/all?page=0";
     }
 
-    @GetMapping("/new")
-    public String newItem(Model model, @AuthenticationPrincipal UserDetails user){
+    @PostMapping("/filter")
+    public String filter(
+            @ModelAttribute("filter") FilterForm filter,
+            @RequestParam("search") Optional<String> searchField,
+            RedirectAttributes attributes
+    ){
+        System.out.println(filter);
+        if (!filter.getCategoryName().equals("any")){
+            attributes.addAttribute("category", filter.getCategoryName());
+        }
+        if(filter.getInStock()){
+            attributes.addAttribute("instock", true);
+        }
+        if(filter.getPriceFrom() != null){
+            attributes.addAttribute("pricefrom", filter.getPriceFrom());
+        }
+        if(filter.getPriceTo() != null){
+            attributes.addAttribute("priceto", filter.getPriceTo());
+        }
+        if(searchField.isPresent()){
+            attributes.addAttribute("search", searchField.get());
+        }
+        return "redirect:/items/all?page=0";
+    }
 
+    @GetMapping("/new")
+    public String newItem(
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletRequest req
+    ){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
 
-        model.addAttribute("user", user);
+        Article article = (Article) req.getSession().getAttribute("newItem");
+        if (article != null){
+            model.addAttribute("item", article);
+            req.getSession().removeAttribute("newItem");
+        } else {
+            model.addAttribute("item", new Article());
+        }
+
         List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
-        model.addAttribute("item", new Article());
+
         model.addAttribute("categories", categories);
         return "new-item-page";
     }
@@ -216,8 +298,10 @@ public class ItemsController {
             @Validated @ModelAttribute("item") Article item,
             BindingResult result,
             @RequestParam("image") MultipartFile file,
-            RedirectAttributes attributes, Model model,
-            @AuthenticationPrincipal UserDetails user
+            RedirectAttributes attributes,
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpSession session
     ) {
 
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
@@ -228,6 +312,7 @@ public class ItemsController {
 
         model.addAttribute("user", user);
         if (result.hasErrors()){
+            session.setAttribute("newItem", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
@@ -236,6 +321,7 @@ public class ItemsController {
         }
         if (file.isEmpty()){
             attributes.addFlashAttribute("error", "Загрузите файл");
+            session.setAttribute("newItem", item);
             return "redirect:/items/new";
         }
         try {
@@ -259,8 +345,9 @@ public class ItemsController {
                             item.getItemDescription(),
                             "/images/" + filename,
                             item.getItemPrice(),
-                            5.0
+                            0.0
                     );
+            session.removeAttribute("newItem");
         } catch (CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -268,23 +355,35 @@ public class ItemsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") Integer id, Model model, @AuthenticationPrincipal UserDetails user){
-
+    public String edit(
+            @PathVariable("id") Integer id,
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletRequest req
+    ){
+        model.addAttribute("user", user);
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
         if (!userRole.equals("Администратор") && !userRole.equals("Менеджер")){
             model.addAttribute("errorMessage", "Доступ запрещён");
             return "error-page";
         }
 
-        model.addAttribute("user", user);
         try {
-            List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
-            Article article = articleService.getById(id);
-            model.addAttribute("item",article);
-            model.addAttribute("categories", categories);
+
+            Article article = (Article) req.getSession().getAttribute("editItem");
+            if (article != null){
+                req.getSession().removeAttribute("editItem");
+            } else {
+                article = articleService.getById(id);
+            }
+            model.addAttribute("item", article);
+
         } catch (ArticleNotFoundException | CategoryNotFoundException e) {
             throw new RuntimeException("BAD ID :" + id, e);
         }
+
+        List<Category> categories = categoryService.getAll((o1,o2) -> o1.getName().compareTo(o2.getName()));
+        model.addAttribute("categories", categories);
         return "item-edit-page";
     }
 
@@ -295,7 +394,8 @@ public class ItemsController {
             @RequestParam("image") MultipartFile file,
             RedirectAttributes attributes,
             Model model,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpSession session
     ){
 
         String userRole = userAuthRepository.findByUsername(user.getUsername()).getRole().getName();
@@ -307,6 +407,7 @@ public class ItemsController {
         model.addAttribute("user", user);
         int id = item.getId();
         if (result.hasErrors()){
+            session.setAttribute("editItem", item);
             for (Object obj : result.getAllErrors()){
                 FieldError fieldError = (FieldError) obj;
                 attributes.addFlashAttribute("error", errorCodes.get(fieldError.getField()) + ": " + messageSource.getMessage(fieldError, Locale.US));
@@ -332,6 +433,7 @@ public class ItemsController {
                 item.setItemPhoto(oldPhoto);
             }
             articleService.update(item);
+            session.removeAttribute("editItem");
         } catch (ArticleNotFoundException | CategoryNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }

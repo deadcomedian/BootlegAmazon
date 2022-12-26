@@ -7,8 +7,8 @@ import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.Cart;
 
 public interface CartService {
-    Cart createCartForUser(Integer userId) throws CartNotFoundException;
-    Cart getCartByUserId(Integer userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException;
+    Cart createCartForUser(String userId) throws CartNotFoundException;
+    Cart getCartByUserId(String userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException;
     void addArticleToCart(Integer cartId, Integer articleId) throws CartNotFoundException;
     void removeArticleFromCart(Integer cartId, Integer articleId) throws CartNotFoundException, CartArticleNotFoundException;
 

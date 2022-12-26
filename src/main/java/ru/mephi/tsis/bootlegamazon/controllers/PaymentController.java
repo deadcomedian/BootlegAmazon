@@ -22,11 +22,10 @@ import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.models.*;
 import ru.mephi.tsis.bootlegamazon.services.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/pay")
@@ -57,8 +56,7 @@ public class PaymentController {
         this.articleService = articleService;
         this.messageSource = messageSource;
         this.userAuthRepository = userAuthRepository;
-        errorCodes.put("orderAddress", "Описание");
-        errorCodes.put("orderPrice", "Название книги");
+        errorCodes.put("orderAddress", "Адрес");
     }
     @PostMapping("")
     public String payment
@@ -67,10 +65,21 @@ public class PaymentController {
                     BindingResult bindingResult,
                     Model model,
                     RedirectAttributes attributes,
-                    @AuthenticationPrincipal UserDetails user
+                    @AuthenticationPrincipal UserDetails user,
+                    HttpServletResponse response,
+                    @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
             ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
+
         model.addAttribute("user", user);
-        Integer userId = userAuthRepository.findByUsername(user.getUsername()).getId();
+
         try {
 
             if (bindingResult.hasErrors()){
@@ -136,13 +145,25 @@ public class PaymentController {
             @RequestParam("paymentId") String paymentId,
             @RequestParam("PayerID") String payerID,
             @ModelAttribute("order") Order order,
-            Model model, @AuthenticationPrincipal UserDetails user){
+            Model model,
+            @AuthenticationPrincipal UserDetails user,
+            HttpServletResponse response,
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
+    ){
+        if(userId.equals("DEFAULT-USER-ID")){
+            userId = UUID.randomUUID().toString();
+            Cookie cookie = new Cookie("user-id", userId);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(86400);
+            response.addCookie(cookie);
+        }
         model.addAttribute("user", user);
         System.out.println(order);
         try {
             Payment payment = paymentService.executePayment(paymentId, payerID);
             if (payment.getState().equals("approved")) {
-                Cart cart = cartService.getCartByUserId(order.getUserId());
+                Cart cart = cartService.getCartByUserId(userId);
                 List<CartArticle> cartArticles = cart.getItems();
 
                 order.setOrderPaymentId(paymentId);
@@ -160,7 +181,7 @@ public class PaymentController {
                 }
 
                 cartService.deleteCart(cart.getId());
-                cartService.createCartForUser(order.getUserId());
+                cartService.createCartForUser(userId);
 
                 return "payment-success-page";
             }

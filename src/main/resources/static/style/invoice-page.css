@@ -540,6 +540,7 @@
   .invoice-page-text {
     line-height: 1em;
   }
+}
   .invoice-page-text01 {
     font-size: 2rem;
     font-family: Open Sans;
@@ -656,4 +657,4 @@
     padding-right: 0.3rem;
   }
 
-}
+

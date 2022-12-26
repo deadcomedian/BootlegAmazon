@@ -11,7 +11,7 @@ public class CartEntity {
     private Integer id;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Column(name = "cart_active")
     private Boolean active;
@@ -19,7 +19,7 @@ public class CartEntity {
     public CartEntity() {
     }
 
-    public CartEntity(Integer id, Integer userId, Boolean active) {
+    public CartEntity(Integer id, String userId, Boolean active) {
         this.id = id;
         this.userId = userId;
         this.active = active;
@@ -33,7 +33,7 @@ public class CartEntity {
         return id;
     }
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 

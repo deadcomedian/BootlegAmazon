@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:beans="">
 
 <head>
   <title>Каталог товаров</title>
@@ -204,29 +205,15 @@
 
             </form>
 
-            <div th:if="${user == null}">
-                <button>
-                  <a th:href="@{/login}">
-                  <svg viewBox="0 0 1024 1024" class="tool-box-cart">
-                    <path
-                            d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
-                    ></path>
-                  </svg>
-                  </a>
-                </button>
-            </div>
-
-            <div th:if="${user != null}">
-              <button>
-                <a th:href="@{'/cart'}">
+            <button>
+              <a th:href="@{'/cart'}">
                 <svg viewBox="0 0 1024 1024" class="tool-box-cart">
                   <path
                           d="M726 768q34 0 59 26t25 60-25 59-59 25-60-25-26-59 26-60 60-26zM42 86h140l40 84h632q18 0 30 13t12 31q0 2-6 20l-152 276q-24 44-74 44h-318l-38 70-2 6q0 10 10 10h494v86h-512q-34 0-59-26t-25-60q0-20 10-40l58-106-154-324h-86v-84zM298 768q34 0 60 26t26 60-26 59-60 25-59-25-25-59 25-60 59-26z"
                   ></path>
                 </svg>
-                </a>
-              </button>
-            </div>
+              </a>
+            </button>
 
             <div th:if="${user != null}">
               <a th:href="@{/profile}">
@@ -280,24 +267,52 @@
           </script>
         </div>
         <div class="button-filter-container button-filter-root-class-name">
-          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр
-            <span class="popuptext" id="filterPopup">
-                    <div class="list">
-                      tut filtr
-                    </div>
-                  </span>
-          </div>
-          <script>
-            // When the user clicks on div, open the popup
-            function filterPopupFunction() {
-              var popup = document.getElementById("filterPopup");
-              popup.classList.toggle("show");
-            }
-          </script>
+
         </div>
+        <form
+                th:method="POST"
+                th:action="@{'/items/filter' + ${hrefArgs.getSearchField()}}"
+                th:object="${filterForm}"
+        >
+          <input
+                  type="text"
+                  th:field="*{priceFrom}"
+                  placeholder="Цена от"
+                  class="new-category-page-input input"
+          />
+          <input
+                  type="text"
+                  th:field="*{priceTo}"
+                  placeholder="Цена до"
+                  class="new-category-page-input input"
+          />
+          <label for="categories">Категория</label>
+          <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
+            <option th:text ="Любая" th:value="any"></option>
+            <div th:each="category : ${categories}">
+              <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+            </div>
+          </select>
+          <label for="inStock">В наличии</label>
+          <input type="checkbox" id="inStock" th:field="*{inStock}">
+          <div class="button-filter-button">
+            <button type="submit" class="popup button-sort-button">
+              Отфильтровать
+            </button>
+          </div>
+
+        </form>
+
+        <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
+          <button>
+            <label>Сбросить фильтрацию</label>
+          </button>
+        </a>
       </div>
+
     </div>
     <div class="catalog-page-gallery">
+
       <div class="catalog-card-gallery-card catalog-card-root-class-name" th:each="articleCard : ${articleCards}">
         <div class="catalog-card-container">
           <a th:href="@{'/items/' + ${articleCard.id}}">

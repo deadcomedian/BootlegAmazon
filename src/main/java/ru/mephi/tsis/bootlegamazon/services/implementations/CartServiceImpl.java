@@ -29,7 +29,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart createCartForUser(Integer userId) throws CartNotFoundException{
+    public Cart createCartForUser(String userId) throws CartNotFoundException{
         CartEntity cartEntity = new CartEntity(null, userId, true);
         cartRepository.save(cartEntity);
         cartEntity = cartRepository.findByUserId(userId).orElseThrow(()-> new CartNotFoundException("Cart not found, userId: " + userId));
@@ -39,9 +39,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Cart getCartByUserId(Integer userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException {
+    public Cart getCartByUserId(String userId) throws CartNotFoundException, ArticleNotFoundException, CategoryNotFoundException {
         CartEntity cartEntity = cartRepository.findByUserId(userId).orElseThrow(()-> new CartNotFoundException("Cart not found, userId: " + userId));
-        return new Cart( cartEntity.getId(),cartArticleService.getAllArticlesForCartByCartId(cartEntity.getId()));
+        return new Cart( cartEntity.getId(), cartArticleService.getAllArticlesForCartByCartId(cartEntity.getId()));
     }
 
     @Override
