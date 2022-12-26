@@ -1,0 +1,37 @@
+.button-register-container {
+  display: flex;
+  position: relative;
+}
+.button-register-button {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 1.5em;
+  font-family: Open Sans;
+  font-weight: 600;
+  padding-top: var(--dl-space-space-halfunit);
+  padding-left: var(--dl-space-space-doubleunit);
+  border-radius: 50px;
+  margin-bottom: 2rem;
+  padding-right: var(--dl-space-space-doubleunit);
+  padding-bottom: var(--dl-space-space-halfunit);
+  text-transform: none;
+  text-decoration: none;
+  background-color: var(--dl-color-primary-100);
+}
+
+
+
+@media(max-width: 479px) {
+  .button-register-root-class-name {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
+  .button-register-root-class-name1 {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
+  .button-register-root-class-name2 {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+  }
+}

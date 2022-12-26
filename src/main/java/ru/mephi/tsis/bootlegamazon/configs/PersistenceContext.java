@@ -2,6 +2,11 @@ package ru.mephi.tsis.bootlegamazon.configs;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +17,13 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.imageio.spi.ServiceRegistry;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -45,9 +55,9 @@ public class PersistenceContext {
 
         jpaProperties.put("hibernate.ddl.auto", "none");
 
-        jpaProperties.put("hibernate.show_sql", "false");
+        jpaProperties.put("hibernate.show_sql", "true");
 
-        jpaProperties.put("hibernate.format_sql", "false");
+        jpaProperties.put("hibernate.format_sql", "true");
 
         entityManagerFactoryBean.setJpaProperties(jpaProperties);
 
@@ -60,4 +70,16 @@ public class PersistenceContext {
         transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
+
+//    @Bean
+//    SessionFactory getCurrentSessionFromJPA() {
+//        // JPA and Hibernate SessionFactory example
+//        EntityManagerFactory emf =
+//                Persistence.createEntityManagerFactory("BootlegAmazon");
+//        EntityManager entityManager = emf.createEntityManager();
+//        // Get the Hibernate Session from the EntityManager in JPA
+//        Session session = entityManager.unwrap(org.hibernate.Session.class);
+//        return session.getSessionFactory();
+//    }
+
 }

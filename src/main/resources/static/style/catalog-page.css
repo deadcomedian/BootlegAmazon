@@ -1,0 +1,348 @@
+.tool-box-container {
+  display: flex;
+  position: relative;
+}
+.tool-box-container1 {
+  display: flex;
+  position: relative;
+  padding-top: 2.5rem;
+  padding-bottom: 0.5rem;
+}
+.tool-box-input {
+  width: 20rem;
+  box-shadow: 5px 5px 10px 0px #d4d4d4;
+  font-family: Open Sans;
+  border-radius: 1rem;
+}
+.tool-box-search {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-cart {
+  width: 5rem;
+  height: 3rem;
+}
+.tool-box-profile {
+  width: 5rem;
+  height: 3rem;
+}
+
+@media(max-width: 991px) {
+  .tool-box-input {
+    width: 15rem;
+  }
+  .tool-box-search {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-cart {
+    width: 4rem;
+    height: 2.5rem;
+  }
+  .tool-box-profile {
+    width: 4rem;
+    height: 2.5rem;
+  }
+}
+@media(max-width: 767px) {
+  .tool-box-input {
+    width: 10rem;
+  }
+  .tool-box-search {
+    width: 3rem;
+    height: 2rem;
+  }
+  .tool-box-cart {
+    width: 2rem;
+    height: 2rem;
+  }
+  .tool-box-profile {
+    width: 3rem;
+    height: 2rem;
+  }
+}
+@media(max-width: 479px) {
+  .tool-box-input {
+    width: 5rem;
+  }
+}
+
+.header-header {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  justify-content: space-between;
+}
+.header-image {
+  width: auto;
+  height: 6rem;
+}
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@media(max-width: 479px) {
+  .header-image {
+    height: 4rem;
+  }
+}
+
+.button-sort-container {
+  display: flex;
+  position: relative;
+}
+.button-sort-button {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 2rem;
+  font-family: Open Sans;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  padding-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding-left: 3rem;
+  border-radius: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--dl-color-primary-100);
+}
+
+
+.button-filter-container {
+  display: flex;
+  position: relative;
+}
+.button-filter-button {
+  color: var(--dl-color-gray-background);
+  border: none;
+  font-size: 2rem;
+  font-family: Open Sans;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  padding-top: 0.5rem;
+  margin-right: 0.5rem;
+  padding-left: 3rem;
+  border-radius: 3rem;
+  padding-right: 3rem;
+  padding-bottom: 0.5rem;
+  background-color: var(--dl-color-primary-100);
+}
+
+
+.catalog-card-gallery-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.catalog-card-container {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  flex-direction: column;
+}
+.catalog-card-image {
+  width: 20rem;
+  object-fit: cover;
+}
+.catalog-card-text {
+  font-size: 2.5em;
+  margin-top: 1rem;
+  font-family: Rubik Dirt;
+  line-height: 1em;
+  margin-bottom: 1rem;
+}
+.catalog-card-container1 {
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  justify-content: space-around;
+}
+.catalog-card-text1 {
+  font-size: 2rem;
+  align-self: center;
+  font-style: italic;
+  font-family: Open Sans;
+  font-weight: 700;
+  line-height: 1.55;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.catalog-card-container2 {
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  justify-content: space-around;
+}
+.catalog-card-text2 {
+  font-size: 2rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  text-transform: none;
+  text-decoration: none;
+}
+.catalog-card-icon {
+  fill: var(--dl-color-primary-100);
+  width: 4rem;
+  height: 4rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-100);
+  border-style: solid;
+  border-width: 0.2rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
+.categories-page-container8 {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-top: 1rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  padding-bottom: 1rem;
+  justify-content: center;
+}
+.categories-page-icon10 {
+  fill: var(--dl-color-primary-100);
+  width: 3rem;
+  height: 3rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-100);
+  border-style: solid;
+  border-width: 0.2rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
+.categories-page-icon12 {
+  fill: var(--dl-color-primary-100);
+  width: 3rem;
+  height: 3rem;
+  align-self: center;
+  margin-left: 1rem;
+  border-color: var(--dl-color-primary-100);
+  border-style: solid;
+  border-width: 0.2rem;
+  margin-right: 1rem;
+  padding-left: 0.3rem;
+  border-radius: var(--dl-radius-radius-round);
+  padding-right: 0.3rem;
+}
+.categories-page-text6 {
+  font-size: 1.5rem;
+  align-self: center;
+  font-family: Open Sans;
+  font-weight: 600;
+  line-height: 1.55;
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+
+
+
+
+
+@media(max-width: 1200px) {
+  .catalog-card-container {
+    justify-content: center;
+  }
+}
+@media(max-width: 767px) {
+  .catalog-card-gallery-card {
+    flex-direction: column;
+  }
+}
+
+.footer-footer {
+  width: 100%;
+  display: flex;
+  position: relative;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  justify-content: center;
+}
+.footer-text {
+  text-align: center;
+  font-family: Open Sans;
+}
+
+.catalog-page-container {
+  width: 100%;
+  display: flex;
+  overflow: auto;
+  min-height: 100vh;
+  align-items: center;
+  flex-direction: column;
+}
+.catalog-page-container1 {
+  flex: 0 0 auto;
+  width: 100%;
+  height: auto;
+  display: flex;
+  margin-top: 2rem;
+  align-items: flex-start;
+  padding-left: 4rem;
+  margin-bottom: 2rem;
+  padding-right: 4rem;
+  justify-content: space-between;
+}
+.catalog-page-text {
+  font-size: 4em;
+  font-family: Rubik Dirt;
+  line-height: 1em;
+}
+.catalog-page-container2 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.catalog-page-gallery {
+  width: 100%;
+  display: grid;
+  padding: 2rem;
+  grid-gap: var(--dl-space-space-unit);
+  max-width: 80rem;
+  align-self: center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+@media(max-width: 991px) {
+  .catalog-page-gallery {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media(max-width: 767px) {
+  .catalog-page-gallery {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+@media(max-width: 479px) {
+  .catalog-page-gallery {
+    padding-top: 32px;
+    padding-left: var(--dl-space-space-unit);
+    padding-right: var(--dl-space-space-unit);
+    padding-bottom: 32px;
+  }
+}

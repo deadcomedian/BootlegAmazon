@@ -1,11 +1,9 @@
 package ru.mephi.tsis.bootlegamazon.dao.entities;
 
-
-
 import javax.persistence.*;
 
 @Entity
-@Table (name = "t_article")
+@Table (name = "t_article", schema = "shop")
 public class ArticleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,5 +91,45 @@ public class ArticleEntity {
 
     public Double getRating() {
         return rating;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }

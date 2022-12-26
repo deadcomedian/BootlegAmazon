@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:form="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+</head>
+<body>
+<div>
+    <form th:method="POST" th:action="@{/registration/create}" th:object="${userForm}">
+        <h2>Регистрация</h2>
+        <div>
+            <label>
+                <input type="text" th:field="*{name}" placeholder="ФИО">
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="text" th:field="*{phone}" placeholder="Телефон">
+                </label>
+        </div>
+        <div>
+            <label>
+                <input type="text" th:field="*{login}" placeholder="Логин">
+                <errors th:if="${usernameError}"> Пользователь с таким именем или телефоном уже существует </errors>
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="password" th:field="*{password}" placeholder="Пароль">
+            </label>
+        </div>
+        <div>
+            <label>
+                <input type="password" th:field="*{passwordConfirm}" placeholder="Повторите пароль">
+                <errors th:if="${passwordError}"> Пароли не совпадают </errors>
+            </label>
+        </div>
+        <div>
+        <errors th:if="${fieldError}"> Все поля должны быть заполнены! </errors>
+        </div>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+    <a th:href="@{'/items/all?page=0'}">Вернуться</a>
+</div>
+</body>
+</html>
