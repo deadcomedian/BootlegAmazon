@@ -5,9 +5,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -20,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.mephi.tsis.bootlegamazon.dao.entities.CategoryEntity;
 import ru.mephi.tsis.bootlegamazon.dao.repositories.UserAuthRepository;
-import ru.mephi.tsis.bootlegamazon.dto.HrefArgs;
+import ru.mephi.tsis.bootlegamazon.dto.HrefArgsItems;
 import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.forms.FilterForm;
@@ -35,10 +32,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -104,7 +99,7 @@ public class ItemsController {
         sortMethodMap.put("Сначала дороже", Sort.by(Sort.Direction.DESC, "price"));
         sortMethodMap.put("Ниже рейтинг", Sort.by(Sort.Direction.ASC, "rating"));
         sortMethodMap.put("Выше рейтинг", Sort.by(Sort.Direction.DESC, "rating"));
-        HrefArgs hrefArgs = new HrefArgs();
+        HrefArgsItems hrefArgs = new HrefArgsItems();
         FilterForm filterForm = new FilterForm();
         Pageable pageable;
         List<ArticleCard> articleCards;
@@ -114,9 +109,7 @@ public class ItemsController {
         int currentPage = pageNumber;
         this.currentPage = currentPage;
         List<Category> categories = categoryService.getAll(Comparator.comparing(CategoryEntity::getName));
-
-        System.out.println(userCookie);
-
+        
         if(userCookie.equals("DEFAULT-USER-ID")){
             Cookie cookie = new Cookie("user-id", UUID.randomUUID().toString());
             cookie.setHttpOnly(true);
@@ -162,6 +155,7 @@ public class ItemsController {
             filterForm.setPriceTo(priceTo.get());
             hrefArgs.setPriceTo(priceTo.get());
         }
+        //поиск
         if (searchField.isPresent()){
             searching = true;
             searchStr = searchField.get();
@@ -178,7 +172,7 @@ public class ItemsController {
         } else {
             totalPages = articleCardService.getTotalPages(pageable);
         }
-        if((totalPages == 0)){
+        if(totalPages == 0){
             model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
             return "error-page";
         }
@@ -243,7 +237,6 @@ public class ItemsController {
     @PostMapping("/search")
     public String search(@RequestParam String search, RedirectAttributes redirectAttributes, Model model, @AuthenticationPrincipal UserDetails user){
         model.addAttribute("user", user);
-        System.out.println(search);
         redirectAttributes.addAttribute("search", search);
         return "redirect:/items/all?page=0";
     }

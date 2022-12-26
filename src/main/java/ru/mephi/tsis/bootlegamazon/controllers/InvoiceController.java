@@ -16,6 +16,7 @@ import ru.mephi.tsis.bootlegamazon.exceptions.ArticleNotFoundException;
 import ru.mephi.tsis.bootlegamazon.exceptions.BadValueException;
 import ru.mephi.tsis.bootlegamazon.exceptions.CategoryNotFoundException;
 import ru.mephi.tsis.bootlegamazon.forms.InvoiceForm;
+import ru.mephi.tsis.bootlegamazon.forms.SearchForm;
 import ru.mephi.tsis.bootlegamazon.models.Article;
 import ru.mephi.tsis.bootlegamazon.models.ArticleCard;
 import ru.mephi.tsis.bootlegamazon.models.Invoice;
@@ -23,12 +24,15 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleCardService;
 import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.InvoiceService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/invoices")
+@SessionAttributes("articleToAdd")
 public class InvoiceController {
 
     private final ArticleCardService articleCardService;
@@ -87,8 +91,6 @@ public class InvoiceController {
         model.addAttribute("nextPage", nextPage);
         model.addAttribute("previousPage", previousPage);
 
-
-
         try {
             List<Invoice> invoices = invoiceService.getAll(pageable);
             model.addAttribute("invoices", invoices);
@@ -103,8 +105,10 @@ public class InvoiceController {
     public String newInvoice(
             Model model,
             @RequestParam("page") Integer pageNumber,
+            @RequestParam("search") Optional<String> searchField,
             @RequestParam("selectitem") Optional<Integer> articleId,
-            @AuthenticationPrincipal UserDetails user
+            @AuthenticationPrincipal UserDetails user,
+            HttpSession session
     ){
 
         model.addAttribute("user", user);
@@ -114,14 +118,22 @@ public class InvoiceController {
             return "error-page";
         }
 
+        SearchForm searchForm = new SearchForm();
+
         Pageable pageable = PageRequest.of(pageNumber, 6, Sort.Direction.ASC, "id");
 
-        int totalPages = articleCardService.getTotalPages(pageable);
+        int totalPages = searchField.map(s -> articleCardService.getTotalPagesWithSearch(pageable, s)).orElseGet(() -> articleCardService.getTotalPages(pageable));
+
+        if(totalPages == 0){
+            model.addAttribute("errorMessage", "По вашему запросу ничего не найдено");
+            return "error-page";
+        }
+
         int previousPage = 0;
         int nextPage = 0;
         int currentPage = pageNumber;
-        if ((pageNumber >= totalPages) || (pageNumber < 0)){
-            return "redirect:/invoice/new?page=0";
+        if (((totalPages > 0 ) && (pageNumber >= totalPages)) || (pageNumber < 0)){
+            return "redirect:/invoices/new?page=0";
         }
 
         if (pageNumber == 0){
@@ -138,26 +150,70 @@ public class InvoiceController {
             nextPage = currentPage + 1;
             previousPage = currentPage - 1;
         }
+        List<ArticleCard> articleCards = null;
+        if (searchField.isPresent()){
+            searchForm.setSearchField(searchField.get());
+            model.addAttribute("searchField", searchField.get());
+            articleCards = articleCardService.getAllByAuthorOrName(pageable, searchField.get());
+        } else {
+            articleCards = articleCardService.getAll(pageable);
+        }
 
-        List<ArticleCard> articleCards = articleCardService.getAll(pageable);
         model.addAttribute("items", articleCards);
 
-        if (articleId.isPresent()){
-            try {
-                ArticleCard articleToAdd = articleCardService.getById(articleId.get());
+        ArticleCard articleToAddOld = (ArticleCard) session.getAttribute("articleToAdd");
+        if (articleToAddOld != null){
+            if(articleId.isPresent()){
+                if(!articleToAddOld.getId().equals(articleId.get())){
+                    ArticleCard articleToAdd = null;
+                    try {
+                        articleToAdd = articleCardService.getById(articleId.get());
+                    } catch (ArticleNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    session.removeAttribute("articleToAdd");
+                    model.addAttribute("articleToAdd", articleToAdd);
+                    session.setAttribute("articleToAdd", articleToAdd);
+                    InvoiceForm invoiceForm = new InvoiceForm(articleId.get(),  0);
+                    model.addAttribute("newInvoice", invoiceForm);
+                }
+            } else {
+                model.addAttribute("articleToAdd", articleToAddOld);
+                InvoiceForm invoiceForm = new InvoiceForm(articleToAddOld.getId(),  0);
+                model.addAttribute("newInvoice", invoiceForm);
+            }
+        } else {
+            if(articleId.isPresent()){
+                ArticleCard articleToAdd = null;
+                try {
+                    articleToAdd = articleCardService.getById(articleId.get());
+                } catch (ArticleNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
                 model.addAttribute("articleToAdd", articleToAdd);
                 InvoiceForm invoiceForm = new InvoiceForm(articleId.get(),  0);
                 model.addAttribute("newInvoice", invoiceForm);
-            } catch (ArticleNotFoundException e) {
-                throw new RuntimeException(e);
             }
         }
 
+        model.addAttribute("searchForm", searchForm);
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("nextPage", nextPage);
         model.addAttribute("previousPage", previousPage);
 
         return "invoice-page";
+    }
+
+    @PostMapping("/finditem")
+    public String search(
+            @ModelAttribute("searchForm") SearchForm searchForm,
+            RedirectAttributes redirectAttributes,
+            Model model,
+            @AuthenticationPrincipal UserDetails user
+    ){
+        model.addAttribute("user", user);
+        redirectAttributes.addAttribute("search", searchForm.getSearchField());
+        return "redirect:/invoices/new?page=0";
     }
 
     @PostMapping("/process")

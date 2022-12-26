@@ -1,6 +1,6 @@
 package ru.mephi.tsis.bootlegamazon.dto;
 
-public class HrefArgs {
+public class HrefArgsItems {
     private int argsCount;
     private String sortMethod;
     private String categoryName;
