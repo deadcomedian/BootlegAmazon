@@ -18,6 +18,7 @@ import ru.mephi.tsis.bootlegamazon.services.ArticleService;
 import ru.mephi.tsis.bootlegamazon.services.CartService;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,7 +82,8 @@ public class CartController {
             @RequestParam("hrefargs") Optional<String> hrefArgs,
             @AuthenticationPrincipal UserDetails user,
             HttpServletResponse response,
-            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId
+            @CookieValue(name = "user-id", defaultValue = "DEFAULT-USER-ID") String userId,
+            HttpServletRequest request
     ){
         if(userId.equals("DEFAULT-USER-ID")){
             userId = UUID.randomUUID().toString();
@@ -125,15 +127,18 @@ public class CartController {
             throw new RuntimeException(e);
         }
 
-        if (pageNumber.isPresent()){
-            if(hrefArgs.isPresent()){
-                return "redirect:/items/all?page=" + pageNumber.get() + hrefArgs.get();
-            } else {
-                return "redirect:/items/all?page=" + pageNumber.get();
-            }
-        } else {
-            return "redirect:/items/" + articleId;
-        }
+        String referer = request.getHeader("Referer");
+        return "redirect:"+ referer;
+
+//        if (pageNumber.isPresent()){
+//            if(hrefArgs.isPresent()){
+//                return "redirect:/items/all?page=" + pageNumber.get() + hrefArgs.get();
+//            } else {
+//                return "redirect:/items/all?page=" + pageNumber.get();
+//            }
+//        } else {
+//            return "redirect:/items/" + articleId;
+//        }
     }
 
 
