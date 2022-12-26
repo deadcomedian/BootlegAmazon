@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:beans="">
 
 <head>
   <title>Каталог товаров</title>
@@ -295,7 +296,7 @@
           <label for="inStock">В наличии</label>
           <input type="checkbox" id="inStock" th:field="*{inStock}">
           <div class="button-filter-button">
-            <button type="submit">
+            <button type="submit" class="popup button-sort-button">
               Отфильтровать
             </button>
           </div>
@@ -311,6 +312,7 @@
 
     </div>
     <div class="catalog-page-gallery">
+
       <div class="catalog-card-gallery-card catalog-card-root-class-name" th:each="articleCard : ${articleCards}">
         <div class="catalog-card-container">
           <a th:href="@{'/items/' + ${articleCard.id}}">

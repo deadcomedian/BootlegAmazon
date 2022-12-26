@@ -3,11 +3,11 @@ package ru.mephi.tsis.bootlegamazon.configs;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -20,13 +20,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        security.httpBasic().disable();
 //    }
 
-
-
     @Bean
     public PasswordEncoder encoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new RefererRedirectionAuthenticationSuccessHandler("/yourdefaultsuccessurl");
+    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
@@ -38,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration", "/registration/create").not().fullyAuthenticated()
                 .antMatchers("/login").not().fullyAuthenticated()
                 //Доступ только для пользователей с ролью Администратор и Менеджер
-               .antMatchers("/categories/all",
+                .antMatchers("/categories/all",
                        "/categories/new",
                        "/categories/add",
                        "/categories/{id}/delete",
@@ -64,22 +66,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart/addtocart",
                         "/cart/changeamount",
                         "/cart/deletearticle").permitAll()
+
                 //Все остальные страницы требуют аутентификации
                 .anyRequest().authenticated()
                 .and()
                 //Настройка для входа в систему
                 .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/profile", true)
-                .permitAll()
+                    .loginPage("/login")
+                    .successHandler(new RefererRedirectionAuthenticationSuccessHandler("/profile"))
+               //   .defaultSuccessUrl("/profile", true)
+                    .permitAll()
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/items/all?page=0");
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .logoutSuccessUrl("/items/all?page=0");
 
     }
 
-
 }
+
 
 
