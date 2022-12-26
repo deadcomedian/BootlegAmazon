@@ -36,10 +36,12 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserAuth user = userAuthRepository.findByUsername(username);
+        UserEntity userEntity = userRepository.findByLogin(user.getUsername()).get();
 
-        if (user == null) {
+        if (user == null || !userEntity.getActive()) {
             throw new UsernameNotFoundException("User not found");
         }
+
         return new  MyUserPrincipal(user);
     }
 
