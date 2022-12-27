@@ -148,7 +148,7 @@
   flex-direction: column;
 }
 .catalog-card-image {
-  flex: flex-start;
+  align-self: center;
   width: 15rem;
   object-fit: cover;
 }
