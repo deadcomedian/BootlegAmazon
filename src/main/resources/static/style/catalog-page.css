@@ -158,6 +158,7 @@
   font-family: Rubik Dirt;
   line-height: 1em;
   margin-bottom: 1rem;
+  text-align: center;
 }
 .catalog-card-container1 {
   flex: 0 0 auto;
@@ -176,8 +177,7 @@
   line-height: 1.55;
   margin-left: 1rem;
   margin-right: 1rem;
-  text-transform: none;
-  text-decoration: none;
+  text-align: center;
 }
 .catalog-card-container2 {
   flex: 0 0 auto;
@@ -197,6 +197,7 @@
   margin-right: 1rem;
   text-transform: none;
   text-decoration: none;
+  text-align: center;
 }
 .catalog-card-icon {
   fill: var(--dl-color-primary-100);
