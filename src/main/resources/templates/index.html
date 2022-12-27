@@ -92,6 +92,10 @@
 
     }
 
+    .checkbox{
+      width: 2rem;
+    }
+
     .popup {
       position: relative;
       display: inline-block;
@@ -104,19 +108,20 @@
 
     .popup .popuptext {
       visibility: hidden;
-      width: 370px;
+      width: 35rem;
       background-color: #FFFFFF;
       border-color: #000000;
       border-width: 2px;
       color: #000;
       text-align: left;
       border-radius: 15px;
-      padding: 8px 0;
+      padding: 1rem;
       position: absolute;
       z-index: 1;
       top: 100%;
-      left: 0%;
+      right: 0%;
       margin-left: -80px;
+      flex-direction: column;
     }
 
     /* Popup arrow */
@@ -248,13 +253,15 @@
       <a th:href="@{/items/all(page=0)}">
         <h1 class="catalog-page-text">Каталог</h1>
       </a>
+
       <div class="catalog-page-container2">
         <div class="button-sort-container button-sort-root-class-name">
           <div class="popup button-sort-button" onclick="sortPopupFunction()">Сортировка
             <span class="popuptext" id="sortPopup">
               <div class="list" th:each="sortMethod : ${sortMethods}">
                 <a th:text="${sortMethod}"
-                   th:href="@{'/items/all?page=0&sort=' + ${sortMethod} + ${hrefArgs.getHrefArgsExcept('sort')}}"></a>
+                   th:href="@{'/items/all?page=0&sort=' + ${sortMethod} + ${hrefArgs.getHrefArgsExcept('sort')}}">
+                </a>
               </div>
             </span>
           </div>
@@ -266,53 +273,63 @@
             }
           </script>
         </div>
-        <div class="button-filter-container button-filter-root-class-name">
 
-        </div>
-        <form
+        <div class="button-filter-container button-filter-root-class-name">
+          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр
+            <span class="popuptext" id="filterPopup">
+              <form
                 th:method="POST"
                 th:action="@{'/items/filter' + ${hrefArgs.getSearchField()}}"
                 th:object="${filterForm}"
-        >
-          <input
-                  type="text"
-                  th:field="*{priceFrom}"
-                  placeholder="Цена от"
-                  class="new-category-page-input input"
-          />
-          <input
-                  type="text"
-                  th:field="*{priceTo}"
-                  placeholder="Цена до"
-                  class="new-category-page-input input"
-          />
-          <label for="categories">Категория</label>
-          <select name="categories" id="categories" required="" class="new-item-page-select input" th:field="*{categoryName}">
-            <option th:text ="Любая" th:value="any"></option>
-            <div th:each="category : ${categories}">
-              <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
-            </div>
-          </select>
-          <label for="inStock">В наличии</label>
-          <input type="checkbox" id="inStock" th:field="*{inStock}">
-          <div class="button-filter-button">
-            <button type="submit" class="popup button-sort-button">
-              Отфильтровать
-            </button>
+              >
+                <input
+                        type="text"
+                        th:field="*{priceFrom}"
+                        placeholder="Цена от"
+                        class="catalog-page-input-h input"
+                />
+                <input
+                        type="text"
+                        th:field="*{priceTo}"
+                        placeholder="Цена до"
+                        class="catalog-page-input-h input"
+                />
+                <label for="categories">Категория</label>
+                <select name="categories" id="categories" required="" class="catalog-page-select input" th:field="*{categoryName}">
+                  <option th:text ="Любая" th:value="any"></option>
+                  <div th:each="category : ${categories}">
+                    <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+                  </div>
+                </select>
+
+                <label for="inStock">В наличии</label>
+                <input type="checkbox" id="inStock" th:field="*{inStock}">
+                <div class="button-filter-button">
+                  <button type="submit" class="popup button-filter-button">
+                    Отфильтровать
+                  </button>
+                </div>
+
+              </form>
+
+              <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
+                <button>
+                  <label>Сбросить фильтрацию</label>
+                </button>
+              </a>
+            </span>
           </div>
-
-        </form>
-
-        <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
-          <button>
-            <label>Сбросить фильтрацию</label>
-          </button>
-        </a>
+          <script>
+            // When the user clicks on div, open the popup
+            function filterPopupFunction() {
+              var popup = document.getElementById("filterPopup");
+              popup.classList.toggle("show");
+            }
+          </script>
+        </div>
       </div>
-
     </div>
     <div class="catalog-page-gallery">
-
       <div class="catalog-card-gallery-card catalog-card-root-class-name" th:each="articleCard : ${articleCards}">
         <div class="catalog-card-container">
           <a th:href="@{'/items/' + ${articleCard.id}}">
