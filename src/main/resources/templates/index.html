@@ -274,59 +274,63 @@
           </script>
         </div>
 
-        <div class="button-filter-container button-filter-root-class-name">
-          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр
-            <span class="popuptext" id="filterPopup">
-              <form
+        <form
                 th:method="POST"
                 th:action="@{'/items/filter' + ${hrefArgs.getSearchField()}}"
                 th:object="${filterForm}"
-              >
-                <input
-                        type="text"
-                        th:field="*{priceFrom}"
-                        placeholder="Цена от"
-                        class="catalog-page-input-h input"
-                />
-                <input
-                        type="text"
-                        th:field="*{priceTo}"
-                        placeholder="Цена до"
-                        class="catalog-page-input-h input"
-                />
-                <label for="categories">Категория</label>
-                <select name="categories" id="categories" required="" class="catalog-page-select input" th:field="*{categoryName}">
-                  <option th:text ="Любая" th:value="any"></option>
-                  <div th:each="category : ${categories}">
-                    <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
-                  </div>
-                </select>
-
-                <label for="inStock">В наличии</label>
-                <input type="checkbox" id="inStock" th:field="*{inStock}">
-                <div class="button-filter-button">
-                  <button type="submit" class="popup button-filter-button">
-                    Отфильтровать
-                  </button>
-                </div>
-
-              </form>
-
-              <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
-                <button>
-                  <label>Сбросить фильтрацию</label>
-                </button>
-              </a>
-            </span>
+        >
+          <input
+                  type="text"
+                  th:field="*{priceFrom}"
+                  placeholder="Цена от"
+                  class="catalog-page-input-h input"
+          />
+          <input
+                  type="text"
+                  th:field="*{priceTo}"
+                  placeholder="Цена до"
+                  class="catalog-page-input-h input"
+          />
+          <label for="categories">Категория</label>
+          <select name="categories" id="categories" required="" class="catalog-page-select input" th:field="*{categoryName}">
+            <option th:text ="Любая" th:value="any"></option>
+            <div th:each="category : ${categories}">
+              <option th:text ="${category.categoryName}" th:value="${category.categoryName}"></option>
+            </div>
+          </select>
+          </br>
+          <label for="inStock">В наличии</label>
+          <input type="checkbox" id="inStock" th:field="*{inStock}">
+          <div class="button-filter-button">
+            <button type="submit" class="popup button-filter-button">
+              Отфильтровать
+            </button>
           </div>
-          <script>
-            // When the user clicks on div, open the popup
-            function filterPopupFunction() {
-              var popup = document.getElementById("filterPopup");
-              popup.classList.toggle("show");
-            }
-          </script>
-        </div>
+
+        </form>
+
+        <a th:href="@{'/items/all?page=0' + ${hrefArgs.getHrefArgsExceptFiltration()}}">
+          <button>
+            <label>Сбросить фильтрацию</label>
+          </button>
+        </a>
+
+<!--        <div class="button-filter-container button-filter-root-class-name">-->
+<!--          <div class="popup button-filter-button" onclick="filterPopupFunction()">Фильтр-->
+<!--            <span class="popuptext" id="filterPopup">-->
+<!--              -->
+
+<!--              -->
+<!--            </span>-->
+<!--          </div>-->
+<!--          <script>-->
+<!--            // When the user clicks on div, open the popup-->
+<!--            function filterPopupFunction() {-->
+<!--              var popup = document.getElementById("filterPopup");-->
+<!--              popup.classList.toggle("show");-->
+<!--            }-->
+<!--          </script>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="catalog-page-gallery">
